@@ -3,17 +3,35 @@
 #include <vector>
 #include <string>
 #include <GL/gl.h>
+#define MAX_LEN_MATERIAL_NAME 200
 
 typedef struct coord {
     float x, y, z;
     coord() {};
     coord(float _x, float _y, float _z) : x(_x), y(_y), z(_z) {};
 } coord;
+
+typedef struct rgb {
+    float r, g, b;
+    rgb() {};
+    rgb(float _r, float _g, float _b) : r(_r), g(_g), b(_b) {};
+} rgb;
+
+typedef struct material {
+    std::string name;
+    float alpha, ns, ni;
+    rgb diffuse, specular;
+    int illum;
+    int texture;
+    material() {};
+} material;
+
 // in this project, obj files are being exported where texture is not included
 // and the faces are triangulated
 typedef struct face {
     coord vertices[3];
     coord normals[3];
+    int materialReference;
 } face;
 
 typedef struct Model {
@@ -33,11 +51,14 @@ class Obj
     private:
         int model;
         std::vector<coord> vertices, normals;
+        std::vector<rgb> diffuses;
+        std::vector<material> materials;
         int indicesNum;
 
         void init();
-        Model extractObjData(char *path);
-        void parseData(char *path);
+        void extractMaterialsData(std::string path);
+        Model extractObjData(std::string path);
+        void parseData(std::string path);
         void writeH(std::string fp, std::string nameObj, Model model);
 };
 

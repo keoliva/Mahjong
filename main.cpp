@@ -26,7 +26,7 @@
 #include "include/Obj.h"
 using namespace std;
 
-static float z_coord = -6.0f;
+static float z_coord = -10.0f;
 float rot_x = 0.0f;
 float rot_y = 0.0f;
 float rot_z = 0.0f;
@@ -54,11 +54,14 @@ static void display(void)
     glRotated(rot_x, 1, 0, 0);
     glRotated(rot_y, 0, 1, 0);
     glRotated(rot_z, 0, 0, 1);
-    glColor3d(1, 0, 0);
 
+    //static Obj tile = Obj("resources/tile.obj");
     static Obj tile = Obj();
     tile.loadObj();
-    tile.draw(0, 0);
+    for (int i = -7; i < 7; i++) {
+        tile.draw(i, 0);
+    }
+    //tile.draw(0, 0);
 
     glutSwapBuffers();
 }
