@@ -24,13 +24,11 @@
 #include <iostream>
 #include <string>
 #include <math.h>
-#include "include/Obj.h"
+#include "include/Draw.h"
 using namespace std;
-static float z_coord = -13.0f;
-float rot_x = -80.0f;
-float rot_y = 0.0f;
-float rot_z = 0.0f;
 
+static Draw *draw;
+static float rot_x = -80.0f, rot_y = 0.0f, rot_z = 0.0f;
 /* GLUT callback Handlers */
 
 static void resize(int width, int height)
@@ -50,39 +48,8 @@ static void display(void)
     // reset transformations
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    int N = 20, rows=20, cols=20;
-    float tile_width = 0.968;
-    float tile_len = 0.968;
-    float tile_height = 1.489;
-    float space_0 = 0.5f, space_1 = 0.01f;
-    float x = -cols/2 + space_0;
-    float cell_width = 1.0f;
-    float cell_height = 1.0f;
-    glTranslatef(x, -2, z_coord);
-    glRotated(rot_x, 1, 0, 0);
-    glRotated(rot_y, 0, 1, 0);
-    glRotated(rot_z, 0, 0, 1);
-    glPushMatrix();
-    glTranslatef(-cell_width/2, -tile_height/2+space_1, 0);
-    glBegin(GL_LINES);
-        for (float i=0; i < rows+1; i++) {
-           glVertex3f(i, 0, -tile_len/2);
-           glVertex3f(i, cols*cell_width, -tile_len/2);
-        }
-        for (float i=0; i < cols+1; i++) {
-            glVertex3f(0, i, -tile_len/2);
-            glVertex3f(rows*cell_width, i, -tile_len/2);
-        }
-    glEnd();
-    glPopMatrix();
-    float turn_right = 90;
-    float turn_left = -90;
-    float turn_around = 180;
-    // rot_x=0 is lying on board
-    static Obj tile = Obj("tile");
-    tile.loadObj();
-    for (int i = 0; i < 5; i++)
-        tile.draw(i, 0, 90, 0);
+
+    draw->drawGame(rot_x, rot_y, rot_z);
 
     glutSwapBuffers();
 }
@@ -95,6 +62,7 @@ static void key(unsigned char key, int x, int y)
         case 27 :
         case 'q':
             //delete tile;
+            delete draw;
             exit(0);
             break;
         case 'a':
@@ -158,6 +126,8 @@ static void init(void)
     glMaterialfv(GL_FRONT, GL_DIFFUSE,   mat_diffuse);
     glMaterialfv(GL_FRONT, GL_SPECULAR,  mat_specular);
     glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, high_shininess);
+
+    draw = new Draw();
 }
 /* Program entry point */
 

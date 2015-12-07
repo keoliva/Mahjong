@@ -210,8 +210,3 @@ void Obj::draw(int x, int y, float rot_x, float rot_y)
     glPopMatrix();
     glColor3d(1, 1, 1);
 }
-
-Obj::~Obj()
-{
-    //dtor
-}

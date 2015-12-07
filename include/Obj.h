@@ -2,6 +2,7 @@
 #define OBJ_H
 #include <vector>
 #include <string>
+#include <iostream>
 #include <GL/gl.h>
 #define COORD_PER_VERTEX 3
 #define COORD_PER_FACE 9
@@ -44,11 +45,12 @@ class Obj
 {
     public:
         std::string name;
+        Obj() {};
         Obj(std::string nameObj);
         Obj(char *path, std::string nameObj);
         void loadObj();
         void draw(int x, int y, float rot_x, float r_y);
-        virtual ~Obj();
+        virtual ~Obj() { std::cout << "deleting Obj\n"; };
     private:
         int model;
         std::vector<coord> vertices, normals;
