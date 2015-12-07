@@ -3,7 +3,8 @@
 #include <vector>
 #include <string>
 #include <GL/gl.h>
-#define MAX_LEN_MATERIAL_NAME 200
+#define COORD_PER_VERTEX 3
+#define COORD_PER_FACE 9
 
 typedef struct coord {
     float x, y, z;
@@ -19,7 +20,6 @@ typedef struct rgb {
 
 typedef struct material {
     std::string name;
-    float alpha, ns, ni;
     rgb diffuse, specular;
     int illum;
     int texture;
@@ -43,10 +43,11 @@ typedef struct Model {
 class Obj
 {
     public:
-        Obj();
-        Obj(char *path);
+        std::string name;
+        Obj(std::string nameObj);
+        Obj(char *path, std::string nameObj);
         void loadObj();
-        void draw(float x, float y);
+        void draw(int x, int y, float rot_x, float r_y);
         virtual ~Obj();
     private:
         int model;
@@ -59,7 +60,7 @@ class Obj
         void extractMaterialsData(std::string path);
         Model extractObjData(std::string path);
         void parseData(std::string path);
-        void writeH(std::string fp, std::string nameObj, Model model);
+        void writeH(std::string fp, Model model);
 };
 
 #endif // OBJ_H

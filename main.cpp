@@ -23,11 +23,11 @@
 #include <stdlib.h>
 #include <iostream>
 #include <string>
+#include <math.h>
 #include "include/Obj.h"
 using namespace std;
-
-static float z_coord = -10.0f;
-float rot_x = 0.0f;
+static float z_coord = -13.0f;
+float rot_x = -80.0f;
 float rot_y = 0.0f;
 float rot_z = 0.0f;
 
@@ -50,18 +50,39 @@ static void display(void)
     // reset transformations
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    glTranslatef(0.0f, 0.0f, z_coord);
+    int N = 20, rows=20, cols=20;
+    float tile_width = 0.968;
+    float tile_len = 0.968;
+    float tile_height = 1.489;
+    float space_0 = 0.5f, space_1 = 0.01f;
+    float x = -cols/2 + space_0;
+    float cell_width = 1.0f;
+    float cell_height = 1.0f;
+    glTranslatef(x, -2, z_coord);
     glRotated(rot_x, 1, 0, 0);
     glRotated(rot_y, 0, 1, 0);
     glRotated(rot_z, 0, 0, 1);
-
-    //static Obj tile = Obj("resources/tile.obj");
-    static Obj tile = Obj();
+    glPushMatrix();
+    glTranslatef(-cell_width/2, -tile_height/2+space_1, 0);
+    glBegin(GL_LINES);
+        for (float i=0; i < rows+1; i++) {
+           glVertex3f(i, 0, -tile_len/2);
+           glVertex3f(i, cols*cell_width, -tile_len/2);
+        }
+        for (float i=0; i < cols+1; i++) {
+            glVertex3f(0, i, -tile_len/2);
+            glVertex3f(rows*cell_width, i, -tile_len/2);
+        }
+    glEnd();
+    glPopMatrix();
+    float turn_right = 90;
+    float turn_left = -90;
+    float turn_around = 180;
+    // rot_x=0 is lying on board
+    static Obj tile = Obj("tile");
     tile.loadObj();
-    for (int i = -7; i < 7; i++) {
-        tile.draw(i, 0);
-    }
-    //tile.draw(0, 0);
+    for (int i = 0; i < 5; i++)
+        tile.draw(i, 0, 90, 0);
 
     glutSwapBuffers();
 }
@@ -78,9 +99,11 @@ static void key(unsigned char key, int x, int y)
             break;
         case 'a':
             rot_x -= 1.0f;
+            cout << "rot_x: " << rot_x << endl;
             break;
         case 'b':
             rot_x += 1.0f;
+            cout << "rot_x: " << rot_x << endl;
             break;
         case 'c':
             rot_y -= 1.0f;

@@ -13,13 +13,14 @@ void Obj::init()
 {
     model = glGenLists(1);
 }
-Obj::Obj()
+Obj::Obj(string nameObj)
 {
+    name = nameObj;
     init();
-    cout << (glGetError()) << endl;
 }
-Obj::Obj(char *path)
+Obj::Obj(char *path, string nameObj)
 {
+    name = nameObj;
     init();
     parseData(path);
 }
@@ -125,27 +126,29 @@ void Obj::parseData(string path)
         this->diffuses.push_back(mtl.diffuse);
         for(int i = 0; i < 3; i++) {
             this->vertices.push_back(_face.vertices[i]);
-
             this->normals.push_back(_face.normals[i]);
         }
     }
-
-    writeH("include/tile.h", "tile", model);
+    stringstream ss;
+    string filename;
+    ss << "include/" << name << ".h";
+    ss >> filename;
+    writeH(filename, model);
 }
-void Obj::writeH(std::string fp, std::string nameObj, Model model)
+void Obj::writeH(std::string fp, Model model)
 {
     ofstream outH(fp, ios::out);
     if (!outH.good()) {
         cout << strerror(errno);
         exit(1);
     }
-    outH << "// This is a .cpp file for the model: " << nameObj << endl;
+    outH << "// This is a .cpp file for the model: " << name << endl;
     outH << endl;
 
     outH << "// Faces: " << model.facesNum << endl;
     outH << "// Number of Indices: " << model.indicesNum << endl;
 
-    outH << "namespace " << nameObj << endl;
+    outH << "namespace " << name << endl;
     outH << "{" << endl;
     outH << "\tconst int indicesNum = " << this->indicesNum << ";" << endl;
 
@@ -170,7 +173,6 @@ void Obj::writeH(std::string fp, std::string nameObj, Model model)
 
 void Obj::loadObj()
 {
-
     glNewList(model, GL_COMPILE);
     {
         glPushMatrix();
@@ -179,12 +181,13 @@ void Obj::loadObj()
             float vx, vy, vz, nx, ny, nz;
             float rgb[3];
             // every 9 elements represents the xyz-coordinates of the three vertices/normals of a face
-            for (int i = 0; i < _size; i+=9) { // COORD*3 = 9
-                memcpy(rgb, tile::diffuses[i/9], sizeof(rgb));
+            for (int i = 0; i < _size; i+=COORD_PER_FACE) { // COORD*3 = 9
+                memcpy(rgb, tile::diffuses[i/COORD_PER_FACE], sizeof(rgb));
                 glColor3f(rgb[0], rgb[1], rgb[2]);
-                for (int j = i; j < (i + 9); j+=3) {
+                for (int j = i; j < (i + COORD_PER_FACE); j+=COORD_PER_VERTEX) {
                     vx = tile::vertices[j]; vy = tile::vertices[j+1]; vz = tile::vertices[j+2];
                     nx = tile::normals[j]; ny = tile::normals[j+1]; nz = tile::normals[j+2];
+
                     glNormal3f(nx, ny, nz);
                     glVertex3f(vx, vy, vz);
                 }
@@ -195,11 +198,14 @@ void Obj::loadObj()
     glEndList();
 }
 
-void Obj::draw(float x, float y)
+void Obj::draw(int x, int y, float rot_x, float rot_y)
 {
     glPushMatrix();
-    glTranslatef(x, 0, y);
-    //glRotatef(90, 0, 1, 0);
+    glTranslatef(x, y, 0);
+
+    glRotatef(rot_x, 1, 0, 0);
+    glRotatef(rot_y, 0, 1, 0);
+
     glCallList(model);
     glPopMatrix();
     glColor3d(1, 1, 1);
