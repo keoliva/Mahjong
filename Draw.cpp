@@ -1,5 +1,9 @@
 #include "include/Draw.h"
+#include "include/Obj.h"
 
+namespace {
+    static Obj tile;
+}
 
 Draw::Draw()
 {
@@ -42,9 +46,4 @@ void Draw::drawGame(float rot_x, float rot_y, float rot_z)
     drawBoard();
 
 
-}
-
-Draw::~Draw()
-{
-    //dtor
 }

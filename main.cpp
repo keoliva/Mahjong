@@ -1,15 +1,8 @@
 /*
- * GLUT Shapes Demo
+ * Mahjong
  *
- * Written by Nigel Stewart November 2003
+ * Written by Kayla Oliva 2015
  *
- * This program is test harness for the sphere, cone
- * and torus shapes in GLUT.
- *
- * Spinning wireframe and smooth shaded shapes are
- * displayed until the ESC or q key is pressed.  The
- * number of geometry stacks and slices can be adjusted
- * using the + and - keys.
  */
 
 #ifdef __APPLE__
@@ -24,6 +17,7 @@
 #include <iostream>
 #include <string>
 #include <math.h>
+#include "include/Tile.h"
 #include "include/Draw.h"
 using namespace std;
 
@@ -130,6 +124,7 @@ static void init(void)
     draw = new Draw();
 }
 /* Program entry point */
+bool myfunction(Tile *a, Tile *b) { return a->get_val() < b->get_val(); }
 
 int main(int argc, char *argv[])
 {

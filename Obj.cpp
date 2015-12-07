@@ -1,5 +1,5 @@
 #include "include/Obj.h"
-#include "include/tile.h"
+#include "resources/tile.h"
 
 #include <fstream>
 #include <iostream>
