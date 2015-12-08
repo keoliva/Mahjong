@@ -13,12 +13,11 @@ Draw::Draw()
 
 static float y_coord = -2.0f, z_coord = -13.0f;
 
-static int rows=20, cols=20;
+int rows=20, cols=20;
 static float tile_len = 0.968, tile_height = 1.489; // tile_width = tile_len
 float space_0 = 0.5f, space_1 = 0.01f;
 float x_coord = -cols/2 + space_0;
 float cell_width = 1.0f, cell_height = 1.0f;
-
 void drawBoard()
 {
     glPushMatrix();
@@ -36,7 +35,7 @@ void drawBoard()
     glPopMatrix();
 }
 
-void Draw::drawGame(float rot_x, float rot_y, float rot_z)
+void Draw::drawGame(float rot_x, float rot_y, float rot_z, Game *game)
 {
     glTranslatef(x_coord, y_coord, z_coord);
     glRotated(rot_x, 1, 0, 0);
@@ -45,5 +44,5 @@ void Draw::drawGame(float rot_x, float rot_y, float rot_z)
 
     drawBoard();
 
-
+    //tile.draw(3, 0, 90, 0);
 }

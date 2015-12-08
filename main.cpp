@@ -17,11 +17,12 @@
 #include <iostream>
 #include <string>
 #include <math.h>
-#include "include/Tile.h"
+#include "include/Game.h"
 #include "include/Draw.h"
 using namespace std;
 
 static Draw *draw;
+Game *game;
 static float rot_x = -80.0f, rot_y = 0.0f, rot_z = 0.0f;
 /* GLUT callback Handlers */
 
@@ -57,6 +58,7 @@ static void key(unsigned char key, int x, int y)
         case 'q':
             //delete tile;
             delete draw;
+            delete game;
             exit(0);
             break;
         case 'a':
@@ -122,9 +124,19 @@ static void init(void)
     glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, high_shininess);
 
     draw = new Draw();
+    game = new Game();
 }
 /* Program entry point */
 bool myfunction(Tile *a, Tile *b) { return a->get_val() < b->get_val(); }
+
+void testInitGame()
+{
+    cout << "Prevailing Wind == EAST: " << ((game->getPrevailingWind() == "EAST")?"PASSED":"FAILED") << endl;
+    cout << "ROUND_OVER == FALSE: " << ((game->roundOver() == false)?"PASSED":"FAILED") << endl;
+    wind pwind = game->getCurrentPlayer()->_wind;
+    cout << "Current Player's Wind: " << ((pwind == EAST)?"PASSED":"FAILED") << endl;
+    cout << "Tiles created == 144: " << ((game->getTilesLeft() == 144)?"PASSED":"FAILED") << endl;
+}
 
 int main(int argc, char *argv[])
 {
@@ -139,8 +151,8 @@ int main(int argc, char *argv[])
     glutDisplayFunc(display);
     glutKeyboardFunc(key);
     //glutIdleFunc(idle);
-
     init();
+    testInitGame();
 
     glutMainLoop();
 
