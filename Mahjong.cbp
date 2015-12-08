@@ -14,6 +14,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
+					<Add directory="include" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -24,6 +25,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add directory="include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -42,10 +44,18 @@
 			<Add library="gdi32" />
 			<Add directory="C:/MinGW/lib" />
 		</Linker>
+		<Unit filename="Draw.cpp" />
+		<Unit filename="Game.cpp" />
 		<Unit filename="Obj.cpp" />
+		<Unit filename="Player.cpp" />
+		<Unit filename="Tile.cpp" />
+		<Unit filename="include/Draw.h" />
+		<Unit filename="include/Game.h" />
 		<Unit filename="include/Obj.h" />
-		<Unit filename="include/tile.h" />
+		<Unit filename="include/Player.h" />
+		<Unit filename="include/Tile.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="resources/tile.h" />
 		<Unit filename="resources/tile.mtl" />
 		<Unit filename="resources/tile.obj" />
 		<Extensions>

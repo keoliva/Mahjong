@@ -20,13 +20,13 @@ enum wind {
 static std::string wind_strings[] = { WINDS };
 #undef X
 
-static std::ostream &operator<<(std::ostream &os, enum wind w);
 class Player
 {
     public:
         wind _wind;
+        int score;
         std::vector<Tile> hand, discards, melds, bonuses;
-        Player() {};
+        Player() { score = 0; };
         bool isDealer();
         virtual ~Player();
     protected:

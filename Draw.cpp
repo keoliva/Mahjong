@@ -1,5 +1,10 @@
 #include "include/Draw.h"
 #include "include/Obj.h"
+#include <GL/gl.h>
+#include <GL/glut.h>
+#include <map>
+#include <sstream>
+using namespace std;
 
 namespace {
     static Obj tile;
@@ -34,7 +39,8 @@ void drawBoard()
     glEnd();
     glPopMatrix();
 }
-
+map<string, string> updates;
+void updateText();
 void Draw::drawGame(float rot_x, float rot_y, float rot_z, Game *game)
 {
     glTranslatef(x_coord, y_coord, z_coord);
@@ -44,5 +50,71 @@ void Draw::drawGame(float rot_x, float rot_y, float rot_z, Game *game)
 
     drawBoard();
 
-    //tile.draw(3, 0, 90, 0);
+    Player *player = game->getHumanPlayer();
+    stringstream ss;
+    ss << " Round Wind: " << game->getPrevailingWind() << "   |   ";
+    ss << " Your Wind: " << wind_strings[player->_wind] << "   |   ";
+    ss << " Your Score: " << player->score;
+    updates["userInfo"] = ss.str();
+    /**
+    vector<Player*> players = game->getPlayers();
+    int i = 0, humanIndex = game->humanPlayerIndex;
+    for (Player *player : players) {
+        if (i == humanIndex) {
+            stringstream ss;
+            ss << " Round Wind: " << game->getPrevailingWind() << "   |   ";
+            ss << " Your Wind: " << wind_strings[player->_wind] << "   |   ";
+            ss << " Your Score: " << player->score;
+            updates["userInfo"] = ss.str();
+        }
+        i++;
+    }*/
+    updateText();
+}
+
+void *font = GLUT_BITMAP_9_BY_15;
+/** got the following two functions from tutorial at:
+http://www.lighthouse3d.com/tutorials/glut-tutorial/bitmap-fonts-and-orthogonal-projections/
+*/
+void setOrthographicProjection(int w, int h);
+void restorePerspectiveProjection(void);
+void renderString(float x, float y, void *font, const char *str, int len);
+void updateText()
+{
+    // dimensions of current window
+    int window_width = glutGet(GLUT_WINDOW_WIDTH);
+    int window_height = glutGet(GLUT_WINDOW_HEIGHT);
+    setOrthographicProjection(window_width, window_height);
+
+    string info = updates["userInfo"];
+    const unsigned char *info_c_str = (const unsigned char *)info.c_str();
+    int info_c_str_width = glutBitmapLength(font, info_c_str);
+    renderString((window_width-info_c_str_width)/2.0, window_height/7, font, info.data(), info.size());
+
+    restorePerspectiveProjection();
+}
+void setOrthographicProjection(int w, int h)
+{
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    gluOrtho2D(0, w, 0, h);
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+}
+void restorePerspectiveProjection(void)
+{
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+    glPopMatrix();
+}
+void renderString(float x, float y, void *font, const char *str, int len)
+{
+    glRasterPos2f(x, y);
+    for (int i = 0; i < len; i++)
+    {
+        glutBitmapCharacter(font, str[i]);
+    }
 }

@@ -1,6 +1,8 @@
 #ifndef GAME_H
 #define GAME_H
 #include "Player.h"
+#define NUM_ROUNDS 4
+#define NUM_PLAYERS 4
 #include <iostream>
 #include <string>
 
@@ -12,16 +14,19 @@ struct state {
 class Game
 {
     public:
-        state curr_state;
+        static int humanPlayerIndex;
         Game();
         std::string getPrevailingWind(); // round wind
         int getTilesLeft();
         Player *getCurrentPlayer();
+        Player *getHumanPlayer();
+        std::vector<Player*> getPlayers();
         bool roundOver();
         void restart(); // start new round
         virtual ~Game();
     protected:
     private:
+        state curr_state;
         int rounds;
         std::vector<Tile*> pile;
         void chooseDealer();
@@ -29,9 +34,5 @@ class Game
         void updatePlayerWinds();
         bool roundIsOver, playExtraHand; // holds if dealer wins or there's a draw
         bool matchOver();
-
-
-
 };
-
 #endif // GAME_H

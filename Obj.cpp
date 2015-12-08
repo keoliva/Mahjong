@@ -1,5 +1,6 @@
 #include "include/Obj.h"
 #include "resources/tile.h"
+#include <GL/gl.h>
 
 #include <fstream>
 #include <iostream>

@@ -3,7 +3,6 @@
 #include <vector>
 #include <string>
 #include <iostream>
-#include <GL/gl.h>
 #define COORD_PER_VERTEX 3
 #define COORD_PER_FACE 9
 

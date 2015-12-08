@@ -1,16 +1,15 @@
 #include "Game.h"
 #include <time.h>
 #include <random>
-#define NUM_ROUNDS 4
-#define NUM_PLAYERS 4
-#define POS(x) (x > 0) ? x : -x
 using namespace std;
+int Game::humanPlayerIndex = 0;
 Game::Game()
 {
     rounds = 0;
     chooseDealer();
     for (int i = 0; i < NUM_PLAYERS; i++)
         curr_state.players[i] = new Player();
+    updatePlayerWinds();
     init_state();
 }
 void Game::chooseDealer()
@@ -53,6 +52,18 @@ void Game::updatePlayerWinds()
 Player *Game::getCurrentPlayer()
 {
     return curr_state.players[curr_state.currPlayerReference];
+}
+Player *Game::getHumanPlayer()
+{
+    return curr_state.players[0];
+}
+vector<Player*> Game::getPlayers()
+{
+    vector<Player*> vec;
+    for (int i = 0; i < NUM_PLAYERS; i++)
+        vec.push_back(curr_state.players[i]);
+
+    return vec;
 }
 string Game::getPrevailingWind()
 {
