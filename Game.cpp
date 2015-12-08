@@ -22,7 +22,6 @@ void Game::chooseDealer()
 void Game::init_state()
 {
     pile = Tile::createTheTiles();
-
 }
 void Game::restart()
 {
@@ -30,13 +29,15 @@ void Game::restart()
         chooseDealer();
     }
     if (!playExtraHand) {
-        rounds = ++rounds % NUM_ROUNDS; // update wind
-        curr_state.dealerReference = ++curr_state.dealerReference % NUM_PLAYERS; // update dealer
+        // update round wind
+        rounds = ++rounds % NUM_ROUNDS;
+        // update dealer
+        curr_state.dealerReference = ++curr_state.dealerReference % NUM_PLAYERS;
+        curr_state.currPlayerReference = curr_state.dealerReference;
         updatePlayerWinds();
     } else {
-
+        playExtraHand = false;
     }
-    playExtraHand = false;
     roundIsOver = false;
     init_state();
 }

@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1449553182 source:c:\users\kayla\documents\quarto\mahjong\main.cpp
+1449554864 source:c:\users\kayla\documents\quarto\mahjong\main.cpp
 	<GLUT/glut.h>
 	<GL/gl.h>
 	<GL/glu.h>
@@ -241,7 +241,7 @@
 	<cstring>
 	<stdlib.h>
 
-1449542669 c:\users\kayla\documents\quarto\mahjong\include\tile.h
+1449555295 c:\users\kayla\documents\quarto\mahjong\include\tile.h
 	<string>
 	<vector>
 
