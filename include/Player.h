@@ -10,10 +10,7 @@
     X(NORTH)
 
 #define X(a) a,
-enum wind {
-    WINDS // order prevailing winds rotate in};
-    WINDS_COUNT
- };
+enum wind { WINDS };// order prevailing winds rotate in
 #undef X
 
 #define X(a) #a,
@@ -25,12 +22,14 @@ class Player
     public:
         wind _wind;
         int score;
-        std::vector<Tile> hand, discards, melds, bonuses;
-        Player() { score = 0; };
+
+        Player() : score(0) {};
         bool isDealer();
-        virtual ~Player();
+        //Player &operator=(const Player &other);
+        ~Player() { std::cout << "deleting Player"; };
     protected:
     private:
+        std::vector<Tile> *hand, *discards, *melds, *bonuses;
 
 };
 

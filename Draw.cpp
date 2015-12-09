@@ -39,6 +39,18 @@ void drawBoard()
     glEnd();
     glPopMatrix();
 }
+// displays a floating cone that serves as a pointer above the dealer's (east player's) hand
+void drawEastPlayerMarker()
+{
+    glColor3d(1, 0, 0);
+    glPushMatrix();
+    glTranslated(5, 0, tile_height*1.5);
+    glRotated(180, 0, 1, 0);
+
+    glutWireCone(0.5, 1.0, 10, 10);
+    glPopMatrix();
+}
+
 map<string, string> updates;
 void updateText();
 void Draw::drawGame(float rot_x, float rot_y, float rot_z, Game *game)
@@ -50,16 +62,10 @@ void Draw::drawGame(float rot_x, float rot_y, float rot_z, Game *game)
 
     drawBoard();
 
-    Player *player = game->getHumanPlayer();
-    stringstream ss;
-    ss << " Round Wind: " << game->getPrevailingWind() << "   |   ";
-    ss << " Your Wind: " << wind_strings[player->_wind] << "   |   ";
-    ss << " Your Score: " << player->score;
-    updates["userInfo"] = ss.str();
-    /**
-    vector<Player*> players = game->getPlayers();
-    int i = 0, humanIndex = game->humanPlayerIndex;
-    for (Player *player : players) {
+    Player *player;
+    int humanIndex = game->humanPlayerIndex;
+    for (int i = 0; i < NUM_PLAYERS; i++) {
+        player = game->getPlayer(i);
         if (i == humanIndex) {
             stringstream ss;
             ss << " Round Wind: " << game->getPrevailingWind() << "   |   ";
@@ -67,11 +73,13 @@ void Draw::drawGame(float rot_x, float rot_y, float rot_z, Game *game)
             ss << " Your Score: " << player->score;
             updates["userInfo"] = ss.str();
         }
-        i++;
-    }*/
+        if (player->_wind == EAST) {
+            drawEastPlayerMarker();
+        }
+    }
+    tile.draw(5, 0, 90, 0);
     updateText();
 }
-
 void *font = GLUT_BITMAP_9_BY_15;
 /** got the following two functions from tutorial at:
 http://www.lighthouse3d.com/tutorials/glut-tutorial/bitmap-fonts-and-orthogonal-projections/

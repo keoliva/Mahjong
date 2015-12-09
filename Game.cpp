@@ -9,6 +9,7 @@ Game::Game()
     chooseDealer();
     for (int i = 0; i < NUM_PLAYERS; i++)
         curr_state.players[i] = new Player();
+
     updatePlayerWinds();
     init_state();
 }
@@ -29,9 +30,9 @@ void Game::restart()
     }
     if (!playExtraHand) {
         // update round wind
-        rounds = ++rounds % NUM_ROUNDS;
+        rounds = (rounds + 1) % NUM_ROUNDS;
         // update dealer
-        curr_state.dealerReference = ++curr_state.dealerReference % NUM_PLAYERS;
+        curr_state.dealerReference = (curr_state.dealerReference + 1) % NUM_PLAYERS;
         curr_state.currPlayerReference = curr_state.dealerReference;
         updatePlayerWinds();
     } else {
@@ -53,17 +54,13 @@ Player *Game::getCurrentPlayer()
 {
     return curr_state.players[curr_state.currPlayerReference];
 }
-Player *Game::getHumanPlayer()
+Player **Game::getPlayers()
 {
-    return curr_state.players[0];
+    return curr_state.players;
 }
-vector<Player*> Game::getPlayers()
+Player *Game::getPlayer(int i)
 {
-    vector<Player*> vec;
-    for (int i = 0; i < NUM_PLAYERS; i++)
-        vec.push_back(curr_state.players[i]);
-
-    return vec;
+    return curr_state.players[i];
 }
 string Game::getPrevailingWind()
 {
@@ -85,8 +82,10 @@ bool Game::matchOver()
 
 Game::~Game()
 {
-    for (Tile *tile : pile)
+    cout << "deleting game.." << endl;
+    for (Tile *tile : pile) {
         delete tile;
+    }
     for (int i = 0; i < NUM_PLAYERS; i++)
         delete curr_state.players[i];
 }

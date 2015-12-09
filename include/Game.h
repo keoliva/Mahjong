@@ -3,13 +3,15 @@
 #include "Player.h"
 #define NUM_ROUNDS 4
 #define NUM_PLAYERS 4
+#define INIT_NUM_TILES 144
 #include <iostream>
+#include <memory>
 #include <string>
 
-struct state {
-    Player *players[4]; // at 0: human player, 1: player to the right of human player and so on
+typedef struct state {
+    Player *players[NUM_PLAYERS]; // at 0: human player, 1: player to the right of human player and so on
     int dealerReference, currPlayerReference;
-};
+} state;
 
 class Game
 {
@@ -18,9 +20,9 @@ class Game
         Game();
         std::string getPrevailingWind(); // round wind
         int getTilesLeft();
+        Player **getPlayers();
         Player *getCurrentPlayer();
-        Player *getHumanPlayer();
-        std::vector<Player*> getPlayers();
+        Player *getPlayer(int i);
         bool roundOver();
         void restart(); // start new round
         virtual ~Game();

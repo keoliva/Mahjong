@@ -44,7 +44,7 @@ static void display(void)
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    draw->drawGame(rot_x, rot_y, rot_z);
+    draw->drawGame(rot_x, rot_y, rot_z, game);
 
     glutSwapBuffers();
 }

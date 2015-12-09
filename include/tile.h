@@ -28,7 +28,7 @@ class SuitTile : public Tile {
     public:
         int suit;
         std::string className;
-        SuitTile(std::string name, int suitNumber) : Tile(SUIT), className(name), suit(suitNumber) {};
+        SuitTile(std::string name, int suitNumber) : Tile(SUIT), suit(suitNumber), className(name) {};
         std::string get_val() const;
 };
 
@@ -48,7 +48,7 @@ class CircleTile : public SuitTile {
 class AttributeTile : public Tile {
     public:
         std::string attribute, className;
-        AttributeTile(std::string name, tileType _tileType, std::string attribute_type) : Tile(_tileType), className(name), attribute(attribute_type) {};
+        AttributeTile(std::string name, tileType _tileType, std::string attribute_type) : Tile(_tileType), attribute(attribute_type), className(name) {};
         std::string get_val() const;
 };
 
