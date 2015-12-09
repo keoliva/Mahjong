@@ -46,8 +46,7 @@ void drawEastPlayerMarker()
     glPushMatrix();
     glTranslated(5, 0, tile_height*1.5);
     glRotated(180, 0, 1, 0);
-
-    glutWireCone(0.5, 1.0, 10, 10);
+    glutSolidCone(0.5, 1.0, 10, 10);
     glPopMatrix();
 }
 
@@ -62,12 +61,22 @@ void Draw::drawGame(float rot_x, float rot_y, float rot_z, Game *game)
 
     drawBoard();
 
+    stringstream ss;
+    ss << "Tiles Left: " << game->getTilesLeft();
+    updates["tilesLeft"] = ss.str();
+    ss.str("");
+
     Player *player;
     int humanIndex = game->humanPlayerIndex;
     for (int i = 0; i < NUM_PLAYERS; i++) {
         player = game->getPlayer(i);
+        cout << "Player " << i << endl;
+        cout << "====================" << endl;
+        for (Tile *tile : player->hand) {
+            cout << tile->get_val();
+        }
+        cout << endl;
         if (i == humanIndex) {
-            stringstream ss;
             ss << " Round Wind: " << game->getPrevailingWind() << "   |   ";
             ss << " Your Wind: " << wind_strings[player->_wind] << "   |   ";
             ss << " Your Score: " << player->score;
@@ -87,6 +96,12 @@ http://www.lighthouse3d.com/tutorials/glut-tutorial/bitmap-fonts-and-orthogonal-
 void setOrthographicProjection(int w, int h);
 void restorePerspectiveProjection(void);
 void renderString(float x, float y, void *font, const char *str, int len);
+void renderUpdates(string msg, int window_width, float height)
+{
+    const unsigned char *c_str = (const unsigned char *)msg.c_str();
+    int c_str_width = glutBitmapLength(font, c_str);
+    renderString((window_width-c_str_width)/2.0, height, font, msg.data(), msg.size());
+}
 void updateText()
 {
     // dimensions of current window
@@ -94,10 +109,8 @@ void updateText()
     int window_height = glutGet(GLUT_WINDOW_HEIGHT);
     setOrthographicProjection(window_width, window_height);
 
-    string info = updates["userInfo"];
-    const unsigned char *info_c_str = (const unsigned char *)info.c_str();
-    int info_c_str_width = glutBitmapLength(font, info_c_str);
-    renderString((window_width-info_c_str_width)/2.0, window_height/7, font, info.data(), info.size());
+    renderUpdates(updates["tilesLeft"], window_width, window_height*5/6);
+    renderUpdates(updates["userInfo"], window_width, window_height/7);
 
     restorePerspectiveProjection();
 }

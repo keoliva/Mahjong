@@ -12,12 +12,11 @@ enum tileType {
 
 class Tile {
     public:
+        tileType type;
         Tile(tileType _type) : type(_type) {};
         virtual ~Tile() {};
         virtual std::string get_val() const = 0;
         static std::vector<Tile*>createTheTiles();
-    protected:
-        tileType type;
 };
 
 struct SortTiles { // like a Comparator in Java

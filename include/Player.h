@@ -22,14 +22,16 @@ class Player
     public:
         wind _wind;
         int score;
-
+        std::vector<Tile*> hand, discards, melds, bonuses;
         Player() : score(0) {};
         bool isDealer();
-        //Player &operator=(const Player &other);
+        bool hasFullHand(); // holds if player has a 13-tile hand
+        void sortHand();
+        void takeTile(Tile *tile);
         ~Player() { std::cout << "deleting Player"; };
     protected:
     private:
-        std::vector<Tile> *hand, *discards, *melds, *bonuses;
+
 
 };
 

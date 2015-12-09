@@ -22,6 +22,22 @@ void Game::chooseDealer()
 void Game::init_state()
 {
     pile = Tile::createTheTiles();
+    vector<Tile*>::iterator tileIt;
+    Player *player;
+    for (int i = 0; i < NUM_PLAYERS; i++) {
+        player = curr_state.players[i];
+        while (!player->hasFullHand())
+            takeFromWall(player);
+        player->sortHand();
+    }
+    cout << "finished dealing tiles..." << endl;
+}
+void Game::takeFromWall(Player *player)
+{
+    Tile *tile = pile.back();
+    cout << "Tile being drawn: " << tile->get_val() << endl;
+    player->takeTile(tile);
+    pile.pop_back();
 }
 void Game::restart()
 {
@@ -54,10 +70,7 @@ Player *Game::getCurrentPlayer()
 {
     return curr_state.players[curr_state.currPlayerReference];
 }
-Player **Game::getPlayers()
-{
-    return curr_state.players;
-}
+
 Player *Game::getPlayer(int i)
 {
     return curr_state.players[i];

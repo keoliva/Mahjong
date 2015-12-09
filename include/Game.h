@@ -20,7 +20,6 @@ class Game
         Game();
         std::string getPrevailingWind(); // round wind
         int getTilesLeft();
-        Player **getPlayers();
         Player *getCurrentPlayer();
         Player *getPlayer(int i);
         bool roundOver();
@@ -36,5 +35,6 @@ class Game
         void updatePlayerWinds();
         bool roundIsOver, playExtraHand; // holds if dealer wins or there's a draw
         bool matchOver();
+        void takeFromWall(Player *player);
 };
 #endif // GAME_H

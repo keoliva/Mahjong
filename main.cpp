@@ -135,7 +135,7 @@ void testInitGame()
     cout << "ROUND_OVER == FALSE: " << ((game->roundOver() == false)?"PASSED":"FAILED") << endl;
     wind pwind = game->getCurrentPlayer()->_wind;
     cout << "Current Player's Wind: " << ((pwind == EAST)?"PASSED":"FAILED") << endl;
-    cout << "Tiles created == 144: " << ((game->getTilesLeft() == 144)?"PASSED":"FAILED") << endl;
+    cout << "Tiles left: " << (game->getTilesLeft()) << endl;
 }
 
 int main(int argc, char *argv[])
