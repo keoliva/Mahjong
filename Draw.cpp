@@ -50,12 +50,12 @@ void drawEastPlayerMarker(PlayingOrder playerIndex)
     if (playerIndex == HUMAN) {
         loc = boardLoc(COLS/10, 0);
     } else if (playerIndex == RIGHT_OF_HUMAN) {
-        loc = boardLoc(0, BOARD_SIZE/10);
+        loc = boardLoc(COLS-(COLS/10), ROWS/10);
     } else if (playerIndex == ACROSS_HUMAN) {
-        loc.x = BOARD_SIZE - (BOARD_SIZE/10);
+        loc.x = COLS - (COLS/10);
         loc.y = loc.x;
     } else if (playerIndex == LEFT_OF_HUMAN) {
-        loc = boardLoc(0, BOARD_SIZE - (BOARD_SIZE/10));
+        loc = boardLoc(0, ROWS - (ROWS/10));
     }
     glTranslated(loc.x, loc.y, tile_height*2);
     glRotated(180, 0, 1, 0);
@@ -115,8 +115,7 @@ void Draw::drawGame(float rot_x, float rot_y, float rot_z, mouseActivity mouseIn
     glRotated(rot_y, 0, 1, 0);
     glRotated(rot_z, 0, 0, 1);
     drawBoard();
-    cout << "inside draw. selectionIndex = " << mouseInfo.selectionIndex << endl;
-    cout << "inside draw. mouseMoved: " << mouseInfo.mouseMoved << endl;
+
     stringstream ss;
     ss << "Tiles Left: " << game->getTilesLeft();
     updates["tilesLeft"] = ss.str();
@@ -147,7 +146,7 @@ void Draw::drawGame(float rot_x, float rot_y, float rot_z, mouseActivity mouseIn
                 if (i == humanIndex) glStencilFunc(GL_ALWAYS, pieceIndex + 1, -1);
                 loc = getPieceLoc(REGULAR, playerPos, j);
                 // if it's the human's turn, and this is the last tile, raise it
-                if (i == humanIndex) {
+                if (game->getCurrentPlayer() == game->getPlayer(humanIndex) && i == humanIndex) {
                     if (pieceIndex == handSize - 1 && !mouseOverOther)
                         loc.z += tile_height/4;
                     else if (mouseInfo.mouseMoved && (mouseInfo.selectionIndex == pieceIndex + 1)) {
