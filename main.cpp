@@ -22,8 +22,9 @@
 using namespace std;
 
 static Draw *draw;
-Game *game;
+static Game *game;
 static float rot_x = -80.0f, rot_y = 0.0f, rot_z = 0.0f;
+int selection_index;
 /* GLUT callback Handlers */
 
 static void resize(int width, int height)
@@ -49,6 +50,18 @@ static void display(void)
     glutSwapBuffers();
 }
 
+static void mouseButton(int button, int state, int x, int y)
+{
+    if (button != GLUT_LEFT_BUTTON || state != GLUT_DOWN || game->roundOver()) return;
+    int window_height = glutGet(GLUT_WINDOW_HEIGHT);
+
+    GLuint index;
+    glReadPixels(x, window_height - y - 1, 1, 1, GL_STENCIL_INDEX, GL_UNSIGNED_INT, &index);
+
+    selection_index = index;
+
+    glutPostRedisplay();
+}
 
 static void key(unsigned char key, int x, int y)
 {
@@ -56,7 +69,6 @@ static void key(unsigned char key, int x, int y)
     {
         case 27 :
         case 'q':
-            //delete tile;
             delete draw;
             delete game;
             exit(0);
@@ -82,7 +94,6 @@ static void key(unsigned char key, int x, int y)
             rot_z += 1.0f;
             break;
     }
-
     glutPostRedisplay();
 }
 
@@ -135,7 +146,6 @@ void testInitGame()
     cout << "ROUND_OVER == FALSE: " << ((game->roundOver() == false)?"PASSED":"FAILED") << endl;
     wind pwind = game->getCurrentPlayer()->_wind;
     cout << "Current Player's Wind: " << ((pwind == EAST)?"PASSED":"FAILED") << endl;
-    cout << "Tiles left: " << (game->getTilesLeft()) << endl;
 }
 
 int main(int argc, char *argv[])
@@ -150,6 +160,7 @@ int main(int argc, char *argv[])
     glutReshapeFunc(resize);
     glutDisplayFunc(display);
     glutKeyboardFunc(key);
+    glutMouseFunc(mouseButton);
     //glutIdleFunc(idle);
     init();
     testInitGame();

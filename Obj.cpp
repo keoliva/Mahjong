@@ -199,13 +199,14 @@ void Obj::loadObj()
     glEndList();
 }
 
-void Obj::draw(int x, int y, float rot_x, float rot_y)
+void Obj::draw(int x, int y, int z, float rot_x, float rot_y, float rot_z)
 {
     glPushMatrix();
-    glTranslatef(x, y, 0);
+    glTranslatef(x, y, z);
 
     glRotatef(rot_x, 1, 0, 0);
     glRotatef(rot_y, 0, 1, 0);
+    glRotatef(rot_z, 0, 0, 1);
 
     glCallList(model);
     glPopMatrix();

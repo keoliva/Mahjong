@@ -5,6 +5,7 @@ using namespace std;
 int Game::humanPlayerIndex = 0;
 Game::Game()
 {
+    roundIsOver = false;
     rounds = 0;
     chooseDealer();
     for (int i = 0; i < NUM_PLAYERS; i++)
