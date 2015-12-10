@@ -1,5 +1,5 @@
 #include "Game.h"
-#include <time.h>
+#include <chrono>
 #include <random>
 using namespace std;
 int Game::humanPlayerIndex = 0;
@@ -16,8 +16,11 @@ Game::Game()
 }
 void Game::chooseDealer()
 {
-    srand(time(NULL));
-    curr_state.dealerReference = rand() % NUM_PLAYERS;
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    default_random_engine generator (seed);
+    uniform_int_distribution<int> dist(0, NUM_PLAYERS-1);
+    // index into curr_state.players
+    curr_state.dealerReference = dist(generator);
     curr_state.currPlayerReference = curr_state.dealerReference;
 }
 void Game::init_state()

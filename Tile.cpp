@@ -1,11 +1,9 @@
 #include "include/Tile.h"
-#include <iostream>
-#include <sstream>
-#include <time.h>
-#include <stdlib.h>
-#include <random>       // std::default_random_engine
 #include <algorithm> // std::random_shuffle
-#include <chrono>  // std::chrono::system_clock
+#include <chrono>
+#include <iostream>
+#include <random>       // std::default_random_engine
+#include <sstream>
 using namespace std;
 
 string SuitTile::get_val() const
@@ -57,15 +55,15 @@ vector<Tile*> Tile::createTheTiles()
     }
     // giving us a total of 144 tiles
     // shuffle the tiles
-    srand(time(NULL));
     int _size = tiles.size();
     int j;
+    unsigned seed = chrono::system_clock::now().time_since_epoch().count();
+    default_random_engine generator (seed);
     for (int i = _size-1; i > 0; i--) {
-        j = rand() % (i + 1); // random index from 0 to i
+        uniform_int_distribution<int> dist(0, i);
+        j = dist(generator); // random index from 0 to i
         iter_swap(tiles.begin() + i, tiles.begin() + j);
     }
-    //std::shuffle(tiles.begin(), tiles.end(), engine);
-
     return tiles;
 }
 
