@@ -1,7 +1,6 @@
 #include "include/Player.h"
 #include "include/Tile.h"
 #include <algorithm>
-#define FULL_HAND_SIZE 13
 using namespace std;
 
 bool Player::isDealer()

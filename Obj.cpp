@@ -199,7 +199,7 @@ void Obj::loadObj()
     glEndList();
 }
 
-void Obj::draw(int x, int y, int z, float rot_x, float rot_y, float rot_z)
+void Obj::draw(float x, float y, float z, float rot_x, float rot_y, float rot_z)
 {
     glPushMatrix();
     glTranslatef(x, y, z);

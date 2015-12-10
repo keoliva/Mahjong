@@ -48,7 +48,7 @@ class Obj
         Obj(std::string nameObj);
         Obj(char *path, std::string nameObj);
         void loadObj();
-        void draw(int x, int y, int z, float rot_x, float r_y, float r_z=0.0f);
+        void draw(float x, float y, float z, float rot_x, float r_y, float r_z=0.0f);
         virtual ~Obj() { std::cout << "deleting Obj\n"; };
     private:
         int model;

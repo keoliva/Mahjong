@@ -3,6 +3,7 @@
 #include "Tile.h"
 #include <iostream>
 #include <string>
+#define FULL_HAND_SIZE 13
 #define WINDS \
     X(EAST)\
     X(SOUTH)\
