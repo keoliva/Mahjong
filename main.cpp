@@ -24,7 +24,8 @@ using namespace std;
 static Draw *draw;
 static Game *game;
 static float rot_x = -80.0f, rot_y = 0.0f, rot_z = 0.0f;
-int selection_index;
+int selectedTileIndex;
+bool mouseMoved, mouseClicked;
 /* GLUT callback Handlers */
 
 static void resize(int width, int height)
@@ -45,21 +46,36 @@ static void display(void)
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    draw->drawGame(rot_x, rot_y, rot_z, game);
+    mouseActivity mouseInfo;
+    mouseInfo = mouseActivity(mouseMoved, mouseClicked, selectedTileIndex);
 
+    draw->drawGame(rot_x, rot_y, rot_z, mouseInfo, game);
     glutSwapBuffers();
 }
 
 static void mouseButton(int button, int state, int x, int y)
 {
-    if (button != GLUT_LEFT_BUTTON || state != GLUT_DOWN || game->roundOver()) return;
+    if (button != GLUT_LEFT_BUTTON || state != GLUT_DOWN || game->roundOver()
+        || game->getCurrentPlayer() != game->getPlayer(game->humanPlayerIndex)) return;
+    int window_height = glutGet(GLUT_WINDOW_HEIGHT);
+
+    GLuint index;
+    glReadPixels(x, window_height - y - 1, 1, 1, GL_STENCIL_INDEX, GL_UNSIGNED_INT, &index);
+    mouseClicked = true;
+    selectedTileIndex = index;
+    glutPostRedisplay();
+}
+static void mouseMove(int x, int y)
+{
+    if (game->roundOver() ||
+        game->getCurrentPlayer() != game->getPlayer(game->humanPlayerIndex)) return;
     int window_height = glutGet(GLUT_WINDOW_HEIGHT);
 
     GLuint index;
     glReadPixels(x, window_height - y - 1, 1, 1, GL_STENCIL_INDEX, GL_UNSIGNED_INT, &index);
 
-    selection_index = index;
-
+    mouseMoved = true;
+    selectedTileIndex = index;
     glutPostRedisplay();
 }
 
@@ -161,7 +177,8 @@ int main(int argc, char *argv[])
     glutDisplayFunc(display);
     glutKeyboardFunc(key);
     glutMouseFunc(mouseButton);
-    //glutIdleFunc(idle);
+    glutPassiveMotionFunc(mouseMove);
+    glutIdleFunc(idle);
     init();
     testInitGame();
 

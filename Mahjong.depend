@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1449730666 source:c:\users\kayla\documents\quarto\mahjong\main.cpp
+1449738725 source:c:\users\kayla\documents\quarto\mahjong\main.cpp
 	<GLUT/glut.h>
 	<GL/gl.h>
 	<GL/glu.h>
@@ -250,7 +250,7 @@
 1419773313 c:\mingw\include\math.h
 	<_mingw.h>
 
-1449732865 source:c:\users\kayla\documents\quarto\mahjong\draw.cpp
+1449740313 source:c:\users\kayla\documents\quarto\mahjong\draw.cpp
 	"include/Draw.h"
 	"include/Obj.h"
 	<GL/gl.h>
@@ -258,12 +258,12 @@
 	<map>
 	<sstream>
 
-1449729648 c:\users\kayla\documents\quarto\mahjong\include\draw.h
+1449740374 c:\users\kayla\documents\quarto\mahjong\include\draw.h
 	"Game.h"
 
 1449389716 c:\users\kayla\documents\quarto\mahjong\resources\tile.h
 
-1449730666 source:c:\users\kayla\documents\quarto\mahjong\game.cpp
+1449732459 source:c:\users\kayla\documents\quarto\mahjong\game.cpp
 	"Game.h"
 	<time.h>
 	<random>
