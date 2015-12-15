@@ -2,6 +2,7 @@
 #include <chrono>
 #include <random>
 using namespace std;
+
 int Game::humanPlayerIndex = 0;
 Game::Game()
 {
@@ -10,9 +11,14 @@ Game::Game()
     chooseDealer();
     for (int i = 0; i < NUM_PLAYERS; i++)
         curr_state.players[i] = new Player();
-
     updatePlayerWinds();
     init_state();
+}
+void Game::start()
+{
+    cout << "starting game..." << endl;
+    turnManager = new Turn(this, getCurrentPlayer());
+    turnManager->init();
 }
 void Game::chooseDealer()
 {
@@ -24,7 +30,6 @@ void Game::chooseDealer()
 void Game::init_state()
 {
     pile = Tile::createTheTiles();
-    vector<Tile*>::iterator tileIt;
     Player *player;
     for (int i = 0; i < NUM_PLAYERS; i++) {
         player = curr_state.players[i];
@@ -33,28 +38,67 @@ void Game::init_state()
         player->sortHand();
     }
     cout << "finished dealing tiles..." << endl;
+    //onStartTurn();
+}
+void Game::switchPlayer()
+{
+    curr_state.currPlayerReference++;
+    curr_state.currPlayerReference %= NUM_PLAYERS;
+
+    turnManager->setCurrentPlayer(getCurrentPlayer());
+    turnManager->init();
 }
 void Game::takeFromWall(Player *player)
 {
-    Tile *tile = pile.back();
-    cout << "Tile being drawn: " << tile->get_val() << endl;
-    player->takeTile(tile);
-    pile.pop_back();
+    Tile *tile;
+    bool successfullyTookTile = false;
+    while (!pile.empty()) {
+        tile = pile.back();
+        player->takeTile(tile);
+        cout << "Tile being drawn: " << tile->get_val() << endl;
+        pile.pop_back();
+        if (tile->type == BONUS) {
+            discardedTile = tile;
+            continue;
+        } else {
+            successfullyTookTile = true;
+            break;
+        }
+    }
+    if (!successfullyTookTile) throw NoMoreTilesError(); return;
+}
+void Game::getDiscard(Tile *tile)
+{
+    discardedTile = tile;
+    cout << "the tile " << tile->get_val() << " was discarded by player " << wind_strings[getCurrentPlayer()->_wind] << endl;
+    // after termining no one wants the the discarded tile
+}
+void Game::finishGame()
+{
+    // check if any players have Mahjong, otherwise
+    roundIsOver = true;
+    playExtraHand = true;
+    // update status to Draw
+    cout << "finished Game" << endl;
 }
 void Game::restart()
 {
-    if (matchOver()) {
-        chooseDealer();
-    }
     if (!playExtraHand) {
-        // update round wind
-        rounds = (rounds + 1) % NUM_ROUNDS;
-        // update dealer
-        curr_state.dealerReference = (curr_state.dealerReference + 1) % NUM_PLAYERS;
-        curr_state.currPlayerReference = curr_state.dealerReference;
-        updatePlayerWinds();
+        if (matchOver()) {
+            chooseDealer();
+            updatePlayerWinds();
+        } else {
+            // update round wind
+            rounds = (rounds + 1) % NUM_ROUNDS;
+            // update dealer
+            curr_state.dealerReference++;
+            curr_state.dealerReference %= NUM_PLAYERS;
+            curr_state.currPlayerReference = curr_state.dealerReference;
+            updatePlayerWinds();
+        }
     } else {
         playExtraHand = false;
+        curr_state.currPlayerReference = curr_state.dealerReference;
     }
     roundIsOver = false;
     init_state();
@@ -98,6 +142,7 @@ bool Game::matchOver()
 Game::~Game()
 {
     cout << "deleting game.." << endl;
+    delete turnManager;
     for (Tile *tile : pile) {
         delete tile;
     }

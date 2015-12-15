@@ -4,7 +4,7 @@
 #include <GL/glut.h>
 #include <map>
 #include <sstream>
-#define ROWS 18
+#define ROWS 22
 #define COLS 22
 #define BOARD_SIZE 20
 using namespace std;
@@ -80,9 +80,9 @@ boardLoc Draw::getPieceLoc(HandTile type, PlayingOrder playerIndex,
     if (type == REGULAR) return loc;
     float y;
     if (playerIndex == HUMAN || playerIndex == ACROSS_HUMAN)
-        y = tile_height * (2 + row); // shift 2 units closer to the center of board
+        y = tile_height * (3 - row); // shift 4 units closer to the center of board
     else
-        y = tile_height * (4 + row); // shift 4 units closer to the center of board
+        y = tile_height * (5 - row); // shift 4 units closer to the center of board
     if (type == DISCARDED) {
         if (playerIndex == HUMAN) {
             loc.y += y;
@@ -129,7 +129,7 @@ void Draw::drawGame(float rot_x, float rot_y, float rot_z, mouseActivity mouseIn
     int humanIndex = game->humanPlayerIndex;
     int rows, discardedRowLength;
     int firstIndex, lastIndex;
-    unsigned int pieceIndex=0, handSize, meldsSize;
+    unsigned int pieceIndex=0, handSize, meldsSize, discardsSize;
     for (int i = 0; i < NUM_PLAYERS; i++) {
         player = game->getPlayer(i);
         playerPos = static_cast<PlayingOrder>(i);
@@ -167,6 +167,7 @@ void Draw::drawGame(float rot_x, float rot_y, float rot_z, mouseActivity mouseIn
         }
         // draw revealed melds and bonus tiles
         {
+            pieceIndex = 0;
             meldsSize = player->melds.size();
             lastIndex = firstIndex + player->bonuses.size() + meldsSize;
             Tile *revealed_tile;
@@ -183,19 +184,22 @@ void Draw::drawGame(float rot_x, float rot_y, float rot_z, mouseActivity mouseIn
         // draw discarded tiles
         {
             if (playerPos == HUMAN || playerPos == ACROSS_HUMAN) {
-                discardedRowLength = FULL_HAND_SIZE;
+                discardedRowLength = 11;
                 firstIndex = (COLS - handSize)/3;
             } else {
-                discardedRowLength = FULL_HAND_SIZE/2;
+                discardedRowLength = 6;
                 firstIndex = (ROWS - handSize);
             }
-            lastIndex = firstIndex + player->discards.size();
-            rows = (player->discards.size() / discardedRowLength) + 1;
-            for (int row = 0; row < rows; row++) {
-                for (int j = firstIndex; j < lastIndex; j++) {
-                    loc = getPieceLoc(DISCARDED, playerPos, j, row);
-                    tile.draw(loc.x, loc.y, loc.z, loc.rotX, loc.rotY, loc.rotZ);
-                    pieceIndex++;
+            discardsSize = player->discards.size();
+            int ith = firstIndex, row = 0;
+            pieceIndex = 0;
+            for (; pieceIndex < discardsSize; pieceIndex++) {
+                loc = getPieceLoc(DISCARDED, playerPos, ith++, row);
+                tile.draw(loc.x, loc.y, loc.z, loc.rotX, loc.rotY, loc.rotZ);
+
+                if ((pieceIndex + 1) % discardedRowLength == 0) {
+                        ith = firstIndex;
+                        row++;
                 }
             }
 

@@ -28,11 +28,12 @@ class Player
         bool isDealer();
         bool hasFullHand(); // holds if player has a 13-tile hand
         void sortHand();
+        bool wantsToUseRecentlyDiscardedTile(Tile *tile);
         void takeTile(Tile *tile);
+        Tile *discardTile();
         ~Player() { std::cout << "deleting Player"; };
     protected:
     private:
-
 
 };
 

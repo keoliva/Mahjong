@@ -46,13 +46,18 @@
 		</Linker>
 		<Unit filename="Draw.cpp" />
 		<Unit filename="Game.cpp" />
+		<Unit filename="GameObserver.cpp" />
 		<Unit filename="Obj.cpp" />
 		<Unit filename="Player.cpp" />
+		<Unit filename="Subject.cpp" />
 		<Unit filename="Tile.cpp" />
 		<Unit filename="include/Draw.h" />
 		<Unit filename="include/Game.h" />
+		<Unit filename="include/GameObserver.h" />
 		<Unit filename="include/Obj.h" />
+		<Unit filename="include/Observer.h" />
 		<Unit filename="include/Player.h" />
+		<Unit filename="include/Subject.h" />
 		<Unit filename="include/Tile.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="resources/tile.h" />

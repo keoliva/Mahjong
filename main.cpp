@@ -89,6 +89,9 @@ static void key(unsigned char key, int x, int y)
             delete game;
             exit(0);
             break;
+        case 's':
+            game->start();
+            break;
         case 'a':
             rot_x -= 1.0f;
             cout << "rot_x: " << rot_x << endl;
@@ -110,11 +113,6 @@ static void key(unsigned char key, int x, int y)
             rot_z += 1.0f;
             break;
     }
-    glutPostRedisplay();
-}
-
-static void idle(void)
-{
     glutPostRedisplay();
 }
 
@@ -178,11 +176,9 @@ int main(int argc, char *argv[])
     glutKeyboardFunc(key);
     glutMouseFunc(mouseButton);
     glutPassiveMotionFunc(mouseMove);
-    glutIdleFunc(idle);
     init();
     testInitGame();
 
     glutMainLoop();
-
     return EXIT_SUCCESS;
 }
