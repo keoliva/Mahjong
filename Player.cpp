@@ -23,13 +23,21 @@ void Player::takeTile(Tile *tile)
     else
         hand.push_back(tile);
 }
-Tile *Player::discardTile()
+Tile *Player::discardTile(int selected_index)
 {
-    unsigned seed = chrono::system_clock::now().time_since_epoch().count();
-    default_random_engine generator (seed);
-    uniform_int_distribution<int> dist(0, hand.size()-1);
-    int index = dist(generator); // random index from
-    Tile *discardedTile = hand[index];
+    Tile *discardedTile;
+    int index;
+    if (selected_index) {
+        index = selected_index;
+        discardedTile = hand[selected_index];
+    } else {
+        unsigned seed = chrono::system_clock::now().time_since_epoch().count();
+        default_random_engine generator (seed);
+        uniform_int_distribution<int> dist(0, hand.size()-1);
+        index = dist(generator); // random index from
+        discardedTile = hand[index];
+    }
+
     discards.push_back(discardedTile);
     hand.erase(hand.begin() + index);
 

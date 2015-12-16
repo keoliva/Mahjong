@@ -18,6 +18,7 @@
 #include <string>
 #include <math.h>
 #include "include/Game.h"
+#include "include/InputHandler.h"
 #include "include/Draw.h"
 using namespace std;
 
@@ -46,10 +47,17 @@ static void display(void)
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    mouseActivity mouseInfo;
-    mouseInfo = mouseActivity(mouseMoved, mouseClicked, selectedTileIndex);
+    mouseKeyActivity mouseInfo;
+    mouseInfo = mouseKeyActivity(mouseMoved, mouseClicked, selectedTileIndex);
+
+    InputHandler inputHandler = InputHandler(mouseInfo);
+    Command *command = inputHandler.handleInput();
+    command->execute(game->getCurrentPlayer());
 
     draw->drawGame(rot_x, rot_y, rot_z, mouseInfo, game);
+
+    mouseClicked = false;
+    selectedTileIndex = 0;
     glutSwapBuffers();
 }
 
@@ -63,6 +71,7 @@ static void mouseButton(int button, int state, int x, int y)
     glReadPixels(x, window_height - y - 1, 1, 1, GL_STENCIL_INDEX, GL_UNSIGNED_INT, &index);
     mouseClicked = true;
     selectedTileIndex = index;
+    cout << "clicked: " << selectedTileIndex << endl;
     glutPostRedisplay();
 }
 static void mouseMove(int x, int y)

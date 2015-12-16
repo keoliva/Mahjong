@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1450133799 source:c:\users\kayla\documents\quarto\mahjong\main.cpp
+1450218930 source:c:\users\kayla\documents\quarto\mahjong\main.cpp
 	<GLUT/glut.h>
 	<GL/gl.h>
 	<GL/glu.h>
@@ -9,6 +9,7 @@
 	<string>
 	<math.h>
 	"include/Game.h"
+	"include/InputHandler.h"
 	"include/Draw.h"
 
 1301111164 c:\mingw\include\gl\gl.h
@@ -250,7 +251,7 @@
 1419773313 c:\mingw\include\math.h
 	<_mingw.h>
 
-1450132296 source:c:\users\kayla\documents\quarto\mahjong\draw.cpp
+1450177982 source:c:\users\kayla\documents\quarto\mahjong\draw.cpp
 	"include/Draw.h"
 	"include/Obj.h"
 	<GL/gl.h>
@@ -258,17 +259,18 @@
 	<map>
 	<sstream>
 
-1449742069 c:\users\kayla\documents\quarto\mahjong\include\draw.h
+1450175791 c:\users\kayla\documents\quarto\mahjong\include\draw.h
 	"Game.h"
+	"InputHandler.h"
 
 1449389716 c:\users\kayla\documents\quarto\mahjong\resources\tile.h
 
-1450133717 source:c:\users\kayla\documents\quarto\mahjong\game.cpp
+1450218745 source:c:\users\kayla\documents\quarto\mahjong\game.cpp
 	"Game.h"
 	<chrono>
 	<random>
 
-1450128887 c:\users\kayla\documents\quarto\mahjong\include\game.h
+1450142550 c:\users\kayla\documents\quarto\mahjong\include\game.h
 	"Player.h"
 	"Turn.h"
 	<iostream>
@@ -287,12 +289,12 @@
 	<_mingw.h>
 	<stddef.h>
 
-1450087151 c:\users\kayla\documents\quarto\mahjong\include\player.h
+1450174359 c:\users\kayla\documents\quarto\mahjong\include\player.h
 	"Tile.h"
 	<iostream>
 	<string>
 
-1450093614 source:c:\users\kayla\documents\quarto\mahjong\player.cpp
+1450177057 source:c:\users\kayla\documents\quarto\mahjong\player.cpp
 	"include/Player.h"
 	"include/Tile.h"
 	<algorithm>
@@ -324,5 +326,18 @@
 1450133717 source:c:\users\kayla\documents\quarto\mahjong\turn.cpp
 	"Turn.h"
 	<GL/glut.h>
+	<iostream>
+
+1450178739 c:\users\kayla\documents\quarto\mahjong\include\inputhandler.h
+	"Command.h"
+
+1450177956 c:\users\kayla\documents\quarto\mahjong\include\command.h
+	"Player.h"
+
+1450177884 source:c:\users\kayla\documents\quarto\mahjong\command.cpp
+	"Command.h"
+
+1450181454 source:c:\users\kayla\documents\quarto\mahjong\inputhandler.cpp
+	"InputHandler.h"
 	<iostream>
 

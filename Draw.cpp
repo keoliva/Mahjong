@@ -108,7 +108,7 @@ boardLoc Draw::getPieceLoc(HandTile type, PlayingOrder playerIndex,
 map<string, string> updates;
 bool mouseOverOther = false;
 void updateText();
-void Draw::drawGame(float rot_x, float rot_y, float rot_z, mouseActivity mouseInfo, Game *game)
+void Draw::drawGame(float rot_x, float rot_y, float rot_z, mouseKeyActivity mouseInfo, Game *game)
 {
     glTranslatef(x_coord, y_coord, z_coord);
     glRotated(rot_x, 1, 0, 0);
@@ -127,7 +127,7 @@ void Draw::drawGame(float rot_x, float rot_y, float rot_z, mouseActivity mouseIn
     Player *player;
     PlayingOrder playerPos;
     int humanIndex = game->humanPlayerIndex;
-    int rows, discardedRowLength;
+    int discardedRowLength;
     int firstIndex, lastIndex;
     unsigned int pieceIndex=0, handSize, meldsSize, discardsSize;
     for (int i = 0; i < NUM_PLAYERS; i++) {

@@ -30,7 +30,7 @@ class Player
         void sortHand();
         bool wantsToUseRecentlyDiscardedTile(Tile *tile);
         void takeTile(Tile *tile);
-        Tile *discardTile();
+        Tile *discardTile(int selected_index=0);
         ~Player() { std::cout << "deleting Player"; };
     protected:
     private:
