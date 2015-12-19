@@ -18,7 +18,7 @@ Draw::Draw()
     tile.loadObj();
 }
 
-static float y_coord = -2.0f, z_coord = -13.0f;
+static float y_coord = -2.0f, z_coord = -14.0f;
 static float tile_len = 0.968, tile_height = 1.489; // tile_width = tile_len
 float space_0 = 0.5f, space_1 = 0.01f;
 float x_coord = -COLS/2.0 + space_0;
@@ -130,6 +130,7 @@ void Draw::drawGame(float rot_x, float rot_y, float rot_z, mouseKeyActivity mous
     int discardedRowLength;
     int firstIndex, lastIndex;
     unsigned int pieceIndex=0, handSize, meldsSize, discardsSize;
+    string tilename;
     for (int i = 0; i < NUM_PLAYERS; i++) {
         player = game->getPlayer(i);
         playerPos = static_cast<PlayingOrder>(i);
@@ -154,7 +155,11 @@ void Draw::drawGame(float rot_x, float rot_y, float rot_z, mouseKeyActivity mous
                         mouseOverOther = true;
                     }
                 }
-                tile.draw(loc.x, loc.y, loc.z, loc.rotX, loc.rotY);
+                if (i == humanIndex)
+                    tilename = player->hand[pieceIndex]->get_val();
+                else
+                    tilename = "";
+                tile.draw(loc.x, loc.y, loc.z, loc.rotX, loc.rotY, 0.0f, tilename);
                 pieceIndex++;
             }
         }
@@ -169,6 +174,9 @@ void Draw::drawGame(float rot_x, float rot_y, float rot_z, mouseKeyActivity mous
         {
             pieceIndex = 0;
             meldsSize = player->melds.size();
+            if (playerPos == HUMAN || playerPos == ACROSS_HUMAN)\
+                firstIndex = (COLS - FULL_HAND_SIZE)/2;
+            else firstIndex = (ROWS - FULL_HAND_SIZE)/2;
             lastIndex = firstIndex + player->bonuses.size() + meldsSize;
             Tile *revealed_tile;
             for (int j = firstIndex; j < lastIndex; j++) {
@@ -177,7 +185,8 @@ void Draw::drawGame(float rot_x, float rot_y, float rot_z, mouseKeyActivity mous
                 else
                     revealed_tile = player->bonuses[pieceIndex];
                 loc = getPieceLoc(REVEALED, playerPos, j);
-                tile.draw(loc.x, loc.y, loc.z, loc.rotX, loc.rotY, loc.rotZ);
+                tile.draw(loc.x, loc.y, loc.z, loc.rotX, loc.rotY, loc.rotZ,
+                          revealed_tile->get_val());
                 pieceIndex++;
             }
         }
@@ -185,17 +194,18 @@ void Draw::drawGame(float rot_x, float rot_y, float rot_z, mouseKeyActivity mous
         {
             if (playerPos == HUMAN || playerPos == ACROSS_HUMAN) {
                 discardedRowLength = 11;
-                firstIndex = (COLS - handSize)/3;
+                firstIndex = (COLS - FULL_HAND_SIZE)/3;
             } else {
                 discardedRowLength = 6;
-                firstIndex = (ROWS - handSize);
+                firstIndex = (ROWS - FULL_HAND_SIZE);
             }
             discardsSize = player->discards.size();
             int ith = firstIndex, row = 0;
             pieceIndex = 0;
             for (; pieceIndex < discardsSize; pieceIndex++) {
                 loc = getPieceLoc(DISCARDED, playerPos, ith++, row);
-                tile.draw(loc.x, loc.y, loc.z, loc.rotX, loc.rotY, loc.rotZ);
+                tile.draw(loc.x, loc.y, loc.z, loc.rotX, loc.rotY, loc.rotZ,
+                          (player->discards)[pieceIndex]->get_val());
 
                 if ((pieceIndex + 1) % discardedRowLength == 0) {
                         ith = firstIndex;

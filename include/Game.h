@@ -28,6 +28,7 @@ class Game
         int getTilesLeft();
         Player *getCurrentPlayer();
         Player *getPlayer(int i);
+        void update();
         bool roundOver();
         void start();
         void restart(); // start new round

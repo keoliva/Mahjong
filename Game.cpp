@@ -1,8 +1,9 @@
 #include "Game.h"
+#include <GL/glut.h>
 #include <chrono>
 #include <random>
 using namespace std;
-
+bool turn_started = false;
 int Game::humanPlayerIndex = 0;
 Game::Game()
 {
@@ -13,16 +14,22 @@ Game::Game()
         curr_state.players[i] = new Player();
     updatePlayerWinds();
     init_state();
+
+    turnManager = new Turn(this, getCurrentPlayer());
+}
+void Game::update()
+{
+    if (turn_started)
+        turnManager->update();
 }
 void Game::start()
 {
     cout << "starting game..." << endl;
-    turnManager = new Turn(this, getCurrentPlayer());
     turnManager->init();
+    turn_started = true;
 }
 void Game::chooseDealer()
 {
-    // index into curr_state.players
     srand(time(NULL));
     curr_state.dealerReference = rand() % NUM_PLAYERS;
     curr_state.currPlayerReference = curr_state.dealerReference;
@@ -38,7 +45,6 @@ void Game::init_state()
         player->sortHand();
     }
     cout << "finished dealing tiles..." << endl;
-    //onStartTurn();
 }
 void Game::switchPlayer()
 {

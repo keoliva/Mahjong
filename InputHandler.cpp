@@ -1,6 +1,6 @@
 #include "InputHandler.h"
 #include <iostream>
-InputHandler::InputHandler(mouseKeyActivity input)
+InputHandler::InputHandler(mouseKeyActivity &input)
 {
     input_ = input;
     nullCommand = new NullCommand();

@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1450218930 source:c:\users\kayla\documents\quarto\mahjong\main.cpp
+1450558599 source:c:\users\kayla\documents\quarto\mahjong\main.cpp
 	<GLUT/glut.h>
 	<GL/gl.h>
 	<GL/glu.h>
@@ -10,6 +10,7 @@
 	<math.h>
 	"include/Game.h"
 	"include/InputHandler.h"
+	"include/Obj.h"
 	"include/Draw.h"
 
 1301111164 c:\mingw\include\gl\gl.h
@@ -227,14 +228,15 @@
 1301111156 c:\mingw\include\oleidl.h
 	<objfwd.h>
 
-1449725524 c:\users\kayla\documents\quarto\mahjong\include\obj.h
+1450473954 c:\users\kayla\documents\quarto\mahjong\include\obj.h
 	<vector>
 	<string>
 	<iostream>
 
-1449725524 source:c:\users\kayla\documents\quarto\mahjong\obj.cpp
+1450478545 source:c:\users\kayla\documents\quarto\mahjong\obj.cpp
 	"include/Obj.h"
 	"resources/tile.h"
+	"resources/SOIL.h"
 	<GL/gl.h>
 	<fstream>
 	<iostream>
@@ -242,7 +244,7 @@
 	<cstring>
 	<stdlib.h>
 
-1449641945 c:\users\kayla\documents\quarto\mahjong\include\tile.h
+1450474739 c:\users\kayla\documents\quarto\mahjong\include\tile.h
 	<string>
 	<vector>
 
@@ -251,7 +253,7 @@
 1419773313 c:\mingw\include\math.h
 	<_mingw.h>
 
-1450177982 source:c:\users\kayla\documents\quarto\mahjong\draw.cpp
+1450496473 source:c:\users\kayla\documents\quarto\mahjong\draw.cpp
 	"include/Draw.h"
 	"include/Obj.h"
 	<GL/gl.h>
@@ -263,14 +265,15 @@
 	"Game.h"
 	"InputHandler.h"
 
-1449389716 c:\users\kayla\documents\quarto\mahjong\resources\tile.h
+1450558689 c:\users\kayla\documents\quarto\mahjong\resources\tile.h
 
-1450218745 source:c:\users\kayla\documents\quarto\mahjong\game.cpp
+1450558599 source:c:\users\kayla\documents\quarto\mahjong\game.cpp
 	"Game.h"
+	<GL/glut.h>
 	<chrono>
 	<random>
 
-1450142550 c:\users\kayla\documents\quarto\mahjong\include\game.h
+1450514058 c:\users\kayla\documents\quarto\mahjong\include\game.h
 	"Player.h"
 	"Turn.h"
 	<iostream>
@@ -294,7 +297,7 @@
 	<iostream>
 	<string>
 
-1450177057 source:c:\users\kayla\documents\quarto\mahjong\player.cpp
+1450499651 source:c:\users\kayla\documents\quarto\mahjong\player.cpp
 	"include/Player.h"
 	"include/Tile.h"
 	<algorithm>
@@ -320,15 +323,15 @@
 1449819546 source:c:\users\kayla\documents\quarto\mahjong\subject.cpp
 	"include/Subject.h"
 
-1450115397 c:\users\kayla\documents\quarto\mahjong\include\turn.h
+1450515296 c:\users\kayla\documents\quarto\mahjong\include\turn.h
 	"Game.h"
 
-1450133717 source:c:\users\kayla\documents\quarto\mahjong\turn.cpp
+1450515296 source:c:\users\kayla\documents\quarto\mahjong\turn.cpp
 	"Turn.h"
 	<GL/glut.h>
 	<iostream>
 
-1450178739 c:\users\kayla\documents\quarto\mahjong\include\inputhandler.h
+1450497193 c:\users\kayla\documents\quarto\mahjong\include\inputhandler.h
 	"Command.h"
 
 1450177956 c:\users\kayla\documents\quarto\mahjong\include\command.h
@@ -337,7 +340,14 @@
 1450177884 source:c:\users\kayla\documents\quarto\mahjong\command.cpp
 	"Command.h"
 
-1450181454 source:c:\users\kayla\documents\quarto\mahjong\inputhandler.cpp
+1450403971 source:c:\users\kayla\documents\quarto\mahjong\inputhandler.cpp
 	"InputHandler.h"
 	<iostream>
+
+1450413116 c:\users\kayla\documents\quarto\mahjong\resources\tile_with_img.h
+
+1301111165 c:\mingw\include\gl\glext.h
+	<windows.h>
+
+1450416938 c:\users\kayla\documents\quarto\mahjong\resources\soil.h
 

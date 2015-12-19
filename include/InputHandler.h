@@ -5,7 +5,7 @@
 typedef struct mouseKeyActivity {
     bool mouseMoved, mouseClicked;
     int selectionIndex;
-    mouseKeyActivity() {};
+    mouseKeyActivity() : selectionIndex(0) {};
     mouseKeyActivity(bool moved, bool clicked, int index) :\
         mouseMoved(moved), mouseClicked(clicked), selectionIndex(index) {};
 } mouseKeyActivity;
@@ -13,7 +13,7 @@ typedef struct mouseKeyActivity {
 class InputHandler
 {
     public:
-        InputHandler(mouseKeyActivity input);
+        InputHandler(mouseKeyActivity &input);
         Command *handleInput();
         virtual ~InputHandler();
     private:

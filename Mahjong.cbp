@@ -44,25 +44,30 @@
 			<Add library="gdi32" />
 			<Add directory="C:/MinGW/lib" />
 		</Linker>
+		<Unit filename="Command.cpp" />
 		<Unit filename="Draw.cpp" />
 		<Unit filename="Game.cpp" />
-		<Unit filename="GameObserver.cpp" />
+		<Unit filename="InputHandler.cpp" />
 		<Unit filename="Obj.cpp" />
 		<Unit filename="Player.cpp" />
-		<Unit filename="Subject.cpp" />
 		<Unit filename="Tile.cpp" />
+		<Unit filename="Turn.cpp" />
+		<Unit filename="include/Command.h" />
 		<Unit filename="include/Draw.h" />
 		<Unit filename="include/Game.h" />
-		<Unit filename="include/GameObserver.h" />
+		<Unit filename="include/InputHandler.h" />
 		<Unit filename="include/Obj.h" />
-		<Unit filename="include/Observer.h" />
 		<Unit filename="include/Player.h" />
-		<Unit filename="include/Subject.h" />
 		<Unit filename="include/Tile.h" />
+		<Unit filename="include/Turn.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="resources/SOIL.h" />
 		<Unit filename="resources/tile.h" />
 		<Unit filename="resources/tile.mtl" />
 		<Unit filename="resources/tile.obj" />
+		<Unit filename="resources/tile_with_img.h" />
+		<Unit filename="resources/tile_with_img.mtl" />
+		<Unit filename="resources/tile_with_img.obj" />
 		<Extensions>
 			<code_completion />
 			<envvars />

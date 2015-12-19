@@ -1,5 +1,6 @@
 #include "include/Obj.h"
 #include "resources/tile.h"
+#include "resources/SOIL.h"
 #include <GL/gl.h>
 
 #include <fstream>
@@ -26,6 +27,21 @@ Obj::Obj(char *path, string nameObj)
     parseData(path);
 }
 
+void Obj::loadTexture(string path)
+{
+    unsigned int texID = SOIL_load_OGL_texture
+	(
+		path.c_str(),
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	if (texID == 0) {
+        cout << "SOIL loading error: " << SOIL_last_result() << endl;
+	}
+    glBindTexture(GL_TEXTURE_2D, texID);
+}
+
 void Obj::extractMaterialsData(string path)
 {
     string mtl_path = "resources/" + path;
@@ -35,7 +51,7 @@ void Obj::extractMaterialsData(string path)
         exit(1);
     }
     material mtl = material();
-    string line, type, material_name;
+    string line, type, material_name, img_filepath;
     float r, g, b;
     char *l;
     while (getline(inMtl, line)) {
@@ -43,15 +59,13 @@ void Obj::extractMaterialsData(string path)
         memcpy(l, line.c_str(), line.size()+1);
         type = line.substr(0, line.find_first_of(" "));
         if (type.compare("newmtl") == 0) {
-            if (mtl.name != "") this->materials.push_back(mtl);
+            if (mtl.name != "")
+                this->materials.push_back(mtl);
             material_name = line.substr(type.size() + 1);
             mtl.name = material_name;
         } else if (type.compare("Kd") == 0) {
             sscanf(l, "Kd %f %f %f", &r, &g, &b);
             mtl.diffuse = rgb(r, g, b);
-        } else if (type.compare("Ks")) {
-            sscanf(l, "Ks %f %f %f", &r, &g, &b);
-            mtl.specular = rgb(r, g, b);
         } else { continue; }
         delete[] l;
     }
@@ -69,7 +83,7 @@ Model Obj::extractObjData(string path) {
     string line, type, mtl_filename, material_name;
     int mtl_reference;
     char *l;
-    float x, y, z;
+    float x, y, z, u, v;
     while (getline(inObj, line)) {
         l = new char[line.size()+1];
         memcpy(l, line.c_str(), line.size()+1);
@@ -80,6 +94,10 @@ Model Obj::extractObjData(string path) {
         } else if (type.compare("v") == 0) {
             sscanf(l, "v %f %f %f", &x, &y, &z);
             model.vertices.push_back(coord(x, y, z));
+        } else if (type.compare("vt") == 0) {
+            sscanf(l, "vt %f %f", &u, &v);
+            // in opengl, bottom-left corner is origin, but in .obj file origin is top-left corner
+            model.textures.push_back(texcoord(1-u, 1-v));
         } else if (type.compare("vn") == 0) {
             sscanf(l, "vn %f %f %f", &x, &y, &z);
             model.normals.push_back(coord(x, y, z));
@@ -88,24 +106,25 @@ Model Obj::extractObjData(string path) {
             int i = 0;
             for (material mtl : this->materials) {
                 if (material_name.compare(mtl.name) == 0) {
-                    mtl_reference = i;
-                    break;
+                    mtl_reference = i; break;
                 }
                 i++;
             }
         } else if (type.compare("f") == 0) {
             face currFace;
-            int a, b, c, d, e, f;
-            // REQUIRE obj to be triangulated so format of faces is
-            // Vertex-Normal Indices Without Texture Coordinate Indices
-            sscanf(l, "f %d//%d %d//%d %d//%d", &a, &b, &c, &d, &e, &f);
-            // v0-v2, n0-n2 are indices references starting from 1
+            int a, b, c, d, e, f, g, h, i;
+            // REQUIRE obj to be triangulated so format of faces is Vertex-Textrue-Normal indices
+            sscanf(l, "f %d/%d/%d %d/%d/%d %d/%d/%d", &a, &b, &c, &d, &e, &f, &g, &h, &i);
+            // a-i are references starting from 1
             currFace.vertices[0] = model.vertices[a - 1];
-            currFace.normals[0] = model.normals[b - 1];
-            currFace.vertices[1] = model.vertices[c - 1];
-            currFace.normals[1] = model.normals[d - 1];
-            currFace.vertices[2] = model.vertices[e - 1];
-            currFace.normals[2] = model.normals[f - 1];
+            currFace.textures[0] = model.textures[b - 1];
+            currFace.normals[0] = model.normals[c - 1];
+            currFace.vertices[1] = model.vertices[d - 1];
+            currFace.textures[1] = model.textures[e - 1];
+            currFace.normals[1] = model.normals[f - 1];
+            currFace.vertices[2] = model.vertices[g - 1];
+            currFace.textures[2] = model.textures[h - 1];
+            currFace.normals[2] = model.normals[i - 1];
             currFace.materialReference = mtl_reference;
             model.faces.push_back(currFace);
             model.facesNum++;
@@ -113,30 +132,27 @@ Model Obj::extractObjData(string path) {
         delete[] l;
     }
     inObj.close();
-    model.indicesNum = model.facesNum * 3;
     return model;
 }
 
 void Obj::parseData(string path)
 {
     Model model = extractObjData(path);
-    this->indicesNum = model.indicesNum;
+    this->facesNum = model.facesNum;
     material mtl = material();
     for (face _face : model.faces) {
         mtl = this->materials[_face.materialReference];
         this->diffuses.push_back(mtl.diffuse);
-        for(int i = 0; i < 3; i++) {
+        for(int i = 0; i < VERTICES_PER_FACE; i++) {
             this->vertices.push_back(_face.vertices[i]);
+            this->textures.push_back(_face.textures[i]);
             this->normals.push_back(_face.normals[i]);
         }
     }
-    stringstream ss;
-    string filename;
-    ss << "include/" << name << ".h";
-    ss >> filename;
-    writeH(filename, model);
+    string filename = "resources/" + name + ".h";
+    writeH(filename);
 }
-void Obj::writeH(std::string fp, Model model)
+void Obj::writeH(std::string fp)
 {
     ofstream outH(fp, ios::out);
     if (!outH.good()) {
@@ -146,26 +162,56 @@ void Obj::writeH(std::string fp, Model model)
     outH << "// This is a .cpp file for the model: " << name << endl;
     outH << endl;
 
-    outH << "// Faces: " << model.facesNum << endl;
-    outH << "// Number of Indices: " << model.indicesNum << endl;
+    outH << "// Faces: " << this->facesNum << endl;
 
     outH << "namespace " << name << endl;
     outH << "{" << endl;
-    outH << "\tconst int indicesNum = " << this->indicesNum << ";" << endl;
+    outH << "\tconst int facesNum = " << this->facesNum << ";" << endl;
 
-    outH << "\tconst float diffuses[" << model.facesNum << "][3] = {" << endl;
+    outH << "\tconst float diffuses[" << this->facesNum << "][3] = {" << endl;
     for (rgb d : this->diffuses)
         outH << "\t\t{" << d.r << ", " << d.g << ", " << d.b << "}," << endl;
     outH << "\t};" << endl;
 
-    outH << "\tconst float vertices[" << this->vertices.size()*3 << "] = {" << endl;
-    for (coord v : this->vertices)
-        outH << "\t\t" << v.x << ", " << v.y << ", " << v.z << "," << endl;
+    outH << "\tconst float textures[" << this->facesNum << "][" << VERTICES_PER_FACE << "][2] = {" << endl;
+    int tex_seen = 0;
+    texcoord t;
+    for (int face = 0; face < this->facesNum; face++) {
+        outH << "\t\t{" << endl;
+        outH << "\t\t\t";
+        for (int i = 0; i < VERTICES_PER_FACE; i++) { // this->vertices.size() == this->textures.size()
+            t = this->textures[tex_seen++];
+            outH << "{" << t.u << ", " << t.v << "}, ";
+        }
+        outH << endl;
+        outH << "\t\t}," << endl;
+    }
     outH << "\t};" << endl;
 
-    outH << "\tconst float normals[" << this->normals.size()*3 << "] = {" << endl;
-     for (coord v : this->normals)
-        outH << "\t\t" << v.x << ", " << v.y << ", " << v.z << "," << endl;
+    outH << "\tconst float vertices[" << this->facesNum << "][" << VERTICES_PER_FACE << "][3] = {" << endl;
+    int vert_seen = 0;
+    coord v;
+    for (int face = 0; face < this->facesNum; face++) {
+        outH << "\t\t{" << endl;
+        for (int i = 0; i < VERTICES_PER_FACE; i++) {
+            v = this->vertices[vert_seen++];
+            outH << "\t\t\t{" << v.x << ", " << v.y << ", " << v.z << "}," << endl;
+        }
+        outH << "\t\t}," << endl;
+    }
+    outH << "\t};" << endl;
+
+    outH << "\tconst float normals[" << this->facesNum << "][" << VERTICES_PER_FACE << "][3] = {" << endl;
+    int norm_seen = 0;
+    coord n;
+    for (int face = 0; face < this->facesNum; face++) {
+        outH << "\t\t{" << endl;
+        for (int i = 0; i < VERTICES_PER_FACE; i++) {// this->normals.size() == this->textures.size()
+            n = this->normals[norm_seen++];
+            outH << "\t\t\t{" << n.x << ", " << n.y << ", " << n.z << "}," << endl;
+        }
+        outH << "\t\t}," << endl;
+    }
     outH << "\t};" << endl;
 
     outH << "}" << endl;
@@ -178,19 +224,19 @@ void Obj::loadObj()
     {
         glPushMatrix();
         glBegin(GL_TRIANGLES);
-            int _size = tile::indicesNum*COORD;
-            float vx, vy, vz, nx, ny, nz;
-            float rgb[3];
+            int faces = tile::facesNum;
+            float vert[3], norm[3], uv[2], rgb[3];
             // every 9 elements represents the xyz-coordinates of the three vertices/normals of a face
-            for (int i = 0; i < _size; i+=COORD_PER_FACE) { // COORD*3 = 9
-                memcpy(rgb, tile::diffuses[i/COORD_PER_FACE], sizeof(rgb));
+            for (int i = 0; i < faces; i++) { // COORD*3 = 9
+                memcpy(rgb, tile::diffuses[i], sizeof(rgb));
                 glColor3f(rgb[0], rgb[1], rgb[2]);
-                for (int j = i; j < (i + COORD_PER_FACE); j+=COORD_PER_VERTEX) {
-                    vx = tile::vertices[j]; vy = tile::vertices[j+1]; vz = tile::vertices[j+2];
-                    nx = tile::normals[j]; ny = tile::normals[j+1]; nz = tile::normals[j+2];
-
-                    glNormal3f(nx, ny, nz);
-                    glVertex3f(vx, vy, vz);
+                for (int j = 0; j < VERTICES_PER_FACE; j++) {
+                    memcpy(vert, tile::vertices[i][j], sizeof(vert));
+                    memcpy(norm, tile::normals[i][j], sizeof(norm));
+                    memcpy(uv, tile::textures[i][j], sizeof(uv));
+                    glTexCoord2f(uv[0], uv[1]); // switched since mirror version showed instead
+                    glNormal3f(norm[0], norm[1], norm[2]);
+                    glVertex3f(vert[0], vert[1], vert[2]);
                 }
             }
         glEnd();
@@ -199,16 +245,23 @@ void Obj::loadObj()
     glEndList();
 }
 
-void Obj::draw(float x, float y, float z, float rot_x, float rot_y, float rot_z)
+void Obj::draw(float x, float y, float z,
+               float rot_x, float rot_y, float rot_z,
+               string texture_filename)
 {
     glPushMatrix();
     glTranslatef(x, y, z);
-
     glRotatef(rot_x, 1, 0, 0);
     glRotatef(rot_y, 0, 1, 0);
     glRotatef(rot_z, 0, 0, 1);
 
+    if (texture_filename != "") {
+        glEnable(GL_TEXTURE_2D);
+        loadTexture("resources/images/"+texture_filename+".png");
+    }
+
     glCallList(model);
     glPopMatrix();
+    glDisable(GL_TEXTURE_2D);
     glColor3d(1, 1, 1);
 }

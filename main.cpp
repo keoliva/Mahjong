@@ -19,12 +19,13 @@
 #include <math.h>
 #include "include/Game.h"
 #include "include/InputHandler.h"
+#include "include/Obj.h"
 #include "include/Draw.h"
 using namespace std;
 
 static Draw *draw;
 static Game *game;
-static float rot_x = -80.0f, rot_y = 0.0f, rot_z = 0.0f;
+static float rot_x = -86.0f, rot_y = 0.0f, rot_z = 0.0f, z_coord = -16.8f;
 int selectedTileIndex;
 bool mouseMoved, mouseClicked;
 /* GLUT callback Handlers */
@@ -50,15 +51,20 @@ static void display(void)
     mouseKeyActivity mouseInfo;
     mouseInfo = mouseKeyActivity(mouseMoved, mouseClicked, selectedTileIndex);
 
-    InputHandler inputHandler = InputHandler(mouseInfo);
-    Command *command = inputHandler.handleInput();
-    command->execute(game->getCurrentPlayer());
-
+    cout <<" drawing game " << endl;
+    //game->update();
     draw->drawGame(rot_x, rot_y, rot_z, mouseInfo, game);
 
     mouseClicked = false;
     selectedTileIndex = 0;
+
     glutSwapBuffers();
+}
+
+static void idle()
+{
+    game->update();
+    glutPostRedisplay();
 }
 
 static void mouseButton(int button, int state, int x, int y)
@@ -71,8 +77,14 @@ static void mouseButton(int button, int state, int x, int y)
     glReadPixels(x, window_height - y - 1, 1, 1, GL_STENCIL_INDEX, GL_UNSIGNED_INT, &index);
     mouseClicked = true;
     selectedTileIndex = index;
-    cout << "clicked: " << selectedTileIndex << endl;
-    glutPostRedisplay();
+
+    mouseKeyActivity mouseInfo;
+    mouseInfo = mouseKeyActivity(mouseMoved, mouseClicked, selectedTileIndex);
+
+    InputHandler inputHandler = InputHandler(mouseInfo);
+    Command *command = inputHandler.handleInput();
+    command->execute(game->getCurrentPlayer());
+    //glutPostRedisplay();
 }
 static void mouseMove(int x, int y)
 {
@@ -97,6 +109,14 @@ static void key(unsigned char key, int x, int y)
             delete draw;
             delete game;
             exit(0);
+            break;
+        case 'l':
+            z_coord -= 0.1f;
+            cout << "z_coord: " << z_coord << endl;
+            break;
+        case 'm':
+            z_coord += 1.0f;
+            cout << "z_coord: " << z_coord << endl;
             break;
         case 's':
             game->start();
@@ -130,27 +150,39 @@ const GLfloat light_diffuse[]  = { 1.0f, 1.0f, 1.0f, 1.0f };
 const GLfloat light_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 const GLfloat light_position[] = { 2.0f, 5.0f, 5.0f, 0.0f };
 
-const GLfloat mat_ambient[]    = { 0.7f, 0.7f, 0.7f, 1.0f };
+const GLfloat sec_light_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+const GLfloat sec_light_diffuse[]  = { 0.5f, 0.5f, 0.5f, 1.0f };
+const GLfloat sec_light_position[] = { 2.0, 5.0f, 15.0f, 0.0f };
+
+const GLfloat mat_ambient[]    = { 0.4f, 0.4f, 0.4f, 1.0f };
 const GLfloat mat_diffuse[]    = { 0.8f, 0.8f, 0.8f, 1.0f };
 const GLfloat mat_specular[]   = { 1.0f, 1.0f, 1.0f, 1.0f };
 const GLfloat high_shininess[] = { 100.0f };
 static void init(void)
 {
     glEnable(GL_CULL_FACE);
+    glEnable(GL_DEPTH_TEST);
     glShadeModel(GL_SMOOTH);
 
-    glEnable(GL_DEPTH_TEST);
-    //glDepthFunc(GL_LESS);
-
-    glEnable(GL_LIGHT0);
     glEnable(GL_NORMALIZE);
     glEnable(GL_COLOR_MATERIAL);
+
     glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
 
     glLightfv(GL_LIGHT0, GL_AMBIENT,  light_ambient);
     glLightfv(GL_LIGHT0, GL_DIFFUSE,  light_diffuse);
     glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
     glLightfv(GL_LIGHT0, GL_POSITION, light_position);
+
+    glEnable(GL_LIGHT3);
+    //glLightfv(GL_LIGHT3, GL_AMBIENT,  light_ambient);
+    //glLightfv(GL_LIGHT3, GL_DIFFUSE,  sec_light_diffuse);
+    //glLightfv(GL_LIGHT3, GL_SPECULAR, sec_light_specular);
+    //glLightfv(GL_LIGHT3, GL_POSITION, sec_light_position);
+
+
+    //glLightfv(GL_LIGHT0, GL_POSITION, sec_light_position);
 
     glMaterialfv(GL_FRONT, GL_AMBIENT,   mat_ambient);
     glMaterialfv(GL_FRONT, GL_DIFFUSE,   mat_diffuse);
@@ -184,10 +216,12 @@ int main(int argc, char *argv[])
     glutDisplayFunc(display);
     glutKeyboardFunc(key);
     glutMouseFunc(mouseButton);
+    glutIdleFunc(idle);
     glutPassiveMotionFunc(mouseMove);
     init();
     testInitGame();
-
     glutMainLoop();
+
+
     return EXIT_SUCCESS;
 }
