@@ -15,6 +15,7 @@
 				<Compiler>
 					<Add option="-g" />
 					<Add directory="include" />
+					<Add directory="$(#boost)" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -37,6 +38,7 @@
 			<Add directory="C:/MinGW/include" />
 		</Compiler>
 		<Linker>
+			<Add library="C:\Users\Kayla\Downloads\soil\Simple OpenGL Image Library\lib\libSOIL.a" />
 			<Add library="glut32" />
 			<Add library="opengl32" />
 			<Add library="glu32" />
@@ -47,6 +49,7 @@
 		<Unit filename="Command.cpp" />
 		<Unit filename="Draw.cpp" />
 		<Unit filename="Game.cpp" />
+		<Unit filename="HandEvaluator.cpp" />
 		<Unit filename="InputHandler.cpp" />
 		<Unit filename="Obj.cpp" />
 		<Unit filename="Player.cpp" />
@@ -55,6 +58,7 @@
 		<Unit filename="include/Command.h" />
 		<Unit filename="include/Draw.h" />
 		<Unit filename="include/Game.h" />
+		<Unit filename="include/HandEvaluator.h" />
 		<Unit filename="include/InputHandler.h" />
 		<Unit filename="include/Obj.h" />
 		<Unit filename="include/Player.h" />
@@ -65,9 +69,6 @@
 		<Unit filename="resources/tile.h" />
 		<Unit filename="resources/tile.mtl" />
 		<Unit filename="resources/tile.obj" />
-		<Unit filename="resources/tile_with_img.h" />
-		<Unit filename="resources/tile_with_img.mtl" />
-		<Unit filename="resources/tile_with_img.obj" />
 		<Extensions>
 			<code_completion />
 			<envvars />

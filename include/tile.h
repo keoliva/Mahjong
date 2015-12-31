@@ -14,6 +14,8 @@ class Tile {
     public:
         tileType type;
         Tile(tileType _type) : type(_type) {};
+        friend bool operator==(const Tile &self, const Tile &other);
+        friend bool operator!=(const Tile &self, const Tile &other);
         virtual ~Tile() {};
         virtual std::string get_val() const = 0;
         static std::vector<Tile*>createTheTiles();

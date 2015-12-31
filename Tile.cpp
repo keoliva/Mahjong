@@ -19,6 +19,18 @@ string AttributeTile::get_val() const
     return ss.str();
 }
 
+bool operator==(const Tile &self, const Tile &other)
+{
+    //string self_val = self.get_val();
+    //string other_val = other.get_val();
+    //return self_val.substr(self_val.find("(")) == other_val.substr(other_val.find("("));
+    return self.get_val() == other.get_val();
+}
+bool operator!=(const Tile &self, const Tile &other)
+{
+    return !(self == other);
+}
+
 const int suitDuplicates = 4;
 const int honorDuplicates = 4;
 const int bonusDuplicates = 1;
@@ -66,5 +78,3 @@ vector<Tile*> Tile::createTheTiles()
     }
     return tiles;
 }
-
-

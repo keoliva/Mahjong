@@ -17,10 +17,14 @@
 #include <iostream>
 #include <string>
 #include <math.h>
+#include "include/Test.h"
 #include "include/Game.h"
 #include "include/InputHandler.h"
+#include "include/HandEvaluator.h"
 #include "include/Obj.h"
 #include "include/Draw.h"
+#define BOOST_BIND_NO_PLACEHOLDERS
+#include <boost/lambda/lambda.hpp>
 using namespace std;
 
 static Draw *draw;
@@ -193,14 +197,14 @@ static void init(void)
     game = new Game();
 }
 /* Program entry point */
-bool myfunction(Tile *a, Tile *b) { return a->get_val() < b->get_val(); }
-
 void testInitGame()
 {
     cout << "Prevailing Wind == EAST: " << ((game->getPrevailingWind() == "EAST")?"PASSED":"FAILED") << endl;
     cout << "ROUND_OVER == FALSE: " << ((game->roundOver() == false)?"PASSED":"FAILED") << endl;
     wind pwind = game->getCurrentPlayer()->_wind;
     cout << "Current Player's Wind: " << ((pwind == EAST)?"PASSED":"FAILED") << endl;
+    HandEvaluator eval = HandEvaluator();
+    eval.test();
 }
 
 int main(int argc, char *argv[])
@@ -221,6 +225,8 @@ int main(int argc, char *argv[])
     init();
     testInitGame();
     glutMainLoop();
+    //using namespace boost::network;
+    //using namespace boost::network::http;
 
 
     return EXIT_SUCCESS;
