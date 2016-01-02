@@ -14,10 +14,10 @@ class Tile {
     public:
         tileType type;
         Tile(tileType _type) : type(_type) {};
-        friend bool operator==(const Tile &self, const Tile &other);
-        friend bool operator!=(const Tile &self, const Tile &other);
+        static bool areEqual(const Tile &a, const Tile &b);
         virtual ~Tile() {};
         virtual std::string get_val() const = 0;
+        virtual std::string get_className() const = 0;
         static std::vector<Tile*>createTheTiles();
 };
 
@@ -26,11 +26,15 @@ struct SortTiles { // like a Comparator in Java
 };
 
 class SuitTile : public Tile {
+        std::string className;
     public:
         int suit;
-        std::string className;
         SuitTile(std::string name, int suitNumber) : Tile(SUIT), suit(suitNumber), className(name) {};
+        friend bool const operator<(const SuitTile &a, const SuitTile &b);
+        friend bool const operator>(const SuitTile &a, const SuitTile &b);
+        static bool inSequence(std::vector<SuitTile*> tiles); // returns whether the tiles' suit numbers are consecutive terms
         std::string get_val() const;
+        std::string get_className() const;
 };
 
 class BambooTile : public SuitTile {
@@ -47,10 +51,11 @@ class CircleTile : public SuitTile {
 };
 
 class AttributeTile : public Tile {
+    std::string attribute, className;
     public:
-        std::string attribute, className;
         AttributeTile(std::string name, tileType _tileType, std::string attribute_type) : Tile(_tileType), attribute(attribute_type), className(name) {};
         std::string get_val() const;
+        std::string get_className() const;
 };
 
 class DragonTile : public AttributeTile { // dragon types: GREEN, RED, WHITE

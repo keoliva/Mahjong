@@ -12,23 +12,43 @@ string SuitTile::get_val() const
     ss << className <<"(" << suit << ")";
     return ss.str();
 }
+string SuitTile::get_className() const
+{
+    return className;
+}
+bool const operator<(const SuitTile &a, const SuitTile &b)
+{
+    return (a.suit < b.suit);
+}
+bool const operator>(const SuitTile &a, const SuitTile &b)
+{
+    return (a.suit > b.suit);
+}
+bool SuitTile::inSequence(std::vector<SuitTile*> tiles)
+{
+    SuitTile *lastTile = NULL;
+    for (SuitTile *tile : tiles) {
+        if (lastTile) {
+            if (tile->suit - lastTile->suit != 1) return false;
+        }
+        lastTile = tile;
+    }
+    return true;
+}
 string AttributeTile::get_val() const
 {
     std::stringstream ss;
     ss << className <<"(" << attribute << ")";
     return ss.str();
 }
-
-bool operator==(const Tile &self, const Tile &other)
+string AttributeTile::get_className() const
 {
-    //string self_val = self.get_val();
-    //string other_val = other.get_val();
-    //return self_val.substr(self_val.find("(")) == other_val.substr(other_val.find("("));
-    return self.get_val() == other.get_val();
+    return className;
 }
-bool operator!=(const Tile &self, const Tile &other)
+
+bool Tile::areEqual(const Tile &a, const Tile &b)
 {
-    return !(self == other);
+   return a.get_val() == b.get_val();
 }
 
 const int suitDuplicates = 4;

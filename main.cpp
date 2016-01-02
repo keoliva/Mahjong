@@ -17,7 +17,6 @@
 #include <iostream>
 #include <string>
 #include <math.h>
-#include "include/Test.h"
 #include "include/Game.h"
 #include "include/InputHandler.h"
 #include "include/HandEvaluator.h"

@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1451582726 source:c:\users\kayla\documents\quarto\mahjong\main.cpp
+1451613316 source:c:\users\kayla\documents\quarto\mahjong\main.cpp
 	<GLUT/glut.h>
 	<GL/gl.h>
 	<GL/glu.h>
@@ -8,7 +8,6 @@
 	<iostream>
 	<string>
 	<math.h>
-	"include/Test.h"
 	"include/Game.h"
 	"include/InputHandler.h"
 	"include/HandEvaluator.h"
@@ -247,7 +246,7 @@
 	<cstring>
 	<stdlib.h>
 
-1451376286 c:\users\kayla\documents\quarto\mahjong\include\tile.h
+1451709272 c:\users\kayla\documents\quarto\mahjong\include\tile.h
 	<string>
 	<vector>
 
@@ -283,7 +282,7 @@
 	<memory>
 	<string>
 
-1451379665 source:c:\users\kayla\documents\quarto\mahjong\tile.cpp
+1451709272 source:c:\users\kayla\documents\quarto\mahjong\tile.cpp
 	"include/Tile.h"
 	<algorithm>
 	<chrono>
@@ -354,14 +353,16 @@
 
 1450563201 c:\users\kayla\documents\quarto\mahjong\resources\soil.h
 
-1451581626 source:c:\users\kayla\documents\quarto\mahjong\handevaluator.cpp
+1451707758 source:c:\users\kayla\documents\quarto\mahjong\handevaluator.cpp
 	"include/HandEvaluator.h"
 	<algorithm>
 	<cassert>
+	<exception>
 	<iostream>
 
-1451526915 c:\users\kayla\documents\quarto\mahjong\include\handevaluator.h
-	<Tile.h>
+1451695748 c:\users\kayla\documents\quarto\mahjong\include\handevaluator.h
+	"Tile.h"
+	<map>
 	<vector>
 
 1450754393 source:c:\users\kayla\documents\quarto\mahjong\src\test.cpp
