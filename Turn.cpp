@@ -16,22 +16,22 @@ Turn::~Turn()
 void Turn::update()
 {
     switch (state_machine.getCurrentState()) {
-        case DISCARD_TILE:
-            discardTile();
-            break;
-        case DRAW_TILE:
+        case NULL:
+            game->switchPlayer();
+            state_machine.pushState(State::DRAW_TILE);
             drawTile();
             break;
-        case SMALL_MELDED_KANG:
+        case State::DISCARD_TILE:
+            discardTile();
             break;
-        case CONCEALED_KANG:
+        case State::DRAW_TILE:
+            drawTile();
+            break;
+        case State::SMALL_MELDED_KANG:
+            break;
+        case State::CONCEALED_KANG:
             break;
     }
-}
-void Turn::init()
-{
-    state_machine.pushState(DRAW_TILE);
-    //glutPostRedisplay();
 }
 
 void Turn::drawTile()
@@ -43,7 +43,7 @@ void Turn::drawTile()
         std::cout << "COMPLETE!" << std::endl;
         std::cout << "about to discard a tile..." << std::endl;
         state_machine.popState();
-        state_machine.pushState(DISCARD_TILE);
+        state_machine.pushState(State::DISCARD_TILE);
     } catch (NoMoreTilesError &e) {
         std::cout << "woops. no more tiles to grab..." << std::endl;
         return game_instance->finishGame();

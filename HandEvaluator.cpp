@@ -9,7 +9,7 @@ HandEvaluator::HandEvaluator()
     //ctor
 }
 
-meld HandEvaluator::canDeclareMeldedPeng(vector<Tile*> hand, Tile *discardedTile)
+vector<meld> HandEvaluator::canDeclareMeldedPeng(vector<Tile*> hand, Tile *discardedTile)
 {
     meld melded_peng;
     vector<vector<int>> split_melds = splitTiles(hand, &Tile::areEqual);
@@ -26,7 +26,8 @@ meld HandEvaluator::canDeclareMeldedPeng(vector<Tile*> hand, Tile *discardedTile
             break;
         }
     }
-    return melded_peng;
+    vector<meld> peng (1, melded_peng);
+    return peng;
 }
 // using binary search to insert the discarded tile into the sorted vector containing
 // suitTileA and B
@@ -102,7 +103,8 @@ vector<meld> HandEvaluator::canDeclareMeldedChi(vector<Tile*> hand, Tile *discar
     }
     return possibleChis;
 }
-meld HandEvaluator::canDeclareBigMeldedKang(std::vector<Tile*> hand, Tile *discardedTile)
+vector<meld> HandEvaluator::canDeclareBigMeldedKang(std::vector<Tile*> hand,
+                                                    Tile *discardedTile)
 {
     meld melded_kang;
     vector<vector<int>> split_melds = splitTiles(hand, &Tile::areEqual);
@@ -113,7 +115,8 @@ meld HandEvaluator::canDeclareBigMeldedKang(std::vector<Tile*> hand, Tile *disca
             break; // only four duplicates of a single tile
         }
     }
-    return melded_kang;
+    vector<meld> kang (1, melded_kang);
+    return kang;
 }
 
 vector<vector<int>> HandEvaluator::splitTiles(vector<Tile*> tiles, bool (*eq)(const Tile &a, const Tile &b))
@@ -241,10 +244,10 @@ void HandEvaluator::test()
     cout << ((kang.indicesInHand == indices)?"Passed.":"Failed.") << endl;
     cout << "Running canDeclareMeldedPeng Tests..." << endl;
     meld _meld;
-    _meld = canDeclareMeldedPeng(melds, tiles[0]);
+    _meld = canDeclareMeldedPeng(melds, tiles[0])[0];
     assert(_meld.indicesInHand.empty());
     cout << "Passed." << endl;;
-    _meld = canDeclareMeldedPeng(melds, melds[0]);
+    _meld = canDeclareMeldedPeng(melds, melds[0])[0];
     assert(!_meld.indicesInHand.empty());
     indices = {0, 1};
     assert(_meld.indicesInHand == indices);
@@ -273,12 +276,12 @@ void HandEvaluator::test()
     assert(chis.empty());
     cout << "Running canDeclareBigMeldedKang Tests..." << endl;
     discardedTile = new CharacterTile(5);
-    kang = canDeclareBigMeldedKang(melds, discardedTile);
+    kang = canDeclareBigMeldedKang(melds, discardedTile)[0];
     indices = {0, 1, 2};
     assert(kang.indicesInHand == indices);
     cout << "Passed." << endl;
     discardedTile = new DragonTile("RED");
-    kang = canDeclareBigMeldedKang(melds, discardedTile);
+    kang = canDeclareBigMeldedKang(melds, discardedTile)[0];
     assert(kang.indicesInHand.empty());
     cout << "Passed.";
     delete discardedTile;

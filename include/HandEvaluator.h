@@ -3,13 +3,30 @@
 #include "Tile.h"
 #include <map>
 #include <vector>
+#define MELDS \
+    X(SINGLE) \
+    X(PAIR) \
+    X(PENG) \
+    X(KANG) \
+    X(SMALL_MELDED_KANG) \
+    X(CONCEALED_KANG) \
+    X(CHI)
+
+#define X(a) a,
+enum MeldType {
+    NONE,
+    MELDS
+};
+#undef X
+
+
+#define X(a) #a,
+static std:: string meld_strings[] = { MELDS };
+#undef X
+
 struct meld {
     std::vector<int> indicesInMelds, indicesInHand;
     int indexInHand;
-};
-
-enum MeldType {
-    SINGLE=1, PAIR, PENG, KANG
 };
 
 class HandEvaluator
@@ -17,9 +34,9 @@ class HandEvaluator
     public:
         HandEvaluator();
         void test();
-        meld canDeclareMeldedPeng(std::vector<Tile*> hand, Tile *discardedTile);
+        std::vector<meld> canDeclareMeldedPeng(std::vector<Tile*> hand, Tile *discardedTile);
         std::vector<meld> canDeclareMeldedChi(std::vector<Tile*> hand, Tile *discardedTile);
-        meld canDeclareBigMeldedKang(std::vector<Tile*> hand, Tile *discardedTile);
+        std::vector<meld> canDeclareBigMeldedKang(std::vector<Tile*> hand, Tile *discardedTile);
         std::vector<meld> canDeclareSmallMeldedKang(std::vector<Tile*> melds, std::vector<Tile*> hand);
         std::vector<meld> canDeclareConcealedKang(std::vector<Tile*> hand);
         bool canDeclareMahjong(std::vector<Tile*> melds, std::vector<Tile*> hand);

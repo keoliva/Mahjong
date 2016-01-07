@@ -43,6 +43,7 @@ class Game
         void getDiscard(Tile *tile);
         void finishGame();
         void switchPlayer();
+        void switchDealer();
         void chooseDealer();
         void init_state();
         void updatePlayerWinds();

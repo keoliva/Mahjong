@@ -2,6 +2,8 @@
 #include "include/Obj.h"
 #include <GL/gl.h>
 #include <GL/glut.h>
+#include <cstring>
+#include <ctype.h> // tolower
 #include <map>
 #include <sstream>
 #define ROWS 22
@@ -12,8 +14,7 @@ using namespace std;
 namespace {
     static Obj tile;
 }
-Draw::Draw()
-{
+Draw::Draw() {
     tile = Obj("tile");
     tile.loadObj();
 }
@@ -23,8 +24,7 @@ static float tile_len = 0.968, tile_height = 1.489; // tile_width = tile_len
 float space_0 = 0.5f, space_1 = 0.01f;
 float x_coord = -COLS/2.0 + space_0;
 float cell_width = 1.0f, cell_height = 1.0f;
-void drawBoard()
-{
+void drawBoard() {
     glPushMatrix();
     glTranslatef(-cell_width/2, -tile_height/2+space_1, 0);
     glBegin(GL_LINES);
@@ -42,8 +42,7 @@ void drawBoard()
     glPopMatrix();
 }
 // displays a floating cone that serves as a pointer above the dealer's (east player's) hand
-void drawEastPlayerMarker(PlayingOrder playerIndex)
-{
+void drawEastPlayerMarker(PlayingOrder playerIndex) {
     glColor3d(1, 0, 0);
     glPushMatrix();
     boardLoc loc;
@@ -105,21 +104,29 @@ boardLoc Draw::getPieceLoc(HandTile type, PlayingOrder playerIndex,
     return loc;
 }
 
-map<string, string> updates;
+struct msg_data {
+    string msg;
+    float screen_height_ratio;
+    msg_data() {};
+    msg_data(string _msg, float y) : msg(_msg), screen_height_ratio(y) {};
+};
+
+map<string, msg_data> updates;
 bool mouseOverOther = false;
 void updateText();
+void displayOptions(Player *human);
 void Draw::drawGame(float rot_x, float rot_y, float rot_z, mouseKeyActivity mouseInfo, Game *game)
 {
+    stringstream ss;
+    ss << "Tiles Left: " << game->getTilesLeft();
+    updates["tilesLeft"] = msg_data(ss.str(), 5.0/6.0);
+    ss.str("");
+
     glTranslatef(x_coord, y_coord, z_coord);
     glRotated(rot_x, 1, 0, 0);
     glRotated(rot_y, 0, 1, 0);
     glRotated(rot_z, 0, 0, 1);
     drawBoard();
-
-    stringstream ss;
-    ss << "Tiles Left: " << game->getTilesLeft();
-    updates["tilesLeft"] = ss.str();
-    ss.str("");
 
     glEnable(GL_STENCIL_TEST);
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
@@ -155,10 +162,7 @@ void Draw::drawGame(float rot_x, float rot_y, float rot_z, mouseKeyActivity mous
                         mouseOverOther = true;
                     }
                 }
-                if (i == humanIndex)
-                    tilename = player->hand[pieceIndex]->get_val();
-                else
-                    tilename = "";
+                tilename = (i == humanIndex)?(player->hand[pieceIndex]->get_val()):"";
                 tile.draw(loc.x, loc.y, loc.z, loc.rotX, loc.rotY, 0.0f, tilename);
                 pieceIndex++;
             }
@@ -168,7 +172,8 @@ void Draw::drawGame(float rot_x, float rot_y, float rot_z, mouseKeyActivity mous
             ss << " Round Wind: " << game->getPrevailingWind() << "   |   ";
             ss << " Your Wind: " << wind_strings[player->_wind] << "   |   ";
             ss << " Your Score: " << player->score << " FAN";
-            updates["userInfo"] = ss.str();
+            updates["userInfo"] = msg_data(ss.str(), 1.0/7.0);
+            displayOptions(player);
         }
         // draw revealed melds and bonus tiles
         {
@@ -224,26 +229,25 @@ http://www.lighthouse3d.com/tutorials/glut-tutorial/bitmap-fonts-and-orthogonal-
 void setOrthographicProjection(int w, int h);
 void restorePerspectiveProjection(void);
 void renderString(float x, float y, void *font, const char *str, int len);
-void renderUpdates(string msg, int window_width, float height)
-{
+void renderUpdates(string msg, int window_width, float height) {
     const unsigned char *c_str = (const unsigned char *)msg.c_str();
     int c_str_width = glutBitmapLength(font, c_str);
     renderString((window_width-c_str_width)/2.0, height, font, msg.data(), msg.size());
 }
-void updateText()
-{
+void updateText() {
     // dimensions of current window
     int window_width = glutGet(GLUT_WINDOW_WIDTH);
     int window_height = glutGet(GLUT_WINDOW_HEIGHT);
     setOrthographicProjection(window_width, window_height);
 
-    renderUpdates(updates["tilesLeft"], window_width, window_height*5/6);
-    renderUpdates(updates["userInfo"], window_width, window_height/7);
+    map<string, msg_data>::iterator it;
+    for (it = updates.begin(); it != updates.end(); it++) {
+        renderUpdates((it->second).msg, window_width, window_height * (it->second).screen_height_ratio);
+    }
 
     restorePerspectiveProjection();
 }
-void setOrthographicProjection(int w, int h)
-{
+void setOrthographicProjection(int w, int h) {
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
     glLoadIdentity();
@@ -252,18 +256,46 @@ void setOrthographicProjection(int w, int h)
     glPushMatrix();
     glLoadIdentity();
 }
-void restorePerspectiveProjection(void)
-{
+void restorePerspectiveProjection(void) {
     glMatrixMode(GL_PROJECTION);
     glPopMatrix();
     glMatrixMode(GL_MODELVIEW);
     glPopMatrix();
 }
-void renderString(float x, float y, void *font, const char *str, int len)
-{
+void renderString(float x, float y, void *font, const char *str, int len) {
     glRasterPos2f(x, y);
     for (int i = 0; i < len; i++)
-    {
         glutBitmapCharacter(font, str[i]);
+}
+
+void displayOptions(Player *human) {
+    map<MeldType, vector<meld>> options = human->getOptions();
+    map<MeldType, vector<meld>>::iterator it;
+    stringstream ss;
+    bool hasOptions = false;
+    string meld_type, key;
+    vector<meld> possible_melds;
+    for (it = options.begin(); it != options.end(); it++) {
+        possible_melds = it->second;
+        if (!possible_melds.empty()) {
+            hasOptions = true;
+            meld_type = meld_strings[it->first];
+            if (meld_type == "SMALL_MELDED_KANG") {
+                key = 'm';
+            } else if (meld_type == "CONCEALED_KANG") {
+                key = 'k';
+            } else {
+                const char *meld_type_c_str = meld_type.c_str();
+                key = tolower(*(meld_type_c_str));
+            }
+            ss << "Press '" << key << "' to declare '" << meld_type << "'   |   ";
+        }
+    }
+    if (hasOptions) ss << "Press 's' to skip.";
+    updates["options"] = msg_data(ss.str(), 4.0/6.0);
+
+    if (options.find(PENG) == options.end()) { // there's a discarded tile
+
+
     }
 }

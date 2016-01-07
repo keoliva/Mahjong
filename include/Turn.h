@@ -2,17 +2,19 @@
 #define TURN_H
 #include "Game.h"
 
-enum State {
+enum class State {
     DISCARD_TILE,
     DRAW_TILE,
-    SMALL_MELDED_KANG, CONCEALED_KANG
+    SMALL_MELDED_KANG, CONCEALED_KANG,
+    MELDED_PENG, MELDED_CHI, MELDED_KANG,
+    MAHJONG
 };
 
 template <typename T>
 class StackFSM {
 public:
     StackFSM() {};
-    T getCurrentState() { return stackOfStates.back(); };
+    T getCurrentState() { return (stackOfStates.empty())?NULL:stackOfStates.back(); };
     void pushState(T state) { stackOfStates.push_back(state); };
     T popState() {
         T state = stackOfStates.back();
@@ -32,7 +34,6 @@ class Turn
         ~Turn();
         Turn(Game *game, Player *player) : game_instance(game), curr_player(player) {};
         void setCurrentPlayer(Player *player) { curr_player = player; };
-        void init();
         void update();
         void drawTile();
         void discardTile();

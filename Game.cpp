@@ -13,7 +13,6 @@ Game::Game()
     for (int i = 0; i < NUM_PLAYERS; i++)
         curr_state.players[i] = new Player();
     updatePlayerWinds();
-    init_state();
 
     turnManager = new Turn(this, getCurrentPlayer());
 }
@@ -25,8 +24,8 @@ void Game::update()
 void Game::start()
 {
     cout << "starting game..." << endl;
-    turnManager->init();
     turn_started = true;
+    init_state();
 }
 void Game::chooseDealer()
 {
@@ -52,7 +51,12 @@ void Game::switchPlayer()
     curr_state.currPlayerReference %= NUM_PLAYERS;
 
     turnManager->setCurrentPlayer(getCurrentPlayer());
-    turnManager->init();
+}
+void Game::switchDealer()
+{
+    curr_state.dealerReference++;
+    curr_state.dealerReference %= NUM_PLAYERS;
+    curr_state.currPlayerReference = curr_state.dealerReference;
 }
 void Game::takeFromWall(Player *player)
 {
@@ -96,10 +100,8 @@ void Game::restart()
         } else {
             // update round wind
             rounds = (rounds + 1) % NUM_ROUNDS;
+            switchDealer();
             // update dealer
-            curr_state.dealerReference++;
-            curr_state.dealerReference %= NUM_PLAYERS;
-            curr_state.currPlayerReference = curr_state.dealerReference;
             updatePlayerWinds();
         }
     } else {

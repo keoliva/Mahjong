@@ -246,7 +246,7 @@
 	<cstring>
 	<stdlib.h>
 
-1451709272 c:\users\kayla\documents\quarto\mahjong\include\tile.h
+1451837195 c:\users\kayla\documents\quarto\mahjong\include\tile.h
 	<string>
 	<vector>
 
@@ -255,11 +255,13 @@
 1419773313 c:\mingw\include\math.h
 	<_mingw.h>
 
-1450563200 source:c:\users\kayla\documents\quarto\mahjong\draw.cpp
+1452062640 source:c:\users\kayla\documents\quarto\mahjong\draw.cpp
 	"include/Draw.h"
 	"include/Obj.h"
 	<GL/gl.h>
 	<GL/glut.h>
+	<cstring>
+	<ctype.h>
 	<map>
 	<sstream>
 
@@ -294,12 +296,14 @@
 	<_mingw.h>
 	<stddef.h>
 
-1450174359 c:\users\kayla\documents\quarto\mahjong\include\player.h
+1451809115 c:\users\kayla\documents\quarto\mahjong\include\player.h
+	"HandEvaluator.h"
 	"Tile.h"
 	<iostream>
+	<map>
 	<string>
 
-1450560870 source:c:\users\kayla\documents\quarto\mahjong\player.cpp
+1451837820 source:c:\users\kayla\documents\quarto\mahjong\player.cpp
 	"include/Player.h"
 	"include/Tile.h"
 	<algorithm>
@@ -325,10 +329,10 @@
 1449819546 source:c:\users\kayla\documents\quarto\mahjong\subject.cpp
 	"include/Subject.h"
 
-1450563201 c:\users\kayla\documents\quarto\mahjong\include\turn.h
+1451836765 c:\users\kayla\documents\quarto\mahjong\include\turn.h
 	"Game.h"
 
-1450563200 source:c:\users\kayla\documents\quarto\mahjong\turn.cpp
+1451837898 source:c:\users\kayla\documents\quarto\mahjong\turn.cpp
 	"Turn.h"
 	<GL/glut.h>
 	<iostream>
@@ -353,14 +357,14 @@
 
 1450563201 c:\users\kayla\documents\quarto\mahjong\resources\soil.h
 
-1451707758 source:c:\users\kayla\documents\quarto\mahjong\handevaluator.cpp
+1451837690 source:c:\users\kayla\documents\quarto\mahjong\handevaluator.cpp
 	"include/HandEvaluator.h"
 	<algorithm>
 	<cassert>
 	<exception>
 	<iostream>
 
-1451695748 c:\users\kayla\documents\quarto\mahjong\include\handevaluator.h
+1451837410 c:\users\kayla\documents\quarto\mahjong\include\handevaluator.h
 	"Tile.h"
 	<map>
 	<vector>
@@ -21580,4 +21584,8 @@
 1450752563 c:\users\kayla\downloads\boost_1_60_0 (1)\boost_1_60_0\boost\utility
 
 1450752284 c:\users\kayla\downloads\boost_1_60_0 (1)\boost_1_60_0\boost\iterator
+
+1419773313 c:\mingw\include\ctype.h
+	<_mingw.h>
+	<stddef.h>
 

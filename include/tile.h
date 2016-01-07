@@ -29,7 +29,7 @@ class SuitTile : public Tile {
         std::string className;
     public:
         int suit;
-        SuitTile(std::string name, int suitNumber) : Tile(SUIT), suit(suitNumber), className(name) {};
+        SuitTile(std::string name, int suitNumber) : Tile(SUIT), className(name), suit(suitNumber) {};
         friend bool const operator<(const SuitTile &a, const SuitTile &b);
         friend bool const operator>(const SuitTile &a, const SuitTile &b);
         static bool inSequence(std::vector<SuitTile*> tiles); // returns whether the tiles' suit numbers are consecutive terms

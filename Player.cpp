@@ -4,13 +4,32 @@
 #include <chrono>
 #include <random>
 using namespace std;
+Player::Player()
+{
+    score = 0;
+    handEvaluator = new HandEvaluator();
+}
+Player::~Player()
+{
+    cout << "deleting player." << endl;
+    delete handEvaluator;
+}
 bool Player::isDealer()
 {
     return _wind == EAST;
 }
-bool wantsToUseRecentlyDiscardedTile(Tile *tile)
+map<MeldType, vector<meld>> Player::getOptions(Tile *discardedTile)
 {
-    return false;
+    map<MeldType, vector<meld>> options;
+    if (discardedTile) {
+        options[PENG] = handEvaluator->canDeclareMeldedPeng(hand, discardedTile);
+        options[KANG] = handEvaluator->canDeclareBigMeldedKang(hand, discardedTile);
+        options[CHI] = handEvaluator->canDeclareMeldedChi(hand, discardedTile);
+    } else {
+        options[SMALL_MELDED_KANG] = handEvaluator->canDeclareSmallMeldedKang(melds, hand);
+        options[CONCEALED_KANG] = handEvaluator->canDeclareConcealedKang(hand);
+    }
+    return options;
 }
 bool Player::hasFullHand()
 {
@@ -18,6 +37,7 @@ bool Player::hasFullHand()
 }
 void Player::takeTile(Tile *tile)
 {
+    curr_status = DREW_TILE;
     if (tile->type == BONUS)
         bonuses.push_back(tile);
     else
@@ -25,9 +45,10 @@ void Player::takeTile(Tile *tile)
 }
 Tile *Player::discardTile(int selected_index)
 {
+    curr_status = DISCARDED_TILE;
     Tile *discardedTile;
     int index;
-    if (selected_index) {
+    if (0 <= selected_index && selected_index < hand.size()) {
         index = selected_index;
         discardedTile = hand[selected_index];
     } else {
