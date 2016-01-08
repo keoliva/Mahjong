@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1451613316 source:c:\users\kayla\documents\quarto\mahjong\main.cpp
+1452213723 source:c:\users\kayla\documents\quarto\mahjong\main.cpp
 	<GLUT/glut.h>
 	<GL/gl.h>
 	<GL/glu.h>
@@ -255,7 +255,7 @@
 1419773313 c:\mingw\include\math.h
 	<_mingw.h>
 
-1452062640 source:c:\users\kayla\documents\quarto\mahjong\draw.cpp
+1452193360 source:c:\users\kayla\documents\quarto\mahjong\draw.cpp
 	"include/Draw.h"
 	"include/Obj.h"
 	<GL/gl.h>
@@ -271,14 +271,15 @@
 
 1450563201 c:\users\kayla\documents\quarto\mahjong\resources\tile.h
 
-1450563200 source:c:\users\kayla\documents\quarto\mahjong\game.cpp
+1452213168 source:c:\users\kayla\documents\quarto\mahjong\game.cpp
 	"Game.h"
 	<GL/glut.h>
 	<chrono>
 	<random>
 
-1450563201 c:\users\kayla\documents\quarto\mahjong\include\game.h
+1452213512 c:\users\kayla\documents\quarto\mahjong\include\game.h
 	"Player.h"
+	"TileDealer.h"
 	"Turn.h"
 	<iostream>
 	<memory>
@@ -296,14 +297,14 @@
 	<_mingw.h>
 	<stddef.h>
 
-1451809115 c:\users\kayla\documents\quarto\mahjong\include\player.h
+1452208256 c:\users\kayla\documents\quarto\mahjong\include\player.h
 	"HandEvaluator.h"
 	"Tile.h"
 	<iostream>
 	<map>
 	<string>
 
-1451837820 source:c:\users\kayla\documents\quarto\mahjong\player.cpp
+1452208272 source:c:\users\kayla\documents\quarto\mahjong\player.cpp
 	"include/Player.h"
 	"include/Tile.h"
 	<algorithm>
@@ -329,10 +330,10 @@
 1449819546 source:c:\users\kayla\documents\quarto\mahjong\subject.cpp
 	"include/Subject.h"
 
-1451836765 c:\users\kayla\documents\quarto\mahjong\include\turn.h
+1452210530 c:\users\kayla\documents\quarto\mahjong\include\turn.h
 	"Game.h"
 
-1451837898 source:c:\users\kayla\documents\quarto\mahjong\turn.cpp
+1452213512 source:c:\users\kayla\documents\quarto\mahjong\turn.cpp
 	"Turn.h"
 	<GL/glut.h>
 	<iostream>
@@ -357,7 +358,7 @@
 
 1450563201 c:\users\kayla\documents\quarto\mahjong\resources\soil.h
 
-1451837690 source:c:\users\kayla\documents\quarto\mahjong\handevaluator.cpp
+1452213168 source:c:\users\kayla\documents\quarto\mahjong\handevaluator.cpp
 	"include/HandEvaluator.h"
 	<algorithm>
 	<cassert>
@@ -21588,4 +21589,10 @@
 1419773313 c:\mingw\include\ctype.h
 	<_mingw.h>
 	<stddef.h>
+
+1452213592 c:\users\kayla\documents\quarto\mahjong\include\tiledealer.h
+	"Game.h"
+
+1452214516 source:c:\users\kayla\documents\quarto\mahjong\tiledealer.cpp
+	"TileDealer.h"
 

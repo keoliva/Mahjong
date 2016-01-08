@@ -14,7 +14,7 @@ template <typename T>
 class StackFSM {
 public:
     StackFSM() {};
-    T getCurrentState() { return (stackOfStates.empty())?NULL:stackOfStates.back(); };
+    T getCurrentState() { if (stackOfStates.empty()) throw -1; else return stackOfStates.back(); };
     void pushState(T state) { stackOfStates.push_back(state); };
     T popState() {
         T state = stackOfStates.back();

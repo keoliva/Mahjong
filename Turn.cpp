@@ -15,22 +15,23 @@ Turn::~Turn()
 
 void Turn::update()
 {
-    switch (state_machine.getCurrentState()) {
-        case NULL:
-            game->switchPlayer();
-            state_machine.pushState(State::DRAW_TILE);
-            drawTile();
-            break;
-        case State::DISCARD_TILE:
-            discardTile();
-            break;
-        case State::DRAW_TILE:
-            drawTile();
-            break;
-        case State::SMALL_MELDED_KANG:
-            break;
-        case State::CONCEALED_KANG:
-            break;
+    try {
+        switch (state_machine.getCurrentState()) {
+            case State::DISCARD_TILE:
+                discardTile();
+                break;
+            case State::DRAW_TILE:
+                drawTile();
+                break;
+            case State::SMALL_MELDED_KANG:
+                break;
+            case State::CONCEALED_KANG:
+                break;
+        }
+    } catch (int e) {
+        //game_instance->switchPlayer();
+        state_machine.pushState(State::DRAW_TILE);
+        drawTile();
     }
 }
 
@@ -46,7 +47,7 @@ void Turn::drawTile()
         state_machine.pushState(State::DISCARD_TILE);
     } catch (NoMoreTilesError &e) {
         std::cout << "woops. no more tiles to grab..." << std::endl;
-        return game_instance->finishGame();
+        return;
     }
     //glutPostRedisplay();
 }

@@ -3,7 +3,6 @@
 #include <chrono>
 #include <random>
 using namespace std;
-bool turn_started = false;
 int Game::humanPlayerIndex = 0;
 Game::Game()
 {
@@ -15,17 +14,12 @@ Game::Game()
     updatePlayerWinds();
 
     turnManager = new Turn(this, getCurrentPlayer());
+    tileDealer = new TileDealer(this);
+    pile = Tile::createTheTiles();
 }
 void Game::update()
 {
-    if (turn_started)
-        turnManager->update();
-}
-void Game::start()
-{
-    cout << "starting game..." << endl;
-    turn_started = true;
-    init_state();
+    turnManager->update();
 }
 void Game::chooseDealer()
 {
@@ -33,17 +27,13 @@ void Game::chooseDealer()
     curr_state.dealerReference = rand() % NUM_PLAYERS;
     curr_state.currPlayerReference = curr_state.dealerReference;
 }
-void Game::init_state()
+bool Game::finishedDealing()
 {
-    pile = Tile::createTheTiles();
-    Player *player;
-    for (int i = 0; i < NUM_PLAYERS; i++) {
-        player = curr_state.players[i];
-        while (!player->hasFullHand())
-            takeFromWall(player);
-        player->sortHand();
-    }
-    cout << "finished dealing tiles..." << endl;
+    return tileDealer->finishedDealing;
+}
+void Game::dealTiles()
+{
+    tileDealer->deal();
 }
 void Game::switchPlayer()
 {
@@ -83,14 +73,6 @@ void Game::getDiscard(Tile *tile)
     cout << "the tile " << tile->get_val() << " was discarded by player " << wind_strings[getCurrentPlayer()->_wind] << endl;
     // after termining no one wants the the discarded tile
 }
-void Game::finishGame()
-{
-    // check if any players have Mahjong, otherwise
-    roundIsOver = true;
-    playExtraHand = true;
-    // update status to Draw
-    cout << "finished Game" << endl;
-}
 void Game::restart()
 {
     if (!playExtraHand) {
@@ -109,7 +91,8 @@ void Game::restart()
         curr_state.currPlayerReference = curr_state.dealerReference;
     }
     roundIsOver = false;
-    init_state();
+    pile = Tile::createTheTiles();
+    dealTiles();
 }
 void Game::updatePlayerWinds()
 {
@@ -151,6 +134,7 @@ Game::~Game()
 {
     cout << "deleting game.." << endl;
     delete turnManager;
+    delete tileDealer;
     for (Tile *tile : pile) {
         delete tile;
     }

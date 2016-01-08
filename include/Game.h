@@ -1,6 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 #include "Player.h"
+#include "TileDealer.h"
 #include "Turn.h"
 
 #define NUM_ROUNDS 4
@@ -18,34 +19,36 @@ typedef struct state {
 struct NoMoreTilesError : public std::exception {};
 
 class Turn;
+class TileDealer;
 class Game
 {
     friend class Turn;
+    friend class TileDealer;
     public:
         static int humanPlayerIndex;
+        bool _finishedDealing;
         Game();
         std::string getPrevailingWind(); // round wind
         int getTilesLeft();
         Player *getCurrentPlayer();
         Player *getPlayer(int i);
         void update();
+        void dealTiles();
         bool roundOver();
-        void start();
+        bool finishedDealing();
         void restart(); // start new round
         virtual ~Game();
-    protected:
     private:
         Turn *turnManager;
+        TileDealer *tileDealer;
         Tile *discardedTile;
         state curr_state;
         int rounds;
         std::vector<Tile*> pile;
         void getDiscard(Tile *tile);
-        void finishGame();
         void switchPlayer();
         void switchDealer();
         void chooseDealer();
-        void init_state();
         void updatePlayerWinds();
         bool roundIsOver, playExtraHand; // holds if dealer wins or there's a draw
         bool matchOver();

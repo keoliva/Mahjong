@@ -31,9 +31,9 @@ map<MeldType, vector<meld>> Player::getOptions(Tile *discardedTile)
     }
     return options;
 }
-bool Player::hasFullHand()
+bool Player::hasHandSize(int _size)
 {
-    return hand.size() == FULL_HAND_SIZE;
+    return hand.size() == _size;
 }
 void Player::takeTile(Tile *tile)
 {

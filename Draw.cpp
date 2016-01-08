@@ -60,6 +60,7 @@ void drawEastPlayerMarker(PlayingOrder playerIndex) {
     glRotated(180, 0, 1, 0);
     glutSolidCone(0.5, 1.0, 10, 10);
     glPopMatrix();
+    glColor3d(1, 1, 1);
 }
 static float faceHuman = 0.0f, turnLeft = -90.0f, turnRight = 90.0f, faceAway = 180.0f;
 static float standUp = 90.0f, lieDown = 0.0f;

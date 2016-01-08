@@ -34,7 +34,7 @@ class Player
         std::vector<Tile*> hand, discards, melds, bonuses;
         Player();
         bool isDealer();
-        bool hasFullHand(); // holds if player has a 13-tile hand
+        bool hasHandSize(int _size);
         void sortHand();
         std::map<MeldType, std::vector<meld>> getOptions(Tile *discardedTile=nullptr);
         void takeTile(Tile *tile);

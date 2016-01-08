@@ -70,6 +70,17 @@ static void idle()
     glutPostRedisplay();
 }
 
+static void dealTiles()
+{
+    if (game->finishedDealing()) {
+        //glutIdleFunc(idle);
+        glutIdleFunc(NULL);
+    } else {
+        game->dealTiles();
+    }
+    glutPostRedisplay();
+}
+
 static void mouseButton(int button, int state, int x, int y)
 {
     if (button != GLUT_LEFT_BUTTON || state != GLUT_DOWN || game->roundOver()
@@ -113,16 +124,8 @@ static void key(unsigned char key, int x, int y)
             delete game;
             exit(0);
             break;
-        case 'l':
-            z_coord -= 0.1f;
-            cout << "z_coord: " << z_coord << endl;
-            break;
-        case 'm':
-            z_coord += 1.0f;
-            cout << "z_coord: " << z_coord << endl;
-            break;
         case 's':
-            game->start();
+            glutIdleFunc(dealTiles);
             break;
         case 'a':
             rot_x -= 1.0f;
@@ -219,7 +222,7 @@ int main(int argc, char *argv[])
     glutDisplayFunc(display);
     glutKeyboardFunc(key);
     glutMouseFunc(mouseButton);
-    glutIdleFunc(idle);
+    //glutIdleFunc(dealTiles);
     glutPassiveMotionFunc(mouseMove);
     init();
     testInitGame();
