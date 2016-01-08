@@ -1,4 +1,6 @@
-#include "Game.h"
+#include "include/Game.h"
+#include "include/AIPlayer.h"
+#include "include/HumanPlayer.h"
 #include <GL/glut.h>
 #include <chrono>
 #include <random>
@@ -9,8 +11,10 @@ Game::Game()
     roundIsOver = false;
     rounds = 0;
     chooseDealer();
-    for (int i = 0; i < NUM_PLAYERS; i++)
-        curr_state.players[i] = new Player();
+    curr_state.players[humanPlayerIndex] = new HumanPlayer();
+    int i = (humanPlayerIndex + 1) % NUM_PLAYERS;
+    for (; i != humanPlayerIndex; i = (i+1)%NUM_PLAYERS)
+        curr_state.players[i] = new AIPlayer();
     updatePlayerWinds();
 
     turnManager = new Turn(this, getCurrentPlayer());

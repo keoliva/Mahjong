@@ -20,26 +20,23 @@ enum wind { WINDS };// order prevailing winds rotate in
 static std::string wind_strings[] = { WINDS };
 #undef X
 
-enum PlayerStatus {
-    DREW_TILE, DISCARDED_TILE
-};
 class Player
 {
-    HandEvaluator *handEvaluator;
-    PlayerStatus curr_status;
-    std::map<MeldType, std::vector<meld>> options;
     public:
         wind _wind;
         int score;
         std::vector<Tile*> hand, discards, melds, bonuses;
         Player();
+        void takeTile(Tile *tile);
+        virtual Tile *discardTile(int selected_index=0);
         bool isDealer();
         bool hasHandSize(int _size);
         void sortHand();
         std::map<MeldType, std::vector<meld>> getOptions(Tile *discardedTile=nullptr);
-        void takeTile(Tile *tile);
-        Tile *discardTile(int selected_index=0);
-        ~Player();
+        virtual ~Player();
+    private:
+        HandEvaluator *handEvaluator;
+        std::map<MeldType, std::vector<meld>> options;
 };
 
 #endif // PLAYER_H

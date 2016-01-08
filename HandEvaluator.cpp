@@ -200,9 +200,6 @@ void HandEvaluator::test()
             tiles.push_back(new DragonTile(type));
     }
     sort(tiles.begin(), tiles.end(), SortTiles());
-    for (Tile *tile : tiles) {
-        cout << tile->get_val() << endl;
-    }
     cout << "Running splitTiles Tests..." << endl;
     bool (*equals)(const Tile &a, const Tile &b) = NULL;
     equals = &Tile::areEqual;

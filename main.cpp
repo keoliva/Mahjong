@@ -28,7 +28,7 @@ using namespace std;
 
 static Draw *draw;
 static Game *game;
-static float rot_x = -86.0f, rot_y = 0.0f, rot_z = 0.0f, z_coord = -16.8f;
+static float rot_x = -86.0f, rot_y = 0.0f, rot_z = 0.0f;
 int selectedTileIndex;
 bool mouseMoved, mouseClicked;
 /* GLUT callback Handlers */

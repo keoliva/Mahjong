@@ -1,9 +1,7 @@
 #include "include/Player.h"
 #include "include/Tile.h"
 #include <algorithm>
-#include <chrono>
-#include <random>
-using namespace std;
+
 Player::Player()
 {
     score = 0;
@@ -11,16 +9,16 @@ Player::Player()
 }
 Player::~Player()
 {
-    cout << "deleting player." << endl;
+    std::cout << "deleting player." << std::endl;
     delete handEvaluator;
 }
 bool Player::isDealer()
 {
     return _wind == EAST;
 }
-map<MeldType, vector<meld>> Player::getOptions(Tile *discardedTile)
+std::map<MeldType, std::vector<meld>> Player::getOptions(Tile *discardedTile)
 {
-    map<MeldType, vector<meld>> options;
+    std::map<MeldType, std::vector<meld>> options;
     if (discardedTile) {
         options[PENG] = handEvaluator->canDeclareMeldedPeng(hand, discardedTile);
         options[KANG] = handEvaluator->canDeclareBigMeldedKang(hand, discardedTile);
@@ -37,7 +35,6 @@ bool Player::hasHandSize(int _size)
 }
 void Player::takeTile(Tile *tile)
 {
-    curr_status = DREW_TILE;
     if (tile->type == BONUS)
         bonuses.push_back(tile);
     else
@@ -45,24 +42,16 @@ void Player::takeTile(Tile *tile)
 }
 Tile *Player::discardTile(int selected_index)
 {
-    curr_status = DISCARDED_TILE;
-    Tile *discardedTile;
-    int index;
     if (0 <= selected_index && selected_index < hand.size()) {
-        index = selected_index;
-        discardedTile = hand[selected_index];
+        int index = selected_index;
+        Tile *discardedTile = hand[selected_index];
+
+        discards.push_back(discardedTile);
+        hand.erase(hand.begin() + index);
+        return discardedTile;
     } else {
-        unsigned seed = chrono::system_clock::now().time_since_epoch().count();
-        default_random_engine generator (seed);
-        uniform_int_distribution<int> dist(0, hand.size()-1);
-        index = dist(generator); // random index from
-        discardedTile = hand[index];
+        return nullptr;
     }
-
-    discards.push_back(discardedTile);
-    hand.erase(hand.begin() + index);
-
-    return discardedTile;
 }
 void Player::sortHand()
 {
