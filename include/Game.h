@@ -1,6 +1,7 @@
 #ifndef GAME_H
 #define GAME_H
 #include "Player.h"
+#include "Status.h"
 #include "TileDealer.h"
 #include "Turn.h"
 
@@ -28,6 +29,9 @@ class Game
         static int humanPlayerIndex;
         bool _finishedDealing;
         Game();
+        Status *getStatus() { return curr_status; };
+        void updateStatus(Status *new_status) { curr_status = new_status; };
+        Tile *getDiscard() { return curr_discard; };
         std::string getPrevailingWind(); // round wind
         int getTilesLeft();
         Player *getCurrentPlayer();
@@ -41,13 +45,14 @@ class Game
     private:
         Turn *turnManager;
         TileDealer *tileDealer;
-        Tile *discardedTile;
+        Tile *curr_discard;
         state curr_state;
+        Status *curr_status;
         int rounds;
         std::vector<Tile*> pile;
-        void getDiscard(Tile *tile);
-        void switchPlayer();
-        void switchDealer();
+        void setDiscard(Tile *tile) { curr_discard = tile; };
+        void cycleCurrentPlayer();
+        void cycleDealer();
         void chooseDealer();
         void updatePlayerWinds();
         bool roundIsOver, playExtraHand; // holds if dealer wins or there's a draw

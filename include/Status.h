@@ -1,49 +1,44 @@
-#ifndef STATUS_H_INCLUDED
-#define STATUS_H_INCLUDED
+#ifndef STATUS_H
+#define STATUS_H
+#include <string>
 #include "Player.h"
 
-class outcome {
+class Status {
   public:
-    virtual ~outcome() {};
-    virtual std::string outcome_to_string() = 0;
-};
-class Winner : public outcome {
-  public:
-    Player *player; // is a pointer because Player class might end up being an ABC
-    Winner (player *p): _player(p), win(w) {};
-    std::string outcome_to_string() {
-        std::stringstream ss;
-        ss << "Winner<" << (wind_strings[p->-wind]) << ">";
-        return ss.str();
-    };
-};
-class Draw : public outcome {
-    public:
-        Draw() {};
-        std::sring outcome_to_string() { return "Draw"; };
+    virtual ~Status() {};
+    friend bool const operator==(const Status &a, const Status &b);
 };
 
-class status {
+class Outcome;
+class Over : public Status {
   public:
-    virtual ~status() {};
-    virtual std::string status_to_string() = 0;
+    Outcome *outcome;
+    Over(Outcome *_outcome) : outcome(_outcome) {};
+    ~Over() { delete outcome; };
 };
-class Over : public status {
-  public:
-    outcome *_outcome;
-    Over() {};
-    Over(outcome *o) : _outcome(o) {};
-    ~Over() {};
-    std::string status_to_string() {
-        std::stringstream ss;
-        ss << "Over<" << _outcome->outcome_to_string() << ">";
-        return ss.str();
-    };
+enum In_Play_Status {
+    WAITING_FOR_INPUT_AFTER_DRAW,
+    WAITING_FOR_INPUT_ON_DISCARD
 };
-class In_Play : public status {
+class In_Play : public Status {
   public:
-    ~In_Play() {};
-    std::string status_to_string() { return "In_Play"; };
+    In_Play_Status status;
+    wind playerWind;
+    MeldType playerMeld;
+    In_Play() {};
+    In_Play(In_Play_Status _status) : status(_status) {};
+    In_Play(wind _wind, MeldType dec) : playerWind(_wind), playerMeld(dec) {};
 };
 
-#endif // STATUS_H_INCLUDED
+class Outcome {
+  public:
+    virtual ~Outcome() {};
+};
+class Winner : public Outcome {
+  public:
+    Player player;
+    Winner (Player _player): player(_player) {};
+};
+class GameDraw : public Outcome {};
+
+#endif // STATUS_H

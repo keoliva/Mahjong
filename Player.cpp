@@ -16,8 +16,9 @@ bool Player::isDealer()
 {
     return _wind == EAST;
 }
-std::map<MeldType, std::vector<meld>> Player::getOptions(Tile *discardedTile)
+void Player::determineOptions(Tile *discardedTile)
 {
+    this->options.clear();
     std::map<MeldType, std::vector<meld>> options;
     if (discardedTile) {
         options[PENG] = handEvaluator->canDeclareMeldedPeng(hand, discardedTile);
@@ -27,6 +28,10 @@ std::map<MeldType, std::vector<meld>> Player::getOptions(Tile *discardedTile)
         options[SMALL_MELDED_KANG] = handEvaluator->canDeclareSmallMeldedKang(melds, hand);
         options[CONCEALED_KANG] = handEvaluator->canDeclareConcealedKang(hand);
     }
+    this->options = options;
+}
+std::map<MeldType, std::vector<meld>> Player::getOptions(Tile *discardedTile)
+{
     return options;
 }
 bool Player::hasHandSize(int _size)

@@ -1,14 +1,7 @@
 #ifndef TURN_H
 #define TURN_H
+#include "AIPlayer.h"
 #include "Game.h"
-
-enum class State {
-    DISCARD_TILE,
-    DRAW_TILE,
-    SMALL_MELDED_KANG, CONCEALED_KANG,
-    MELDED_PENG, MELDED_CHI, MELDED_KANG,
-    MAHJONG
-};
 
 template <typename T>
 class StackFSM {
@@ -24,12 +17,17 @@ public:
 private:
     std::vector<T> stackOfStates;
 };
-
+#define X(a) a,
+enum class State {
+    DISCARD_TILE,
+    DRAW_TILE,
+    DECLARATIONS
+};
+#undef X
 class Game;
 class Turn
 {
     public:
-        //typedef void (Turn::*fn)();
         Turn();
         ~Turn();
         Turn(Game *game, Player *player) : game_instance(game), curr_player(player) {};

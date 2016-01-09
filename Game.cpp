@@ -39,14 +39,14 @@ void Game::dealTiles()
 {
     tileDealer->deal();
 }
-void Game::switchPlayer()
+void Game::cycleCurrentPlayer()
 {
     curr_state.currPlayerReference++;
     curr_state.currPlayerReference %= NUM_PLAYERS;
 
     turnManager->setCurrentPlayer(getCurrentPlayer());
 }
-void Game::switchDealer()
+void Game::cycleDealer()
 {
     curr_state.dealerReference++;
     curr_state.dealerReference %= NUM_PLAYERS;
@@ -62,7 +62,7 @@ void Game::takeFromWall(Player *player)
         cout << "Tile being drawn: " << tile->get_val() << endl;
         pile.pop_back();
         if (tile->type == BONUS) {
-            discardedTile = tile;
+            curr_discard = tile;
             continue;
         } else {
             successfullyTookTile = true;
@@ -71,12 +71,7 @@ void Game::takeFromWall(Player *player)
     }
     if (!successfullyTookTile) throw NoMoreTilesError(); return;
 }
-void Game::getDiscard(Tile *tile)
-{
-    discardedTile = tile;
-    cout << "the tile " << tile->get_val() << " was discarded by player " << wind_strings[getCurrentPlayer()->_wind] << endl;
-    // after termining no one wants the the discarded tile
-}
+
 void Game::restart()
 {
     if (!playExtraHand) {
@@ -86,8 +81,7 @@ void Game::restart()
         } else {
             // update round wind
             rounds = (rounds + 1) % NUM_ROUNDS;
-            switchDealer();
-            // update dealer
+            cycleDealer();
             updatePlayerWinds();
         }
     } else {

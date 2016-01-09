@@ -3,7 +3,9 @@
 #include "Player.h"
 
 enum PlayerStatus {
-    DREW_TILE, DISCARDED_TILE
+    DREW_TILE, DISCARDED_TILE,
+    NOT_DECLARING_MELD,
+    DECLARING_CONCEALED_KANG, DECLARING_SMALL_MELDED_KANG
 };
 
 class HumanPlayer : public Player
@@ -12,6 +14,8 @@ class HumanPlayer : public Player
         HumanPlayer();
         Tile *discardTile(int selected_index=0);
         void takeTile(Tile *tile);
+        bool statusIs(PlayerStatus status);
+        bool statusIn(PlayerStatus statuses[]);
         ~HumanPlayer();
     private:
         PlayerStatus curr_status;

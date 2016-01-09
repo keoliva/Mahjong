@@ -32,9 +32,10 @@ class Player
         bool isDealer();
         bool hasHandSize(int _size);
         void sortHand();
+        void determineOptions(Tile *discardedTile=nullptr);
         std::map<MeldType, std::vector<meld>> getOptions(Tile *discardedTile=nullptr);
         virtual ~Player();
-    private:
+    protected:
         HandEvaluator *handEvaluator;
         std::map<MeldType, std::vector<meld>> options;
 };
