@@ -21,22 +21,22 @@ private:
 enum class State {
     DISCARD_TILE,
     DRAW_TILE,
-    DECLARATIONS
+    DECLARATIONS // defined in AIPlayer.h
 };
 #undef X
 class Game;
 class Turn
 {
     public:
-        Turn();
+        Turn() : state_machine(StackFSM<State>()) {};
         ~Turn();
         Turn(Game *game, Player *player) : game_instance(game), curr_player(player) {};
         void setCurrentPlayer(Player *player) { curr_player = player; };
         void update();
         void drawTile();
         void discardTile();
-        void declareSmallMeldedKang();
-        void declareConcealedKang();
+        void smallMeldedKang();
+        void concealedKang();
     protected:
     private:
         StackFSM<State> state_machine;

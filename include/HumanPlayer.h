@@ -14,8 +14,6 @@ class HumanPlayer : public Player
         HumanPlayer();
         Tile *discardTile(int selected_index=0);
         void takeTile(Tile *tile);
-        bool statusIs(PlayerStatus status);
-        bool statusIn(PlayerStatus statuses[]);
         ~HumanPlayer();
     private:
         PlayerStatus curr_status;

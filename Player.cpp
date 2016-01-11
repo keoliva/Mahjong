@@ -34,6 +34,23 @@ std::map<MeldType, std::vector<meld>> Player::getOptions(Tile *discardedTile)
 {
     return options;
 }
+void std::pair<Declaration, int> Player::getDeclaration()
+{
+    return curr_declaration;
+}
+void Player::setDeclaration(std::pair<Declaration, int> declaration)
+{
+    curr_declaration = declaration;
+}
+bool Player::declarationIn(Declaration declarations[])
+{
+    int _size = sizeof(declarations)/sizeof(declarations[0]);
+    Declaration declaration = curr_declaration->first;
+    for (int i = 0; i < _size; i++) {
+        if (declaration == declarations[i]) return true;
+    }
+    return false;
+}
 bool Player::hasHandSize(int _size)
 {
     return hand.size() == _size;
@@ -53,9 +70,28 @@ Tile *Player::discardTile(int selected_index)
 
         discards.push_back(discardedTile);
         hand.erase(hand.begin() + index);
+        sort(hand.begin(), hand.end(), SortTiles());
         return discardedTile;
     } else {
         return nullptr;
+    }
+}
+void Player::makeMeld()
+{
+    Declaration declaration = curr_declaration->first;
+    int indexIntoOptions = curr_declaration->second;
+
+    meld meld_to_make;
+    switch declaration {
+    case SMALL_MELDED_KANG:
+        meld_to_make = options[declaration][indexIntoOptions];
+        int beginningOfPeng = meld_to_make.indicesInMelds[0];
+        Tile *matching_tile = hand[meld_to_make.indexInHand];
+        melds.insert(melds.begin() + beginningOfPeng, matching_tile);
+        break;
+    case CONCEALED_KANG:
+        meld_to_make = options[declaration][indexIntoOptions];
+        break;
     }
 }
 void Player::sortHand()

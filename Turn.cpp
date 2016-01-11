@@ -3,17 +3,8 @@
 #include "include/HumanPlayer.h"
 #include <GL/glut.h>
 #include <iostream>
+#include <utility>
 int i = 0;
-
-Turn::Turn()
-{
-    state_machine = StackFSM<State>();
-}
-
-Turn::~Turn()
-{
-    //delete state_machine;
-}
 
 void Turn::update()
 {
@@ -26,6 +17,7 @@ void Turn::update()
                 drawTile();
                 break;
             case State::SMALL_MELDED_KANG:
+                smallMeldedKang();
                 break;
             case State::CONCEALED_KANG:
                 break;
@@ -37,18 +29,17 @@ void Turn::update()
     }
 }
 
-void Turn::drawTile()
-{
+void Turn::drawTile() {
     HumanPlayer *human = dynamic_cast<HumanPlayer*>(curr_player);
-    PlayerStatus statuses[3] = {DECLARING_CONCEALED_KANG, DECLARING_SMALL_MELDED_KANG,
-                                NOT_DECLARING_MELD};
-    if (human && human->statusIn(statuses)) {
+    std::pair<Declaration, int> declaration = human->getDeclaration();
+    Declaration declarations[3] = {CONCEALED_KANG, SMALL_MELDED_KANG, NONE};
+    if (human && human->declarationIn(declarations))) {
         state_machine.popState();
-        if (human->statusIs(DECLARING_SMALL_MELDED_KANG)) {
+        if (declaration == SMALL_MELDED_KANG)) {
             state_machine.pushState(State::DISCARD_TILE);
-        } else if (human->statusIs(DECLARING_CONCEALED_KANG)) {
+        } else if (declaration == CONCEALED_KANG)) {
             state_machine.pushState(State::DISCARD_TILE);
-        }  else if (human->statusIs(NOT_DECLARING_MELD)) {
+        }  else if (declaration == NONE) {
             state_machine.pushState(State::DISCARD_TILE);
         }
         return;
@@ -69,12 +60,12 @@ void Turn::drawTile()
     AIPlayer *ai;
     if (!human) {
         ai = dynamic_cast<AIPlayer*>(curr_player);
-        Declaration declaration = ai->getDeclaration();
-        if (declaration == Declaration::SMALL_MELDED_KANG) {
+        std::pair<Declaration, int> declaration = ai->getDeclaration();
+        if (declaration->first == Declaration::SMALL_MELDED_KANG) {
             state_machine.popState();
             state_machine.pushState(State::SMALL_MELDED_KANG);
             return;
-        } else if (declaration == Declaration::CONCEALED_KANG) {
+        } else if (declaration->first == Declaration::CONCEALED_KANG) {
             state_machine.popState();
             state_machine.pushState(State::CONCEALED_KANG);
             return;
@@ -91,11 +82,21 @@ void Turn::drawTile()
     state_machine.pushState(State::DISCARD_TILE);
 }
 
-void Turn::discardTile()
-{
+void Turn::discardTile() {
     game_instance->setDiscard(curr_player->discardTile());
 
     std::cout << "finished discarding tile " << i++ << std::endl;
     state_machine.popState();
     game_instance->cycleCurrentPlayer();
+}
+
+void Turn::smallMeldedKang() {
+    game_instance->updateStatus(new In_Play(curr_player->_wind, MeldType::KANG));
+    curr_player->makeMeld();
+    state_machine.popState();
+    state_machine.pushState(State::DRAW_TILE);
+}
+
+Turn::~Turn() {
+    //delete state_machine;
 }

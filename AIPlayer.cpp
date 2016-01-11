@@ -14,12 +14,12 @@ Declaration AIPlayer::getDeclaration()
     // means a tile that's not yours was recently discarded
     // and Player::determineOptions(Tile*) was called before this method was called
     // and mapped a value to the keys PENG, CHI, KANG
-    if (options.find(KANG) != options.end()) {
+    if (options.find(MeldType::KANG) != options.end()) {
         return Declaration::NONE;
     } else {
-        if (options.find(SMALL_MELDED_KANG) != options.end()) {
+        if (options.find(MeldType::SMALL_MELDED_KANG) != options.end()) {
             return Declaration::SMALL_MELDED_KANG;
-        } else if (options.find(CONCEALED_KANG) != options.end()) {
+        } else if (options.find(MeldType::CONCEALED_KANG) != options.end()) {
             return Declaration::CONCEALED_KANG;
         } else {
             return Declaration::NONE;

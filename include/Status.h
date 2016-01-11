@@ -37,7 +37,7 @@ class In_Play : public Status {
     MeldType playerMeld;
     In_Play();
     In_Play(In_Play_Status _status);
-    In_Play(wind _wind, MeldType dec);
+    In_Play(wind _wind, MeldType dec); // MeldType defined in HandEvaluator.h
 };
 
 class Outcome {
