@@ -10,6 +10,7 @@ Game::Game()
 {
     roundIsOver = false;
     rounds = 0;
+    curr_status = new In_Play();
     chooseDealer();
     curr_state.players[humanPlayerIndex] = new HumanPlayer();
     int i = (humanPlayerIndex + 1) % NUM_PLAYERS;
@@ -131,6 +132,7 @@ bool Game::matchOver()
 Game::~Game()
 {
     cout << "deleting game.." << endl;
+    delete curr_status;
     delete turnManager;
     delete tileDealer;
     for (Tile *tile : pile) {

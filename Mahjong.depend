@@ -1,13 +1,14 @@
 # depslib dependency file v1.0
-1452285071 source:c:\users\kayla\documents\quarto\mahjong\main.cpp
+1452485655 source:c:\users\kayla\documents\quarto\mahjong\main.cpp
 	<GLUT/glut.h>
 	<GL/gl.h>
 	<GL/glu.h>
 	<GL/glut.h>
-	<stdlib.h>
 	<iostream>
-	<string>
 	<math.h>
+	<string>
+	<stdlib.h>
+	<typeinfo>
 	"include/Game.h"
 	"include/InputHandler.h"
 	"include/HandEvaluator.h"
@@ -230,12 +231,12 @@
 1301111156 c:\mingw\include\oleidl.h
 	<objfwd.h>
 
-1450563201 c:\users\kayla\documents\quarto\mahjong\include\obj.h
+1452408761 c:\users\kayla\documents\quarto\mahjong\include\obj.h
 	<vector>
 	<string>
 	<iostream>
 
-1450563200 source:c:\users\kayla\documents\quarto\mahjong\obj.cpp
+1452424487 source:c:\users\kayla\documents\quarto\mahjong\obj.cpp
 	"include/Obj.h"
 	"resources/tile.h"
 	"resources/SOIL.h"
@@ -255,7 +256,7 @@
 1419773313 c:\mingw\include\math.h
 	<_mingw.h>
 
-1452193360 source:c:\users\kayla\documents\quarto\mahjong\draw.cpp
+1452485615 source:c:\users\kayla\documents\quarto\mahjong\draw.cpp
 	"include/Draw.h"
 	"include/Obj.h"
 	<GL/gl.h>
@@ -271,7 +272,7 @@
 
 1450563201 c:\users\kayla\documents\quarto\mahjong\resources\tile.h
 
-1452313455 source:c:\users\kayla\documents\quarto\mahjong\game.cpp
+1452442917 source:c:\users\kayla\documents\quarto\mahjong\game.cpp
 	"include/Game.h"
 	"include/AIPlayer.h"
 	"include/HumanPlayer.h"
@@ -335,7 +336,7 @@
 	"AIPlayer.h"
 	"Game.h"
 
-1452313524 source:c:\users\kayla\documents\quarto\mahjong\turn.cpp
+1452324737 source:c:\users\kayla\documents\quarto\mahjong\turn.cpp
 	"include/Turn.h"
 	"include/AIPlayer.h"
 	"include/HumanPlayer.h"
@@ -21600,7 +21601,7 @@
 1452215491 source:c:\users\kayla\documents\quarto\mahjong\tiledealer.cpp
 	"TileDealer.h"
 
-1452269331 source:c:\users\kayla\documents\quarto\mahjong\aiplayer.cpp
+1452323960 source:c:\users\kayla\documents\quarto\mahjong\aiplayer.cpp
 	"AIPlayer.h"
 	<algorithm>
 	<chrono>
@@ -21615,11 +21616,11 @@
 1452306348 source:c:\users\kayla\documents\quarto\mahjong\humanplayer.cpp
 	"HumanPlayer.h"
 
-1452309340 source:c:\users\kayla\documents\quarto\mahjong\status.cpp
+1452485252 source:c:\users\kayla\documents\quarto\mahjong\status.cpp
 	"Status.h"
 	<typeinfo>
 
-1452324275 c:\users\kayla\documents\quarto\mahjong\include\status.h
+1452485409 c:\users\kayla\documents\quarto\mahjong\include\status.h
 	<string>
 	"Player.h"
 

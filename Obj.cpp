@@ -11,9 +11,11 @@
 
 #define COORD 3
 using namespace std;
+static int rate = 80, inc = 2;
+static bool _dec = true;
 void Obj::init()
 {
-    model = glGenLists(1);
+    model = glGenLists(2);
 }
 Obj::Obj(string nameObj)
 {
@@ -32,7 +34,7 @@ void Obj::loadTexture(string path)
     unsigned int texID = SOIL_load_OGL_texture
 	(
 		path.c_str(),
-		SOIL_LOAD_AUTO,
+		SOIL_LOAD_RGBA,
 		SOIL_CREATE_NEW_ID,
 		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
 	);
@@ -217,19 +219,32 @@ void Obj::writeH(std::string fp)
     outH << "}" << endl;
     outH.close();
 }
-
+void loadBlinkingObj(int i, float opacity);
 void Obj::loadObj()
 {
-    glNewList(model, GL_COMPILE);
+    int i = model + 1, total = i + rate;
+    float opacity = 1.0f, dec_amount = opacity/(float)rate;
+    loadBlinkingObj(model, opacity);
+    for (; i <= total; i++) {
+        loadBlinkingObj(i, opacity);
+        opacity -= dec_amount;
+    }
+}
+
+void loadBlinkingObj(int i, float opacity) {
+// simulates a blinking object
+    glNewList(i, GL_COMPILE);
     {
         glPushMatrix();
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glEnable(GL_BLEND);
         glBegin(GL_TRIANGLES);
             int faces = tile::facesNum;
             float vert[3], norm[3], uv[2], rgb[3];
             // every 9 elements represents the xyz-coordinates of the three vertices/normals of a face
             for (int i = 0; i < faces; i++) { // COORD*3 = 9
                 memcpy(rgb, tile::diffuses[i], sizeof(rgb));
-                glColor3f(rgb[0], rgb[1], rgb[2]);
+                glColor4f(rgb[0], rgb[1], rgb[2], opacity);
                 for (int j = 0; j < VERTICES_PER_FACE; j++) {
                     memcpy(vert, tile::vertices[i][j], sizeof(vert));
                     memcpy(norm, tile::normals[i][j], sizeof(norm));
@@ -241,13 +256,15 @@ void Obj::loadObj()
             }
         glEnd();
     }
+    glDisable(GL_BLEND);
     glPopMatrix();
     glEndList();
 }
 
 void Obj::draw(float x, float y, float z,
                float rot_x, float rot_y, float rot_z,
-               string texture_filename)
+               string texture_filename,
+               bool blinking)
 {
     glPushMatrix();
     glTranslatef(x, y, z);
@@ -259,8 +276,26 @@ void Obj::draw(float x, float y, float z,
         glEnable(GL_TEXTURE_2D);
         loadTexture("resources/images/"+texture_filename+".png");
     }
-
-    glCallList(model);
+    if (!blinking) {
+        glCallList(model); // model = 1
+        return;
+    }
+    glCallList(inc);
+    // since glGenLists(n) will return 1, 2 and onwards represents the
+    // code (or list) with varying opacities
+    while (!((_dec && inc > 2) || (!_dec && inc < 82))) {
+        if (_dec && inc <= 2) {
+            _dec = false;
+        }
+        else if (!_dec && inc >= 82) {
+            _dec = true;
+        }
+    }
+    if (_dec) {
+        inc -= 1;
+    } else {
+        inc += 1;
+    }
     glPopMatrix();
     glDisable(GL_TEXTURE_2D);
     glColor3d(1, 1, 1);

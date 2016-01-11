@@ -53,7 +53,8 @@ class Obj
         void loadObj();
         void draw(float x, float y, float z,
                   float rot_x, float r_y, float r_z=0.0f,
-                  std::string texture_filename="");
+                  std::string texture_filename="",
+                  bool blinking=false);
         virtual ~Obj() { std::cout << "deleting Obj\n"; };
     private:
         int model;

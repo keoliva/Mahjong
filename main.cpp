@@ -12,11 +12,11 @@
 #include <GL/glu.h>
 #include <GL/glut.h>
 #endif
-
-#include <stdlib.h>
 #include <iostream>
-#include <string>
 #include <math.h>
+#include <string>
+#include <stdlib.h>
+#include <typeinfo>
 #include "include/Game.h"
 #include "include/InputHandler.h"
 #include "include/HandEvaluator.h"
@@ -25,7 +25,7 @@
 #define BOOST_BIND_NO_PLACEHOLDERS
 #include <boost/lambda/lambda.hpp>
 using namespace std;
-
+Obj tile;
 static Draw *draw;
 static Game *game;
 static float rot_x = -86.0f, rot_y = 0.0f, rot_z = 0.0f;
@@ -54,7 +54,7 @@ static void display(void)
     mouseKeyActivity mouseInfo;
     mouseInfo = mouseKeyActivity(mouseMoved, mouseClicked, selectedTileIndex);
 
-    cout <<" drawing game " << endl;
+    //cout <<" drawing game " << endl;
     //game->update();
     draw->drawGame(rot_x, rot_y, rot_z, mouseInfo, game);
 
@@ -66,25 +66,29 @@ static void display(void)
 
 static void idle()
 {
-    game->update();
+    if (*(game->getStatus()) == In_Play(WAITING_FOR_INPUT_AFTER_DRAW)) {
+        glutIdleFunc(NULL);
+    } else {
+        game->update();
+    }
     glutPostRedisplay();
 }
 
 static void dealTiles()
 {
     if (game->finishedDealing()) {
-        //glutIdleFunc(idle);
-        glutIdleFunc(NULL);
+        glutIdleFunc(idle);
     } else {
         game->dealTiles();
     }
     glutPostRedisplay();
 }
 
+
 static void mouseButton(int button, int state, int x, int y)
 {
     if (button != GLUT_LEFT_BUTTON || state != GLUT_DOWN || game->roundOver()
-        || game->getCurrentPlayer() != game->getPlayer(game->humanPlayerIndex)) return;
+        || typeid(game->getCurrentPlayer()).name() != "HumanPlayer") return;
     int window_height = glutGet(GLUT_WINDOW_HEIGHT);
 
     GLuint index;
@@ -102,8 +106,7 @@ static void mouseButton(int button, int state, int x, int y)
 }
 static void mouseMove(int x, int y)
 {
-    if (game->roundOver() ||
-        game->getCurrentPlayer() != game->getPlayer(game->humanPlayerIndex)) return;
+    if (game->roundOver() || typeid(game->getCurrentPlayer()).name() != "HumanPlayer") return;
     int window_height = glutGet(GLUT_WINDOW_HEIGHT);
 
     GLuint index;
@@ -222,11 +225,12 @@ int main(int argc, char *argv[])
     glutDisplayFunc(display);
     glutKeyboardFunc(key);
     glutMouseFunc(mouseButton);
-    //glutIdleFunc(dealTiles);
+    //glutIdleFunc(idle);
     glutPassiveMotionFunc(mouseMove);
     init();
     testInitGame();
     glutMainLoop();
+
     //using namespace boost::network;
     //using namespace boost::network::http;
 

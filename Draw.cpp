@@ -123,6 +123,14 @@ void Draw::drawGame(float rot_x, float rot_y, float rot_z, mouseKeyActivity mous
     updates["tilesLeft"] = msg_data(ss.str(), 5.0/6.0);
     ss.str("");
 
+    bool drawBlinkingDiscard = false;
+    if (*game->getStatus() == In_Play(WAITING_FOR_INPUT_AFTER_DRAW)||
+        *game->getStatus() == In_Play(WAITING_FOR_INPUT_ON_DISCARD)) {
+        displayOptions(game->getPlayer(game->humanPlayerIndex));
+        if (*game->getStatus() == In_Play(WAITING_FOR_INPUT_ON_DISCARD))
+            drawBlinkingDiscard = true;
+    }
+
     glTranslatef(x_coord, y_coord, z_coord);
     glRotated(rot_x, 1, 0, 0);
     glRotated(rot_y, 0, 1, 0);
@@ -132,7 +140,8 @@ void Draw::drawGame(float rot_x, float rot_y, float rot_z, mouseKeyActivity mous
     glEnable(GL_STENCIL_TEST);
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
-    Player *player;
+    Player *player, *curr_player = game->getCurrentPlayer();
+    Tile *curr_discard = game->getDiscard();
     PlayingOrder playerPos;
     int humanIndex = game->humanPlayerIndex;
     int discardedRowLength;
@@ -174,7 +183,6 @@ void Draw::drawGame(float rot_x, float rot_y, float rot_z, mouseKeyActivity mous
             ss << " Your Wind: " << wind_strings[player->_wind] << "   |   ";
             ss << " Your Score: " << player->score << " FAN";
             updates["userInfo"] = msg_data(ss.str(), 1.0/7.0);
-            displayOptions(player);
         }
         // draw revealed melds and bonus tiles
         {
@@ -208,11 +216,19 @@ void Draw::drawGame(float rot_x, float rot_y, float rot_z, mouseKeyActivity mous
             discardsSize = player->discards.size();
             int ith = firstIndex, row = 0;
             pieceIndex = 0;
+            Tile *_tile;
             for (; pieceIndex < discardsSize; pieceIndex++) {
                 loc = getPieceLoc(DISCARDED, playerPos, ith++, row);
-                tile.draw(loc.x, loc.y, loc.z, loc.rotX, loc.rotY, loc.rotZ,
-                          (player->discards)[pieceIndex]->get_val());
-
+                _tile = (player->discards)[pieceIndex];
+                if (drawBlinkingDiscard &&
+                    player == curr_player &&
+                    Tile::areEqual(*_tile, *curr_discard)) {
+                    tile.draw(loc.x, loc.y, loc.z, loc.rotX, loc.rotY, loc.rotZ,
+                          _tile->get_val(), true);
+                } else {
+                    tile.draw(loc.x, loc.y, loc.z, loc.rotX, loc.rotY, loc.rotZ,
+                          _tile->get_val());
+                }
                 if ((pieceIndex + 1) % discardedRowLength == 0) {
                         ith = firstIndex;
                         row++;
@@ -273,30 +289,21 @@ void displayOptions(Player *human) {
     map<MeldType, vector<meld>> options = human->getOptions();
     map<MeldType, vector<meld>>::iterator it;
     stringstream ss;
-    bool hasOptions = false;
+    ss << "Press 's' to skip.   ";
     string meld_type, key;
     vector<meld> possible_melds;
     for (it = options.begin(); it != options.end(); it++) {
         possible_melds = it->second;
         if (!possible_melds.empty()) {
-            hasOptions = true;
             meld_type = meld_strings[it->first];
-            if (meld_type == "SMALL_MELDED_KANG") {
-                key = 'm';
-            } else if (meld_type == "CONCEALED_KANG") {
+            if (meld_type == "SMALL_MELDED_KANG" || meld_type == "CONCEALED_KANG") {
                 key = 'k';
             } else {
                 const char *meld_type_c_str = meld_type.c_str();
                 key = tolower(*(meld_type_c_str));
             }
-            ss << "Press '" << key << "' to declare '" << meld_type << "'   |   ";
+            ss << "|   Press '" << key << "' to declare '" << meld_type << "'   ";
         }
     }
-    if (hasOptions) ss << "Press 's' to skip.";
     updates["options"] = msg_data(ss.str(), 4.0/6.0);
-
-    if (options.find(PENG) == options.end()) { // there's a discarded tile
-
-
-    }
 }
