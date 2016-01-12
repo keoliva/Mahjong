@@ -25,8 +25,8 @@ static std:: string meld_strings[] = { MELDS };
 #undef X
 
 struct meld {
-    std::vector<int> indicesInMelds, indicesInHand;
-    int indexInHand;
+    std::vector<int> indicesInHand;
+    int indexInHand, indexInMeld;
 };
 
 class HandEvaluator
@@ -37,7 +37,9 @@ class HandEvaluator
         std::vector<meld> canDeclareMeldedPeng(std::vector<Tile*> hand, Tile *discardedTile);
         std::vector<meld> canDeclareMeldedChi(std::vector<Tile*> hand, Tile *discardedTile);
         std::vector<meld> canDeclareBigMeldedKang(std::vector<Tile*> hand, Tile *discardedTile);
-        std::vector<meld> canDeclareSmallMeldedKang(std::vector<Tile*> melds, std::vector<Tile*> hand);
+        std::vector<meld> canDeclareSmallMeldedKang(std::vector<
+                                                    std::pair<MeldType, std::vector<Tile*>>
+                                                    > melds, std::vector<Tile*> hand);
         std::vector<meld> canDeclareConcealedKang(std::vector<Tile*> hand);
         bool canDeclareMahjong(std::vector<Tile*> melds, std::vector<Tile*> hand);
         int getScore(std::vector<Tile*> melds, std::vector<Tile*> hand,

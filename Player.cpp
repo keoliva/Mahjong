@@ -5,6 +5,7 @@
 Player::Player()
 {
     score = 0;
+    curr_declaration = std::make_pair(Declaration::NONE, -1);
     handEvaluator = new HandEvaluator();
 }
 Player::~Player()
@@ -34,7 +35,7 @@ std::map<MeldType, std::vector<meld>> Player::getOptions(Tile *discardedTile)
 {
     return options;
 }
-void std::pair<Declaration, int> Player::getDeclaration()
+std::pair<Declaration, int> Player::getDeclaration()
 {
     return curr_declaration;
 }
@@ -45,7 +46,7 @@ void Player::setDeclaration(std::pair<Declaration, int> declaration)
 bool Player::declarationIn(Declaration declarations[])
 {
     int _size = sizeof(declarations)/sizeof(declarations[0]);
-    Declaration declaration = curr_declaration->first;
+    Declaration declaration = curr_declaration.first;
     for (int i = 0; i < _size; i++) {
         if (declaration == declarations[i]) return true;
     }
@@ -78,20 +79,32 @@ Tile *Player::discardTile(int selected_index)
 }
 void Player::makeMeld()
 {
-    Declaration declaration = curr_declaration->first;
-    int indexIntoOptions = curr_declaration->second;
+    Declaration declaration = curr_declaration.first;
+    int indexIntoOptions = curr_declaration.second;
 
     meld meld_to_make;
-    switch declaration {
-    case SMALL_MELDED_KANG:
-        meld_to_make = options[declaration][indexIntoOptions];
-        int beginningOfPeng = meld_to_make.indicesInMelds[0];
-        Tile *matching_tile = hand[meld_to_make.indexInHand];
-        melds.insert(melds.begin() + beginningOfPeng, matching_tile);
-        break;
-    case CONCEALED_KANG:
-        meld_to_make = options[declaration][indexIntoOptions];
-        break;
+    switch (declaration) {
+        case Declaration::SMALL_MELDED_KANG: {
+            meld_to_make = (options[SMALL_MELDED_KANG])[indexIntoOptions];
+            int pengIndex = meld_to_make.indexInMeld;
+            Tile *matching_tile = hand[meld_to_make.indexInHand];
+            melds[pengIndex].first = SMALL_MELDED_KANG;
+            melds[pengIndex].second.push_back(matching_tile);
+            // tile that's moved to melds should no longer be in hand
+            hand.erase(hand.begin() + meld_to_make.indexInHand);
+            break;
+        }
+        case Declaration::CONCEALED_KANG:
+            meld_to_make = options[CONCEALED_KANG][indexIntoOptions];
+            std::vector<int> indicesInHand = meld_to_make.indicesInHand;
+            std::vector<Tile*> tilesInNewMeld;
+            for (int i : indicesInHand) {
+                tilesInNewMeld.push_back(hand[i]);
+                hand.erase(hand.begin() + i);
+            }
+            std::pair<MeldType, std::vector<Tile*>> new_meld (CONCEALED_KANG, tilesInNewMeld);
+            melds.push_back(new_meld);
+            break;
     }
 }
 void Player::sortHand()

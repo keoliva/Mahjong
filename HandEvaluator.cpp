@@ -151,21 +151,22 @@ int HandEvaluator::findMatchingTile(vector<Tile*> hand, Tile *tileToBeFound)
     return -1;
 }
 // see if there's a melded peng (three of the same tile) that can be promoted to a kang (four of the same)
-vector<meld> HandEvaluator::canDeclareSmallMeldedKang(vector<Tile*> melds, vector<Tile*> hand)
+vector<meld> HandEvaluator::canDeclareSmallMeldedKang(vector<pair<MeldType, vector<Tile*>>> melds,
+                                                        vector<Tile*> hand)
 {
     vector<meld> possibleKangs;
-    vector<vector<int>> split_melds = splitTiles(melds, &Tile::areEqual);
-    int kangIndex;
-    for (vector<int> indices : split_melds) {
-        if (indices.size() == 3) { // Peng (three of the same tile)
-            kangIndex = findMatchingTile(hand, melds[indices[0]]);
+    int kangIndex, i = 0;
+    for (pair<MeldType, vector<Tile*>> _meld : melds) {
+        if (_meld.first == PENG) { // Peng (three of the same tile)
+            kangIndex = findMatchingTile(hand, _meld.second[0]);
             if (kangIndex > -1) {
                 meld small_meld;
-                small_meld.indicesInMelds = indices;
+                small_meld.indexInMeld = i;
                 small_meld.indexInHand = kangIndex;
                 possibleKangs.push_back(small_meld);
             }
         }
+        i++;
     }
     return possibleKangs;
 }
@@ -219,13 +220,14 @@ void HandEvaluator::test()
     delete tileToBeFound;
     cout << "Running canDeclareSmallMeldedKang Tests..." << endl;
     vector<Tile*> hand = {new CharacterTile(4), new CharacterTile(5), new CircleTile(2), new BambooTile(7)};
-    vector<Tile*> melds = { new CharacterTile(5), new CharacterTile(5),new CharacterTile(5), new CharacterTile(1),new CharacterTile(2), new CharacterTile(3) };
+    vector<pair<MeldType, vector<Tile*>>> _melds = {
+        pair<MeldType, vector<Tile*>> (PENG, {new CharacterTile(5), new CharacterTile(5),new CharacterTile(5)}),
+        pair<MeldType, vector<Tile*>> (CHI, {new CharacterTile(1),new CharacterTile(2), new CharacterTile(3)}) };
     sort(hand.begin(), hand.end(), SortTiles());
-    vector<meld> vec = canDeclareSmallMeldedKang(melds, hand);
+    vector<meld> vec = canDeclareSmallMeldedKang(_melds, hand);
     assert(vec.size() == 1);
     meld kang = vec[0];
-    vector<int> indices {0, 1, 2};
-    cout << ((kang.indexInHand == 2 && kang.indicesInMelds == indices)?"Passed.":"Failed.") << endl;
+    cout << ((kang.indexInHand == 2 && kang.indexInMeld == 0)?"Passed.":"Failed.") << endl;
     hand = {new CharacterTile(4), new CharacterTile(5), new CircleTile(2), new BambooTile(7)};
     cout << "Running canDeclareConcealedKang Tests..." << endl;
     vector<meld> kangs = canDeclareConcealedKang(hand);
@@ -237,10 +239,12 @@ void HandEvaluator::test()
     kangs = canDeclareConcealedKang(hand);
     assert(kangs.size() == 1);
     kang = kangs[0];
-    indices = {3, 4, 5, 6};
+    vector<int> indices = {3, 4, 5, 6};
     cout << ((kang.indicesInHand == indices)?"Passed.":"Failed.") << endl;
     cout << "Running canDeclareMeldedPeng Tests..." << endl;
     meld _meld;
+    vector<Tile*> melds = {new CharacterTile(5), new CharacterTile(5),new CharacterTile(5),
+                    new CharacterTile(1),new CharacterTile(2), new CharacterTile(3)};
     _meld = canDeclareMeldedPeng(melds, tiles[0])[0];
     assert(_meld.indicesInHand.empty());
     cout << "Passed." << endl;;

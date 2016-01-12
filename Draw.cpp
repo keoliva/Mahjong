@@ -63,7 +63,7 @@ void drawEastPlayerMarker(PlayingOrder playerIndex) {
     glColor3d(1, 1, 1);
 }
 static float faceHuman = 0.0f, turnLeft = -90.0f, turnRight = 90.0f, faceAway = 180.0f;
-static float standUp = 90.0f, lieDown = 0.0f;
+static float standUp = 90.0f, lieDown = 0.0f, lieDownFaceDown = 180.0f;
 boardLoc Draw::getPieceLoc(HandTile type, PlayingOrder playerIndex,
                            int ith, int row)
 {
@@ -94,10 +94,10 @@ boardLoc Draw::getPieceLoc(HandTile type, PlayingOrder playerIndex,
             loc.x += y;
         }
     }
-    // either REVEALED or DISCARDED at this point
+    // either REVEALED, REVEALED_FACE_DOWN, or DISCARDED at this point
     // take the lying down piece of the human, and rotate the piece
     //  around the z-axis to represent everyone else's */
-    loc.rotX = lieDown;
+    loc.rotX = (type == REVEALED_FACE_DOWN)?lieDownFaceDown:lieDown;
     loc.z = -tile_height/4;
     loc.rotZ = loc.rotY;
     loc.rotY = faceHuman;
@@ -186,22 +186,33 @@ void Draw::drawGame(float rot_x, float rot_y, float rot_z, mouseKeyActivity mous
         }
         // draw revealed melds and bonus tiles
         {
-            pieceIndex = 0;
             meldsSize = player->melds.size();
             if (playerPos == HUMAN || playerPos == ACROSS_HUMAN)\
                 firstIndex = (COLS - FULL_HAND_SIZE)/2;
             else firstIndex = (ROWS - FULL_HAND_SIZE)/2;
             lastIndex = firstIndex + player->bonuses.size() + meldsSize;
+            int j = firstIndex;
+            for (pair<MeldType, std::vector<Tile*>> meld : player->melds) {
+                for (Tile *discard_tile : meld.second) {
+                    if (meld.first == CONCEALED_KANG) {
+                        loc = getPieceLoc(REVEALED_FACE_DOWN, playerPos, j);
+                        tile.draw(loc.x, loc.y, loc.z, loc.rotX, loc.rotY, loc.rotZ, "");
+                    } else {
+                        loc = getPieceLoc(REVEALED, playerPos, j);
+                        tile.draw(loc.x, loc.y, loc.z, loc.rotX, loc.rotY, loc.rotZ,
+                              discard_tile->get_val());
+                    }
+
+                    j++;
+                }
+            }
             Tile *revealed_tile;
-            for (int j = firstIndex; j < lastIndex; j++) {
-                if (pieceIndex < meldsSize)
-                    revealed_tile = player->melds[pieceIndex];
-                else
-                    revealed_tile = player->bonuses[pieceIndex];
+            pieceIndex = 0;
+            for (; j < lastIndex; j++) {
+                revealed_tile = player->bonuses[pieceIndex++];
                 loc = getPieceLoc(REVEALED, playerPos, j);
                 tile.draw(loc.x, loc.y, loc.z, loc.rotX, loc.rotY, loc.rotZ,
-                          revealed_tile->get_val());
-                pieceIndex++;
+                              revealed_tile->get_val());
             }
         }
         // draw discarded tiles

@@ -31,15 +31,15 @@ void Turn::update()
 
 void Turn::drawTile() {
     HumanPlayer *human = dynamic_cast<HumanPlayer*>(curr_player);
-    std::pair<Declaration, int> declaration = human->getDeclaration();
-    Declaration declarations[3] = {CONCEALED_KANG, SMALL_MELDED_KANG, NONE};
-    if (human && human->declarationIn(declarations))) {
+    Declaration declarations[3] = {Declaration::CONCEALED_KANG, Declaration::SMALL_MELDED_KANG, Declaration::NONE};
+    if (human && human->declarationIn(declarations)) {
+        std::pair<Declaration, int> declaration = human->getDeclaration();
         state_machine.popState();
-        if (declaration == SMALL_MELDED_KANG)) {
+        if (declaration.first == Declaration::SMALL_MELDED_KANG) {
             state_machine.pushState(State::DISCARD_TILE);
-        } else if (declaration == CONCEALED_KANG)) {
+        } else if (declaration.first == Declaration::CONCEALED_KANG) {
             state_machine.pushState(State::DISCARD_TILE);
-        }  else if (declaration == NONE) {
+        }  else if (declaration.first == Declaration::NONE) {
             state_machine.pushState(State::DISCARD_TILE);
         }
         return;
@@ -61,11 +61,11 @@ void Turn::drawTile() {
     if (!human) {
         ai = dynamic_cast<AIPlayer*>(curr_player);
         std::pair<Declaration, int> declaration = ai->getDeclaration();
-        if (declaration->first == Declaration::SMALL_MELDED_KANG) {
+        if (declaration.first == Declaration::SMALL_MELDED_KANG) {
             state_machine.popState();
             state_machine.pushState(State::SMALL_MELDED_KANG);
             return;
-        } else if (declaration->first == Declaration::CONCEALED_KANG) {
+        } else if (declaration.first == Declaration::CONCEALED_KANG) {
             state_machine.popState();
             state_machine.pushState(State::CONCEALED_KANG);
             return;
@@ -94,7 +94,12 @@ void Turn::smallMeldedKang() {
     game_instance->updateStatus(new In_Play(curr_player->_wind, MeldType::KANG));
     curr_player->makeMeld();
     state_machine.popState();
+    game_instance->cycleCurrentPlayer();
     state_machine.pushState(State::DRAW_TILE);
+}
+
+void Turn::concealedKang() {
+    Turn::smallMeldedKang();
 }
 
 Turn::~Turn() {

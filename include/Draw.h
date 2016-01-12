@@ -16,7 +16,7 @@ enum PlayingOrder {
     HUMAN, RIGHT_OF_HUMAN, ACROSS_HUMAN, LEFT_OF_HUMAN
 };
 enum HandTile {
-    REGULAR, REVEALED, DISCARDED
+    REGULAR, REVEALED, REVEALED_FACE_DOWN, DISCARDED
 };
 class Draw {
     public:
