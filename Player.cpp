@@ -2,6 +2,14 @@
 #include "include/Tile.h"
 #include <algorithm>
 
+std::map<Declaration, MeldType> Player::declarationToMeld =  {
+    {Declaration::SMALL_MELDED_KANG, MeldType::SMALL_MELDED_KANG},
+    {Declaration::CONCEALED_KANG, MeldType::CONCEALED_KANG},
+    {Declaration::MELDED_PENG, MeldType::PENG},
+    {Declaration::MELDED_CHI, MeldType::CHI},
+    {Declaration::MELDED_KANG, MeldType::KANG}
+};
+
 Player::Player()
 {
     score = 0;
@@ -106,6 +114,7 @@ void Player::makeMeld()
             melds.push_back(new_meld);
             break;
     }
+    setDeclaration(std::make_pair(Declaration::NONE, -1));
 }
 void Player::sortHand()
 {

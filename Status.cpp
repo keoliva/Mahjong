@@ -5,6 +5,9 @@ using namespace std;
 bool const operator==(const Status &a, const Status &b) {
     return a.toString() == b.toString();
 }
+bool const operator!=(const Status &a, const Status &b) {
+    return !(a == b);
+}
 
 Over::Over(Outcome *_outcome) {
     repr = "Over<" + _outcome->toString() + ">";

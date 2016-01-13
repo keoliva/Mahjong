@@ -35,10 +35,11 @@ void Turn::drawTile() {
     if (human && human->declarationIn(declarations)) {
         std::pair<Declaration, int> declaration = human->getDeclaration();
         state_machine.popState();
+        game_instance->updateStatus(new In_Play(WAITING_FOR_INPUT_AFTER_DECLARATION));
         if (declaration.first == Declaration::SMALL_MELDED_KANG) {
-            state_machine.pushState(State::DISCARD_TILE);
+            state_machine.pushState(State::SMALL_MELDED_KANG);
         } else if (declaration.first == Declaration::CONCEALED_KANG) {
-            state_machine.pushState(State::DISCARD_TILE);
+            state_machine.pushState(State::CONCEALED_KANG);
         }  else if (declaration.first == Declaration::NONE) {
             state_machine.pushState(State::DISCARD_TILE);
         }
@@ -91,6 +92,18 @@ void Turn::discardTile() {
 }
 
 void Turn::smallMeldedKang() {
+    if (dynamic_cast<HumanPlayer*>(curr_player)) {
+        Declaration dec_type = curr_player->getDeclaration().first;
+        MeldType meld_type = Player::declarationToMeld[dec_type];
+        std::vector<meld> melds = curr_player->getOptions()[meld_type]; // key is MeldType
+        if (melds.size() == 1) {
+            curr_player->setDeclaration(std::make_pair(dec_type, 0));
+        } else { // must choose from several options
+            // means human hasn't chosen which sets of tiles to kang
+            if (curr_player->getDeclaration().second == -1) return;
+        }
+    }
+
     game_instance->updateStatus(new In_Play(curr_player->_wind, MeldType::KANG));
     curr_player->makeMeld();
     state_machine.popState();

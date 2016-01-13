@@ -255,9 +255,9 @@ void loadBlinkingObj(int i, float opacity) {
                 }
             }
         glEnd();
+        glDisable(GL_BLEND);
+        glPopMatrix();
     }
-    glDisable(GL_BLEND);
-    glPopMatrix();
     glEndList();
 }
 
@@ -278,6 +278,9 @@ void Obj::draw(float x, float y, float z,
     }
     if (!blinking) {
         glCallList(model); // model = 1
+        glPopMatrix();
+        glDisable(GL_TEXTURE_2D);
+        glColor3d(1, 1, 1);
         return;
     }
     glCallList(inc);

@@ -4,12 +4,15 @@
 #include "Player.h"
 #define IN_PLAY_STATUSES \
     X(WAITING_FOR_INPUT_AFTER_DRAW) \
-    X(WAITING_FOR_INPUT_ON_DISCARD)
+    X(WAITING_FOR_INPUT_ON_DISCARD) \
+    X(WAITING_FOR_INPUT_TO_DISCARD) \
+    X(WAITING_FOR_INPUT_AFTER_DECLARATION)
 
 class Status {
   public:
     virtual ~Status() {};
     friend bool const operator==(const Status &a, const Status &b);
+    friend bool const operator!=(const Status &a, const Status &b);
     std::string toString() const { return repr; };
   protected:
     std::string repr;

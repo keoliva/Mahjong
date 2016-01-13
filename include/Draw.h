@@ -1,16 +1,23 @@
 #ifndef DRAW_H
 #define DRAW_H
 #include "Game.h"
-#include "InputHandler.h"
 
-typedef struct boardLoc {
+struct mouseActivity {
+    bool mouseMoved;
+    int selectionIndex;
+    mouseActivity() : selectionIndex(0) {};
+    mouseActivity(bool moved, int index) :\
+        mouseMoved(moved), selectionIndex(index) {};
+};
+
+struct boardLoc {
     float x, y;
     float z=0.0f, rotX=0.0f, rotY=0.0f, rotZ=0.0f;
     boardLoc() {};
     boardLoc(float _x, float _y) : x(_x), y(_y) {};
     boardLoc(float _x, float _y, float _rotX, float _rotY) : \
             x(_x), y(_y), rotX(_rotX), rotY(_rotY) {};
-} boardLoc;
+};
 
 enum PlayingOrder {
     HUMAN, RIGHT_OF_HUMAN, ACROSS_HUMAN, LEFT_OF_HUMAN
@@ -21,9 +28,12 @@ enum HandTile {
 class Draw {
     public:
         Draw();
-        boardLoc getPieceLoc(HandTile type, PlayingOrder playerIndex, int ith, int row=0);
         void drawGame(float rot_x, float rot_y, float rot_z,
-                      mouseKeyActivity mouseInfo, Game *game);
+                      mouseActivity mouseInfo, Game *game);
+    private:
+        void displayChoices(Player *human);
+        void displayOptions(Player *human);
+        boardLoc getPieceLoc(HandTile type, PlayingOrder playerIndex, int ith, int row=0);
 };
 
 #endif // DRAW_H

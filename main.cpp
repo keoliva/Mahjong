@@ -18,8 +18,8 @@
 #include <stdlib.h>
 #include <typeinfo>
 #include "include/Game.h"
-#include "include/InputHandler.h"
 #include "include/HandEvaluator.h"
+#include "include/HumanPlayer.h"
 #include "include/Obj.h"
 #include "include/Draw.h"
 #define BOOST_BIND_NO_PLACEHOLDERS
@@ -30,11 +30,10 @@ static Draw *draw;
 static Game *game;
 static float rot_x = -86.0f, rot_y = 0.0f, rot_z = 0.0f;
 int selectedTileIndex;
-bool mouseMoved, mouseClicked;
+bool mouseMoved;
 /* GLUT callback Handlers */
 
-static void resize(int width, int height)
-{
+static void resize(int width, int height) {
     const float ar = (float) width / (float) height;
 
     glViewport(0, 0, width, height);
@@ -43,29 +42,23 @@ static void resize(int width, int height)
     glFrustum(-ar, ar, -1.0, 1.0, 2.0, 100.0);
 }
 
-static void display(void)
-{
+static void display(void) {
     glClearStencil(0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-    // reset transformations
-    glMatrixMode(GL_MODELVIEW);
+    glMatrixMode(GL_MODELVIEW); // reset transformations
     glLoadIdentity();
 
-    mouseKeyActivity mouseInfo;
-    mouseInfo = mouseKeyActivity(mouseMoved, mouseClicked, selectedTileIndex);
+    mouseActivity mouseInfo;
+    mouseInfo = mouseActivity(mouseMoved, selectedTileIndex);
 
-    //cout <<" drawing game " << endl;
-    //game->update();
     draw->drawGame(rot_x, rot_y, rot_z, mouseInfo, game);
 
-    mouseClicked = false;
     selectedTileIndex = 0;
 
     glutSwapBuffers();
 }
 
-static void idle()
-{
+static void idle() {
     if (*(game->getStatus()) == In_Play(WAITING_FOR_INPUT_AFTER_DRAW)) {
         glutIdleFunc(NULL);
     } else {
@@ -74,8 +67,7 @@ static void idle()
     glutPostRedisplay();
 }
 
-static void dealTiles()
-{
+static void dealTiles() {
     if (game->finishedDealing()) {
         glutIdleFunc(idle);
     } else {
@@ -85,42 +77,38 @@ static void dealTiles()
 }
 
 
-static void mouseButton(int button, int state, int x, int y)
-{
+static void mouseButton(int button, int state, int x, int y) {
     if (button != GLUT_LEFT_BUTTON || state != GLUT_DOWN || game->roundOver()
-        || typeid(game->getCurrentPlayer()).name() != "HumanPlayer") return;
+        || *game->getStatus() != In_Play(WAITING_FOR_INPUT_TO_DISCARD)
+        || *game->getStatus() != In_Play(WAITING_FOR_INPUT_AFTER_DECLARATION)) return;
     int window_height = glutGet(GLUT_WINDOW_HEIGHT);
 
     GLuint index;
     glReadPixels(x, window_height - y - 1, 1, 1, GL_STENCIL_INDEX, GL_UNSIGNED_INT, &index);
-    mouseClicked = true;
-    selectedTileIndex = index;
-
-    mouseKeyActivity mouseInfo;
-    mouseInfo = mouseKeyActivity(mouseMoved, mouseClicked, selectedTileIndex);
-
-    InputHandler inputHandler = InputHandler(mouseInfo);
-    Command *command = inputHandler.handleInput();
-    command->execute(game->getCurrentPlayer());
-    //glutPostRedisplay();
+    if (index > 0 && *game->getStatus() == In_Play(WAITING_FOR_INPUT_AFTER_DECLARATION)) {
+        Player *human = game->getCurrentPlayer();
+        pair<Declaration, int> humanDeclaration = human->getDeclaration();
+        humanDeclaration.second = index - 1;
+        human->setDeclaration(humanDeclaration);
+        glutPostRedisplay();
+    }
 }
-static void mouseMove(int x, int y)
-{
-    if (game->roundOver() || typeid(game->getCurrentPlayer()).name() != "HumanPlayer") return;
+static void mouseMove(int x, int y) {
+    if (game->roundOver() ||
+        *game->getStatus() != In_Play(WAITING_FOR_INPUT_TO_DISCARD)) return;
     int window_height = glutGet(GLUT_WINDOW_HEIGHT);
 
     GLuint index;
     glReadPixels(x, window_height - y - 1, 1, 1, GL_STENCIL_INDEX, GL_UNSIGNED_INT, &index);
-
-    mouseMoved = true;
-    selectedTileIndex = index;
-    glutPostRedisplay();
+    if (index > 0) {
+        mouseMoved = true;
+        selectedTileIndex = index;
+        glutPostRedisplay();
+    }
 }
 
-static void key(unsigned char key, int x, int y)
-{
-    switch (key)
-    {
+static void key(unsigned char key, int x, int y) {
+    switch (key) {
         case 27 :
         case 'q':
             delete draw;
@@ -128,7 +116,26 @@ static void key(unsigned char key, int x, int y)
             exit(0);
             break;
         case 's':
-            glutIdleFunc(dealTiles);
+            // status is only set when the current player is human, therefore current player
+            // must be human
+            if (*game->getStatus() == In_Play(WAITING_FOR_INPUT_AFTER_DRAW)) {
+                (game->getCurrentPlayer())->setDeclaration(
+                                            make_pair(Declaration::NONE, -1));
+            } else {
+                glutIdleFunc(dealTiles);
+            }
+            break;
+        case 'k':
+            if (*game->getStatus() == In_Play(WAITING_FOR_INPUT_AFTER_DRAW)) {
+                (game->getCurrentPlayer())->setDeclaration(
+                                        make_pair(Declaration::CONCEALED_KANG, -1));
+            }
+            break;
+        case 'm':
+            if (*game->getStatus() == In_Play(WAITING_FOR_INPUT_AFTER_DRAW)) {
+                (game->getCurrentPlayer())->setDeclaration(
+                                        make_pair(Declaration::SMALL_MELDED_KANG, -1));
+            }
             break;
         case 'a':
             rot_x -= 1.0f;
@@ -167,8 +174,7 @@ const GLfloat mat_ambient[]    = { 0.4f, 0.4f, 0.4f, 1.0f };
 const GLfloat mat_diffuse[]    = { 0.8f, 0.8f, 0.8f, 1.0f };
 const GLfloat mat_specular[]   = { 1.0f, 1.0f, 1.0f, 1.0f };
 const GLfloat high_shininess[] = { 100.0f };
-static void init(void)
-{
+static void init(void) {
     glEnable(GL_CULL_FACE);
     glEnable(GL_DEPTH_TEST);
     glShadeModel(GL_SMOOTH);
@@ -202,18 +208,12 @@ static void init(void)
     game = new Game();
 }
 /* Program entry point */
-void testInitGame()
-{
-    cout << "Prevailing Wind == EAST: " << ((game->getPrevailingWind() == "EAST")?"PASSED":"FAILED") << endl;
-    cout << "ROUND_OVER == FALSE: " << ((game->roundOver() == false)?"PASSED":"FAILED") << endl;
-    wind pwind = game->getCurrentPlayer()->_wind;
-    cout << "Current Player's Wind: " << ((pwind == EAST)?"PASSED":"FAILED") << endl;
+void testInitGame() {
     HandEvaluator eval = HandEvaluator();
     eval.test();
 }
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     glutInit(&argc, argv);
     glutInitWindowSize(640,480);
     glutInitWindowPosition(10,10);

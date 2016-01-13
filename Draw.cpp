@@ -1,4 +1,5 @@
 #include "include/Draw.h"
+#include "include/HumanPlayer.h"
 #include "include/Obj.h"
 #include <GL/gl.h>
 #include <GL/glut.h>
@@ -113,10 +114,9 @@ struct msg_data {
 };
 
 map<string, msg_data> updates;
-bool mouseOverOther = false;
+static bool mouseOverOther = false;
 void updateText();
-void displayOptions(Player *human);
-void Draw::drawGame(float rot_x, float rot_y, float rot_z, mouseKeyActivity mouseInfo, Game *game)
+void Draw::drawGame(float rot_x, float rot_y, float rot_z, mouseActivity mouseInfo, Game *game)
 {
     stringstream ss;
     ss << "Tiles Left: " << game->getTilesLeft();
@@ -124,21 +124,21 @@ void Draw::drawGame(float rot_x, float rot_y, float rot_z, mouseKeyActivity mous
     ss.str("");
 
     bool drawBlinkingDiscard = false;
-    if (*game->getStatus() == In_Play(WAITING_FOR_INPUT_AFTER_DRAW)||
+    if (*game->getStatus() == In_Play(WAITING_FOR_INPUT_AFTER_DRAW) ||
         *game->getStatus() == In_Play(WAITING_FOR_INPUT_ON_DISCARD)) {
         displayOptions(game->getPlayer(game->humanPlayerIndex));
-        if (*game->getStatus() == In_Play(WAITING_FOR_INPUT_ON_DISCARD))
+        if (*game->getStatus() == In_Play(WAITING_FOR_INPUT_ON_DISCARD)) {
             drawBlinkingDiscard = true;
+        }
+    } else if (*game->getStatus() == In_Play(WAITING_FOR_INPUT_TO_DISCARD)) {
+        glEnable(GL_STENCIL_TEST);
+        glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
     }
-
     glTranslatef(x_coord, y_coord, z_coord);
     glRotated(rot_x, 1, 0, 0);
     glRotated(rot_y, 0, 1, 0);
     glRotated(rot_z, 0, 0, 1);
     drawBoard();
-
-    glEnable(GL_STENCIL_TEST);
-    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
     Player *player, *curr_player = game->getCurrentPlayer();
     Tile *curr_discard = game->getDiscard();
@@ -161,16 +161,16 @@ void Draw::drawGame(float rot_x, float rot_y, float rot_z, mouseKeyActivity mous
             else firstIndex = (ROWS - handSize)/2;
             lastIndex = firstIndex + handSize;
             for (int j = firstIndex; j < lastIndex; j++) {
-                if (i == humanIndex) glStencilFunc(GL_ALWAYS, pieceIndex + 1, -1);
                 loc = getPieceLoc(REGULAR, playerPos, j);
                 // if it's the human's turn, and this is the last tile, raise it
-                if (game->getCurrentPlayer() == game->getPlayer(humanIndex) && i == humanIndex) {
+                if (*game->getStatus() == In_Play(WAITING_FOR_INPUT_TO_DISCARD) && i == humanIndex) {
                     if (pieceIndex == handSize - 1 && !mouseOverOther)
                         loc.z += tile_height/4;
                     else if (mouseInfo.mouseMoved && (mouseInfo.selectionIndex == pieceIndex + 1)) {
                         loc.z += tile_height/4; // raise the tile
                         mouseOverOther = true;
                     }
+                    glStencilFunc(GL_ALWAYS, pieceIndex + 1, -1);
                 }
                 tilename = (i == humanIndex)?(player->hand[pieceIndex]->get_val()):"";
                 tile.draw(loc.x, loc.y, loc.z, loc.rotX, loc.rotY, 0.0f, tilename);
@@ -248,8 +248,104 @@ void Draw::drawGame(float rot_x, float rot_y, float rot_z, mouseKeyActivity mous
 
         }
     }
+    if (*game->getStatus() == In_Play(WAITING_FOR_INPUT_AFTER_DECLARATION)) {
+        displayChoices(game->getPlayer(game->humanPlayerIndex));
+    }
     updateText();
 }
+
+void determineLengths(float &x, float &y,
+                      int num_sections, float total_len,
+                      float _ratio=1.0f/3.0f) {
+    // gives solution to system of equations
+    // x * num_sections + y * (num_sections + 1) = total_len
+    // y = x * _ratio
+    if (x > 0) {
+        y = (total_len - (x*num_sections + num_sections-1)) / 2;
+        return;
+    }
+    x = total_len / (num_sections + _ratio*num_sections + _ratio);
+    y = _ratio * x;
+}
+void Draw::displayChoices(Player *human) {
+    map<MeldType, vector<meld>> options = human->getOptions();
+    Declaration dec_type = human->getDeclaration().first;
+    MeldType meld_type = Player::declarationToMeld[dec_type];
+    vector<meld> possible_melds = options[meld_type];
+    Tile *tile_in_meld;
+    int num_tiles, choices_len = possible_melds.size(), j = 0;
+    float x, y;
+    float len = COLS*tile_len, z = tile_height*2;
+    glEnable(GL_STENCIL_TEST);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+    for (meld _meld : possible_melds ) {
+        switch (dec_type) {
+            case Declaration::SMALL_MELDED_KANG:
+            case Declaration::CONCEALED_KANG:
+            case Declaration::MELDED_KANG: {
+                if (dec_type == Declaration::SMALL_MELDED_KANG) {
+                    tile_in_meld = human->hand[_meld.indexInHand];
+                } else {
+                    tile_in_meld = human->hand[_meld.indicesInHand[0]];
+                }
+                num_tiles = 4;
+                x = num_tiles;
+                determineLengths(x, y, choices_len, len);
+                glStencilFunc(GL_ALWAYS, j + 1, -1);
+                glPushMatrix();
+                glTranslatef(y + j*(num_tiles + 1), 0, 0);
+                for (int i = 0; i < num_tiles; i++) {
+                    boardLoc loc = getPieceLoc(REGULAR, HUMAN, i);
+                    tile.draw(loc.x, loc.y, z, loc.rotX, loc.rotY, loc.rotZ,
+                              tile_in_meld->get_val());
+                }
+                glPopMatrix();
+                break;
+            }
+        }
+        j++;
+    }
+    glDisable(GL_STENCIL_TEST);
+    // draw transparent rectangle as tiles' background
+    glPushMatrix();
+        glTranslatef(0, 0, z);
+        glRotated(standUp, 1, 0, 0);
+        glColor4d(1, 1, 1, 0.3);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glBegin(GL_POLYGON);
+            glVertex2d(0, -tile_height); glVertex2d(len, -tile_height);
+            glVertex2d(len, tile_height); glVertex2d(0, tile_height);
+        glEnd();
+        glDisable(GL_BLEND);
+        glColor3d(1, 1, 1);
+    glPopMatrix();
+}
+void Draw::displayOptions(Player *human) {
+    map<MeldType, vector<meld>> options = human->getOptions();
+    map<MeldType, vector<meld>>::iterator it;
+    stringstream ss;
+    ss << "Press 's' to skip.   ";
+    string meld_type, key;
+    vector<meld> possible_melds;
+    for (it = options.begin(); it != options.end(); it++) {
+        possible_melds = it->second;
+        if (!possible_melds.empty()) {
+            meld_type = meld_strings[it->first];
+            if (meld_type == "SMALL_MELDED_KANG") {
+                key = 'c';
+            } else if (meld_type == "CONCEALED_KANG") {
+                key = 'k';
+            } else {
+                const char *meld_type_c_str = meld_type.c_str();
+                key = tolower(*(meld_type_c_str));
+            }
+            ss << "|   Press '" << key << "' to declare '" << meld_type << "'   ";
+        }
+    }
+    updates["options"] = msg_data(ss.str(), 4.0/6.0);
+}
+
 void *font = GLUT_BITMAP_9_BY_15;
 /** got the following two functions from tutorial at:
 http://www.lighthouse3d.com/tutorials/glut-tutorial/bitmap-fonts-and-orthogonal-projections/
@@ -294,27 +390,4 @@ void renderString(float x, float y, void *font, const char *str, int len) {
     glRasterPos2f(x, y);
     for (int i = 0; i < len; i++)
         glutBitmapCharacter(font, str[i]);
-}
-
-void displayOptions(Player *human) {
-    map<MeldType, vector<meld>> options = human->getOptions();
-    map<MeldType, vector<meld>>::iterator it;
-    stringstream ss;
-    ss << "Press 's' to skip.   ";
-    string meld_type, key;
-    vector<meld> possible_melds;
-    for (it = options.begin(); it != options.end(); it++) {
-        possible_melds = it->second;
-        if (!possible_melds.empty()) {
-            meld_type = meld_strings[it->first];
-            if (meld_type == "SMALL_MELDED_KANG" || meld_type == "CONCEALED_KANG") {
-                key = 'k';
-            } else {
-                const char *meld_type_c_str = meld_type.c_str();
-                key = tolower(*(meld_type_c_str));
-            }
-            ss << "|   Press '" << key << "' to declare '" << meld_type << "'   ";
-        }
-    }
-    updates["options"] = msg_data(ss.str(), 4.0/6.0);
 }
