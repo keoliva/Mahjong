@@ -4,26 +4,26 @@
 #include <random>
 using namespace std;
 
-AIPlayer::AIPlayer()
-{
+AIPlayer::AIPlayer() {
     //ctor
 }
 
-Tile *AIPlayer::discardTile(int selected_index)
-{
+void AIPlayer::determineTileToDiscard() {
     unsigned seed = chrono::system_clock::now().time_since_epoch().count();
     default_random_engine generator (seed);
     uniform_int_distribution<int> dist(0, hand.size()-1);
-    int index = dist(generator); // random index from
-    Tile *discardedTile = hand[index];
+    indexOfTileToDiscard = dist(generator); // random index into hand
+}
+
+Tile *AIPlayer::discardTile(int selected_index) {
+    Tile *discardedTile = hand[indexOfTileToDiscard];
 
     discards.push_back(discardedTile);
-    hand.erase(hand.begin() + index);
+    hand.erase(hand.begin() + indexOfTileToDiscard);
 
     return discardedTile;
 }
 
-AIPlayer::~AIPlayer()
-{
+AIPlayer::~AIPlayer() {
     //dtor
 }

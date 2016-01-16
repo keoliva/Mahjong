@@ -4,7 +4,6 @@
 #include <GL/glut.h>
 #include <iostream>
 #include <utility>
-int i = 0;
 
 void Turn::update()
 {
@@ -13,6 +12,9 @@ void Turn::update()
             case State::DISCARD_TILE:
                 discardTile();
                 break;
+            case State::DETERMINE_ORDER_OF_CLAIMS:
+                determineOrderOfClaims();
+                break;
             case State::DRAW_TILE:
                 drawTile();
                 break;
@@ -20,10 +22,10 @@ void Turn::update()
                 smallMeldedKang();
                 break;
             case State::CONCEALED_KANG:
+                concealedKang();
                 break;
         }
     } catch (int e) {
-        //game_instance->switchPlayer();
         state_machine.pushState(State::DRAW_TILE);
         drawTile();
     }
@@ -31,11 +33,11 @@ void Turn::update()
 
 void Turn::drawTile() {
     HumanPlayer *human = dynamic_cast<HumanPlayer*>(curr_player);
-    Declaration declarations[3] = {Declaration::CONCEALED_KANG, Declaration::SMALL_MELDED_KANG, Declaration::NONE};
-    if (human && human->declarationIn(declarations)) {
+    //Declaration declarations[3] = {Declaration::CONCEALED_KANG, Declaration::SMALL_MELDED_KANG, Declaration::NONE};
+    if (human && human->hasProvidedInput()) {
         std::pair<Declaration, int> declaration = human->getDeclaration();
         state_machine.popState();
-        game_instance->updateStatus(new In_Play(WAITING_FOR_INPUT_AFTER_DECLARATION));
+        game_instance->updateStatus(In_Play(WAITING_FOR_INPUT_AFTER_DECLARATION));
         if (declaration.first == Declaration::SMALL_MELDED_KANG) {
             state_machine.pushState(State::SMALL_MELDED_KANG);
         } else if (declaration.first == Declaration::CONCEALED_KANG) {
@@ -46,13 +48,12 @@ void Turn::drawTile() {
         return;
     }
     std::cout << "Player " << wind_strings[curr_player->_wind] << "is drawing a tile from the wall" << std::endl;
-    std::cout << "taking from a wall..." << i <<  std::endl;
     try {
         game_instance->takeFromWall(curr_player);
         std::cout << "COMPLETE!" << std::endl;
     } catch (NoMoreTilesError &e) {
         std::cout << "woops. no more tiles to grab..." << std::endl;
-        game_instance->updateStatus(new Over(new GameDraw()));
+        game_instance->updateStatus(Over(new GameDraw()));
         state_machine.popState();
         return;
     }
@@ -72,23 +73,44 @@ void Turn::drawTile() {
             return;
         }
     } else {
+        human->setStatus(PlayerStatus::DREW_TILE);
         std::map<MeldType, std::vector<meld>> options = human->getOptions();
         // see if human player CAN declare either one of these melds
         if (!options[CONCEALED_KANG].empty() || !options[SMALL_MELDED_KANG].empty()) {
-            game_instance->updateStatus(new In_Play(WAITING_FOR_INPUT_AFTER_DRAW));
+            game_instance->updateStatus(In_Play(WAITING_FOR_INPUT_AFTER_DRAW));
             return;
         }
     }
+    game_instance->updateStatus(In_Play());
     state_machine.popState();
     state_machine.pushState(State::DISCARD_TILE);
 }
 
 void Turn::discardTile() {
-    game_instance->setDiscard(curr_player->discardTile());
+    AIPlayer *ai = dynamic_cast<AIPlayer*>(curr_player);
+    HumanPlayer *human = dynamic_cast<HumanPlayer*>(curr_player);
+    if (ai) {
+        ai->determineTileToDiscard();
+        game_instance->setDiscard(curr_player->discardTile());
+    } else {
+        if (human->hasProvidedInput()) {
+            human->providedInput = false; // toggle the value
+            game_instance->setDiscard(curr_player->discards.back());
+        } else {
+            game_instance->updateStatus(In_Play(WAITING_FOR_INPUT_TO_DISCARD));
+            return;
+        }
+    }
+    game_instance->updateStatus(In_Play());
+    state_machine.popState();
+    state_machine.pushState(State::DETERMINE_ORDER_OF_CLAIMS);
+}
 
-    std::cout << "finished discarding tile " << i++ << std::endl;
+void Turn::determineOrderOfClaims() {
+
     state_machine.popState();
     game_instance->cycleCurrentPlayer();
+    state_machine.pushState(State::DRAW_TILE);
 }
 
 void Turn::smallMeldedKang() {
@@ -103,8 +125,8 @@ void Turn::smallMeldedKang() {
             if (curr_player->getDeclaration().second == -1) return;
         }
     }
-
-    game_instance->updateStatus(new In_Play(curr_player->_wind, MeldType::KANG));
+    game_instance->updateStatus(In_Play(curr_player->_wind,
+                                Player::declarationToMeld[curr_player->getDeclaration().first]));
     curr_player->makeMeld();
     state_machine.popState();
     game_instance->cycleCurrentPlayer();

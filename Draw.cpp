@@ -16,6 +16,8 @@ namespace {
     static Obj tile;
 }
 Draw::Draw() {
+    mouseOverOther = false;
+    cout << "mouseOverOther set to false........................" << endl;
     tile = Obj("tile");
     tile.loadObj();
 }
@@ -114,31 +116,30 @@ struct msg_data {
 };
 
 map<string, msg_data> updates;
-static bool mouseOverOther = false;
 void updateText();
 void Draw::drawGame(float rot_x, float rot_y, float rot_z, mouseActivity mouseInfo, Game *game)
 {
-    stringstream ss;
-    ss << "Tiles Left: " << game->getTilesLeft();
-    updates["tilesLeft"] = msg_data(ss.str(), 5.0/6.0);
-    ss.str("");
-
-    bool drawBlinkingDiscard = false;
-    if (*game->getStatus() == In_Play(WAITING_FOR_INPUT_AFTER_DRAW) ||
-        *game->getStatus() == In_Play(WAITING_FOR_INPUT_ON_DISCARD)) {
-        displayOptions(game->getPlayer(game->humanPlayerIndex));
-        if (*game->getStatus() == In_Play(WAITING_FOR_INPUT_ON_DISCARD)) {
-            drawBlinkingDiscard = true;
-        }
-    } else if (*game->getStatus() == In_Play(WAITING_FOR_INPUT_TO_DISCARD)) {
-        glEnable(GL_STENCIL_TEST);
-        glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-    }
     glTranslatef(x_coord, y_coord, z_coord);
     glRotated(rot_x, 1, 0, 0);
     glRotated(rot_y, 0, 1, 0);
     glRotated(rot_z, 0, 0, 1);
     drawBoard();
+
+    stringstream ss;
+    ss << "Tiles Left: " << game->getTilesLeft();
+    updates["tilesLeft"] = msg_data(ss.str(), 5.0/6.0);
+    ss.str("");
+    bool drawBlinkingDiscard = false;
+    if (game->getStatus() == In_Play(WAITING_FOR_INPUT_AFTER_DRAW) ||
+        game->getStatus() == In_Play(WAITING_FOR_INPUT_ON_DISCARD)) {
+        displayOptions(game->getPlayer(game->humanPlayerIndex));
+        if (game->getStatus() == In_Play(WAITING_FOR_INPUT_ON_DISCARD)) {
+            drawBlinkingDiscard = true;
+        }
+    } else if (game->getStatus() == In_Play(WAITING_FOR_INPUT_TO_DISCARD)) {
+        glEnable(GL_STENCIL_TEST);
+        glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+    }
 
     Player *player, *curr_player = game->getCurrentPlayer();
     Tile *curr_discard = game->getDiscard();
@@ -146,11 +147,12 @@ void Draw::drawGame(float rot_x, float rot_y, float rot_z, mouseActivity mouseIn
     int humanIndex = game->humanPlayerIndex;
     int discardedRowLength;
     int firstIndex, lastIndex;
-    unsigned int pieceIndex=0, handSize, meldsSize, discardsSize;
+    unsigned int pieceIndex, handSize, meldsSize, discardsSize;
     string tilename;
     for (int i = 0; i < NUM_PLAYERS; i++) {
         player = game->getPlayer(i);
         playerPos = static_cast<PlayingOrder>(i);
+        pieceIndex = 0;
         boardLoc loc;
         if (player->_wind == EAST) drawEastPlayerMarker(playerPos);
         // draw regular hand
@@ -163,14 +165,26 @@ void Draw::drawGame(float rot_x, float rot_y, float rot_z, mouseActivity mouseIn
             for (int j = firstIndex; j < lastIndex; j++) {
                 loc = getPieceLoc(REGULAR, playerPos, j);
                 // if it's the human's turn, and this is the last tile, raise it
-                if (*game->getStatus() == In_Play(WAITING_FOR_INPUT_TO_DISCARD) && i == humanIndex) {
-                    if (pieceIndex == handSize - 1 && !mouseOverOther)
-                        loc.z += tile_height/4;
-                    else if (mouseInfo.mouseMoved && (mouseInfo.selectionIndex == pieceIndex + 1)) {
+                HumanPlayer *human = dynamic_cast<HumanPlayer*>(game->getCurrentPlayer());
+                if (game->getStatus() == In_Play(WAITING_FOR_INPUT_TO_DISCARD) && i == humanIndex) {
+                    cout << "mouseOverOther: " << mouseOverOther << "____________" << endl;
+                    if (mouseInfo.mouseMoved && (mouseInfo.selectionIndex == pieceIndex + 1)) {
                         loc.z += tile_height/4; // raise the tile
                         mouseOverOther = true;
+                        cout << "****************" << endl;
+                        cout << "sected_index " << mouseInfo.selectionIndex << endl;
+                        cout << "pieceInde " << pieceIndex << endl;
+                        cout << "****************" << endl;
+                    } else if (pieceIndex == handSize - 1 && !mouseOverOther ) {
+                            cout << "in here........................" << endl;
+                            loc.z += tile_height/4;
                     }
                     glStencilFunc(GL_ALWAYS, pieceIndex + 1, -1);
+                } else if (game->getStatus() == In_Play() && i == humanIndex &&
+                    human && human->getStatus() == PlayerStatus::DREW_TILE) {
+                    if (pieceIndex == handSize - 1)
+                        loc.z += tile_height/4;
+                    mouseOverOther = false;
                 }
                 tilename = (i == humanIndex)?(player->hand[pieceIndex]->get_val()):"";
                 tile.draw(loc.x, loc.y, loc.z, loc.rotX, loc.rotY, 0.0f, tilename);
@@ -248,7 +262,7 @@ void Draw::drawGame(float rot_x, float rot_y, float rot_z, mouseActivity mouseIn
 
         }
     }
-    if (*game->getStatus() == In_Play(WAITING_FOR_INPUT_AFTER_DECLARATION)) {
+    if (game->getStatus() == In_Play(WAITING_FOR_INPUT_AFTER_DECLARATION)) {
         displayChoices(game->getPlayer(game->humanPlayerIndex));
     }
     updateText();
@@ -280,6 +294,7 @@ void Draw::displayChoices(Player *human) {
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
     for (meld _meld : possible_melds ) {
         switch (dec_type) {
+            case Declaration::MELDED_PENG:
             case Declaration::SMALL_MELDED_KANG:
             case Declaration::CONCEALED_KANG:
             case Declaration::MELDED_KANG: {
@@ -288,7 +303,7 @@ void Draw::displayChoices(Player *human) {
                 } else {
                     tile_in_meld = human->hand[_meld.indicesInHand[0]];
                 }
-                num_tiles = 4;
+                num_tiles = (dec_type == Declaration::MELDED_PENG)?3:4;
                 x = num_tiles;
                 determineLengths(x, y, choices_len, len);
                 glStencilFunc(GL_ALWAYS, j + 1, -1);

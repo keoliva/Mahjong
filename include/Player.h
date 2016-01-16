@@ -31,7 +31,7 @@ class Player
         std::vector<std::pair<MeldType, std::vector<Tile*>>> melds;
         static std::map<Declaration, MeldType> declarationToMeld;
         Player();
-        void takeTile(Tile *tile);
+        virtual void takeTile(Tile *tile);
         virtual Tile *discardTile(int selected_index=0);
         void makeMeld();
         bool isDealer();

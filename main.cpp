@@ -14,23 +14,21 @@
 #endif
 #include <iostream>
 #include <math.h>
+#include <memory>
 #include <string>
 #include <stdlib.h>
 #include <typeinfo>
 #include "include/Game.h"
 #include "include/HandEvaluator.h"
 #include "include/HumanPlayer.h"
-#include "include/Obj.h"
 #include "include/Draw.h"
-#define BOOST_BIND_NO_PLACEHOLDERS
-#include <boost/lambda/lambda.hpp>
+
 using namespace std;
-Obj tile;
-static Draw *draw;
-static Game *game;
+static Draw *draw = NULL;
+static Game *game = NULL;
 static float rot_x = -86.0f, rot_y = 0.0f, rot_z = 0.0f;
-int selectedTileIndex;
-bool mouseMoved;
+int selectedTileIndex = 0;
+bool mouseMoved = false;
 /* GLUT callback Handlers */
 
 static void resize(int width, int height) {
@@ -43,8 +41,8 @@ static void resize(int width, int height) {
 }
 
 static void display(void) {
-    glClearStencil(0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+    glClearStencil(0);
     glMatrixMode(GL_MODELVIEW); // reset transformations
     glLoadIdentity();
 
@@ -54,13 +52,18 @@ static void display(void) {
     draw->drawGame(rot_x, rot_y, rot_z, mouseInfo, game);
 
     selectedTileIndex = 0;
+    mouseMoved = false;
 
     glutSwapBuffers();
 }
 
 static void idle() {
-    if (*(game->getStatus()) == In_Play(WAITING_FOR_INPUT_AFTER_DRAW)) {
-        glutIdleFunc(NULL);
+    HumanPlayer *human = dynamic_cast<HumanPlayer*>(game->getCurrentPlayer());
+    string curr_st = game->getStatus().toString();
+    if (human)
+        bool has = human->hasProvidedInput();
+    if (game->getStatus() != In_Play() && human && !human->hasProvidedInput()) {
+       glutIdleFunc(NULL);
     } else {
         game->update();
     }
@@ -78,26 +81,29 @@ static void dealTiles() {
 
 
 static void mouseButton(int button, int state, int x, int y) {
-    if (button != GLUT_LEFT_BUTTON || state != GLUT_DOWN || game->roundOver()
-        || *game->getStatus() != In_Play(WAITING_FOR_INPUT_TO_DISCARD)
-        || *game->getStatus() != In_Play(WAITING_FOR_INPUT_AFTER_DECLARATION)) return;
+    bool check = game->getStatus() != In_Play(WAITING_FOR_INPUT_TO_DISCARD);
+    if (button != GLUT_LEFT_BUTTON || state != GLUT_DOWN || game->roundOver()) return;
     int window_height = glutGet(GLUT_WINDOW_HEIGHT);
 
     GLuint index;
     glReadPixels(x, window_height - y - 1, 1, 1, GL_STENCIL_INDEX, GL_UNSIGNED_INT, &index);
-    if (index > 0 && *game->getStatus() == In_Play(WAITING_FOR_INPUT_AFTER_DECLARATION)) {
+    if (index > 0 && game->getStatus() == In_Play(WAITING_FOR_INPUT_AFTER_DECLARATION)) {
         Player *human = game->getCurrentPlayer();
         pair<Declaration, int> humanDeclaration = human->getDeclaration();
         humanDeclaration.second = index - 1;
         human->setDeclaration(humanDeclaration);
-        glutPostRedisplay();
+        glutIdleFunc(idle);
+    } else if (index > 0 && game->getStatus() == In_Play(WAITING_FOR_INPUT_TO_DISCARD)) {
+        game->getCurrentPlayer()->discardTile(index - 1);
+        glutIdleFunc(idle);
     }
 }
 static void mouseMove(int x, int y) {
     if (game->roundOver() ||
-        *game->getStatus() != In_Play(WAITING_FOR_INPUT_TO_DISCARD)) return;
+        game->getStatus() != In_Play(WAITING_FOR_INPUT_TO_DISCARD)) {
+        mouseMoved = false; return;
+        }
     int window_height = glutGet(GLUT_WINDOW_HEIGHT);
-
     GLuint index;
     glReadPixels(x, window_height - y - 1, 1, 1, GL_STENCIL_INDEX, GL_UNSIGNED_INT, &index);
     if (index > 0) {
@@ -118,7 +124,7 @@ static void key(unsigned char key, int x, int y) {
         case 's':
             // status is only set when the current player is human, therefore current player
             // must be human
-            if (*game->getStatus() == In_Play(WAITING_FOR_INPUT_AFTER_DRAW)) {
+            if (game->getStatus() == In_Play(WAITING_FOR_INPUT_AFTER_DRAW)) {
                 (game->getCurrentPlayer())->setDeclaration(
                                             make_pair(Declaration::NONE, -1));
             } else {
@@ -126,13 +132,13 @@ static void key(unsigned char key, int x, int y) {
             }
             break;
         case 'k':
-            if (*game->getStatus() == In_Play(WAITING_FOR_INPUT_AFTER_DRAW)) {
+            if (game->getStatus() == In_Play(WAITING_FOR_INPUT_AFTER_DRAW)) {
                 (game->getCurrentPlayer())->setDeclaration(
                                         make_pair(Declaration::CONCEALED_KANG, -1));
             }
             break;
         case 'm':
-            if (*game->getStatus() == In_Play(WAITING_FOR_INPUT_AFTER_DRAW)) {
+            if (game->getStatus() == In_Play(WAITING_FOR_INPUT_AFTER_DRAW)) {
                 (game->getCurrentPlayer())->setDeclaration(
                                         make_pair(Declaration::SMALL_MELDED_KANG, -1));
             }
@@ -203,9 +209,8 @@ static void init(void) {
     glMaterialfv(GL_FRONT, GL_DIFFUSE,   mat_diffuse);
     glMaterialfv(GL_FRONT, GL_SPECULAR,  mat_specular);
     glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, high_shininess);
-
-    draw = new Draw();
     game = new Game();
+    draw = new Draw();
 }
 /* Program entry point */
 void testInitGame() {
@@ -228,12 +233,8 @@ int main(int argc, char *argv[]) {
     //glutIdleFunc(idle);
     glutPassiveMotionFunc(mouseMove);
     init();
-    testInitGame();
+    //testInitGame();
     glutMainLoop();
-
-    //using namespace boost::network;
-    //using namespace boost::network::http;
-
 
     return EXIT_SUCCESS;
 }

@@ -31,6 +31,7 @@ class Draw {
         void drawGame(float rot_x, float rot_y, float rot_z,
                       mouseActivity mouseInfo, Game *game);
     private:
+        bool mouseOverOther;
         void displayChoices(Player *human);
         void displayOptions(Player *human);
         boardLoc getPieceLoc(HandTile type, PlayingOrder playerIndex, int ith, int row=0);

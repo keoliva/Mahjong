@@ -9,6 +9,7 @@ int Game::humanPlayerIndex = 0;
 Game::Game()
 {
     roundIsOver = false;
+    playExtraHand = false;
     rounds = 0;
     curr_status = new In_Play();
     chooseDealer();

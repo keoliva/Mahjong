@@ -2,21 +2,28 @@
 #define HUMANPLAYER_H
 #include "Player.h"
 
-enum PlayerStatus {
+enum class PlayerStatus {
+    NONE,
     DREW_TILE, DISCARDED_TILE,
-    NOT_DECLARING_MELD,
-    DECLARING_CONCEALED_KANG, DECLARING_SMALL_MELDED_KANG
+    DECLARING_MELD
 };
 
 class HumanPlayer : public Player
 {
     public:
+        bool providedInput;
+        bool hasProvidedInput();
         HumanPlayer();
+        void setStatus(PlayerStatus status) { curr_status = status; };
         Tile *discardTile(int selected_index=0);
         void takeTile(Tile *tile);
+        void setDeclaration(std::pair<Declaration, int> declaration);
+        void makeMeld();
+        PlayerStatus getStatus() { return curr_status; };
         ~HumanPlayer();
     private:
         PlayerStatus curr_status;
+
 };
 
 #endif // HUMANPLAYER_H

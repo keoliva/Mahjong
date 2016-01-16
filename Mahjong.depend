@@ -1,20 +1,19 @@
 # depslib dependency file v1.0
-1452665489 source:c:\users\kayla\documents\quarto\mahjong\main.cpp
+1452929090 source:c:\users\kayla\documents\quarto\mahjong\main.cpp
 	<GLUT/glut.h>
 	<GL/gl.h>
 	<GL/glu.h>
 	<GL/glut.h>
 	<iostream>
 	<math.h>
+	<memory>
 	<string>
 	<stdlib.h>
 	<typeinfo>
 	"include/Game.h"
 	"include/HandEvaluator.h"
 	"include/HumanPlayer.h"
-	"include/Obj.h"
 	"include/Draw.h"
-	<boost/lambda/lambda.hpp>
 
 1301111164 c:\mingw\include\gl\gl.h
 
@@ -256,7 +255,7 @@
 1419773313 c:\mingw\include\math.h
 	<_mingw.h>
 
-1452674036 source:c:\users\kayla\documents\quarto\mahjong\draw.cpp
+1452929936 source:c:\users\kayla\documents\quarto\mahjong\draw.cpp
 	"include/Draw.h"
 	"include/HumanPlayer.h"
 	"include/Obj.h"
@@ -267,12 +266,12 @@
 	<map>
 	<sstream>
 
-1452663438 c:\users\kayla\documents\quarto\mahjong\include\draw.h
+1452919240 c:\users\kayla\documents\quarto\mahjong\include\draw.h
 	"Game.h"
 
 1450563201 c:\users\kayla\documents\quarto\mahjong\resources\tile.h
 
-1452442917 source:c:\users\kayla\documents\quarto\mahjong\game.cpp
+1452731259 source:c:\users\kayla\documents\quarto\mahjong\game.cpp
 	"include/Game.h"
 	"include/AIPlayer.h"
 	"include/HumanPlayer.h"
@@ -280,7 +279,7 @@
 	<chrono>
 	<random>
 
-1452313423 c:\users\kayla\documents\quarto\mahjong\include\game.h
+1452827431 c:\users\kayla\documents\quarto\mahjong\include\game.h
 	"Player.h"
 	"Status.h"
 	"TileDealer.h"
@@ -301,7 +300,7 @@
 	<_mingw.h>
 	<stddef.h>
 
-1452590710 c:\users\kayla\documents\quarto\mahjong\include\player.h
+1452917216 c:\users\kayla\documents\quarto\mahjong\include\player.h
 	"HandEvaluator.h"
 	"Tile.h"
 	<iostream>
@@ -309,7 +308,7 @@
 	<string>
 	<utility>
 
-1452590650 source:c:\users\kayla\documents\quarto\mahjong\player.cpp
+1452685425 source:c:\users\kayla\documents\quarto\mahjong\player.cpp
 	"include/Player.h"
 	"include/Tile.h"
 	<algorithm>
@@ -333,11 +332,11 @@
 1449819546 source:c:\users\kayla\documents\quarto\mahjong\subject.cpp
 	"include/Subject.h"
 
-1452495229 c:\users\kayla\documents\quarto\mahjong\include\turn.h
+1452686735 c:\users\kayla\documents\quarto\mahjong\include\turn.h
 	"AIPlayer.h"
 	"Game.h"
 
-1452590836 source:c:\users\kayla\documents\quarto\mahjong\turn.cpp
+1452917646 source:c:\users\kayla\documents\quarto\mahjong\turn.cpp
 	"include/Turn.h"
 	"include/AIPlayer.h"
 	"include/HumanPlayer.h"
@@ -372,7 +371,7 @@
 	<exception>
 	<iostream>
 
-1452571544 c:\users\kayla\documents\quarto\mahjong\include\handevaluator.h
+1452686715 c:\users\kayla\documents\quarto\mahjong\include\handevaluator.h
 	"Tile.h"
 	<map>
 	<vector>
@@ -21603,26 +21602,26 @@
 1452215491 source:c:\users\kayla\documents\quarto\mahjong\tiledealer.cpp
 	"TileDealer.h"
 
-1452531763 source:c:\users\kayla\documents\quarto\mahjong\aiplayer.cpp
+1452727250 source:c:\users\kayla\documents\quarto\mahjong\aiplayer.cpp
 	"AIPlayer.h"
 	<algorithm>
 	<chrono>
 	<random>
 
-1452518183 c:\users\kayla\documents\quarto\mahjong\include\aiplayer.h
+1452727104 c:\users\kayla\documents\quarto\mahjong\include\aiplayer.h
 	"Player.h"
 
-1452518598 c:\users\kayla\documents\quarto\mahjong\include\humanplayer.h
+1452917542 c:\users\kayla\documents\quarto\mahjong\include\humanplayer.h
 	"Player.h"
 
-1452518602 source:c:\users\kayla\documents\quarto\mahjong\humanplayer.cpp
+1452917580 source:c:\users\kayla\documents\quarto\mahjong\humanplayer.cpp
 	"HumanPlayer.h"
 
 1452590051 source:c:\users\kayla\documents\quarto\mahjong\status.cpp
 	"Status.h"
 	<typeinfo>
 
-1452590027 c:\users\kayla\documents\quarto\mahjong\include\status.h
+1452749832 c:\users\kayla\documents\quarto\mahjong\include\status.h
 	<string>
 	"Player.h"
 

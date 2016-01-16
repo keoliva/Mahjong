@@ -26,11 +26,12 @@ class Game
     friend class Turn;
     friend class TileDealer;
     public:
+        Status *curr_status;
         static int humanPlayerIndex;
         bool _finishedDealing;
         Game();
-        Status *getStatus() { return curr_status; };
-        void updateStatus(Status *new_status) { curr_status = new_status; };
+        Status getStatus() { return *curr_status; };
+        void updateStatus(Status new_status) { *curr_status = new_status; };
         Tile *getDiscard() { return curr_discard; };
         std::string getPrevailingWind(); // round wind
         int getTilesLeft();
@@ -47,7 +48,7 @@ class Game
         TileDealer *tileDealer;
         Tile *curr_discard;
         state curr_state;
-        Status *curr_status;
+
         int rounds;
         std::vector<Tile*> pile;
         void setDiscard(Tile *tile) { curr_discard = tile; };

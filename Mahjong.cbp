@@ -13,6 +13,14 @@
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
+					<Add option="-Wnon-virtual-dtor" />
+					<Add option="-Wshadow" />
+					<Add option="-Winit-self" />
+					<Add option="-Wredundant-decls" />
+					<Add option="-Weffc++" />
+					<Add option="-pedantic-errors" />
+					<Add option="-Wextra" />
+					<Add option="-Wall" />
 					<Add option="-g" />
 					<Add directory="include" />
 					<Add directory="$(#boost)" />
@@ -46,23 +54,27 @@
 			<Add library="gdi32" />
 			<Add directory="C:/MinGW/lib" />
 		</Linker>
-		<Unit filename="Command.cpp" />
+		<Unit filename="AIPlayer.cpp" />
 		<Unit filename="Draw.cpp" />
 		<Unit filename="Game.cpp" />
 		<Unit filename="HandEvaluator.cpp" />
-		<Unit filename="InputHandler.cpp" />
+		<Unit filename="HumanPlayer.cpp" />
 		<Unit filename="Obj.cpp" />
 		<Unit filename="Player.cpp" />
+		<Unit filename="Status.cpp" />
 		<Unit filename="Tile.cpp" />
+		<Unit filename="TileDealer.cpp" />
 		<Unit filename="Turn.cpp" />
-		<Unit filename="include/Command.h" />
+		<Unit filename="include/AIPlayer.h" />
 		<Unit filename="include/Draw.h" />
 		<Unit filename="include/Game.h" />
 		<Unit filename="include/HandEvaluator.h" />
-		<Unit filename="include/InputHandler.h" />
+		<Unit filename="include/HumanPlayer.h" />
 		<Unit filename="include/Obj.h" />
 		<Unit filename="include/Player.h" />
+		<Unit filename="include/Status.h" />
 		<Unit filename="include/Tile.h" />
+		<Unit filename="include/TileDealer.h" />
 		<Unit filename="include/Turn.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="resources/SOIL.h" />

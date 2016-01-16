@@ -19,7 +19,7 @@ private:
 };
 #define X(a) a,
 enum class State {
-    DISCARD_TILE,
+    DISCARD_TILE, DETERMINE_ORDER_OF_CLAIMS,
     DRAW_TILE,
     DECLARATIONS // defined in AIPlayer.h
 };
@@ -35,6 +35,7 @@ class Turn
         void update();
         void drawTile();
         void discardTile();
+        void determineOrderOfClaims();
         void smallMeldedKang();
         void concealedKang();
     protected:
