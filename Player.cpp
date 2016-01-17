@@ -1,5 +1,6 @@
 #include "include/Player.h"
 #include "include/Tile.h"
+#include <cassert>
 #include <algorithm>
 
 std::map<Declaration, MeldType> Player::declarationToMeld =  {
@@ -85,15 +86,15 @@ Tile *Player::discardTile(int selected_index)
         return nullptr;
     }
 }
-void Player::makeMeld()
+void Player::makeMeld(Tile *discardedTile)
 {
     Declaration declaration = curr_declaration.first;
     int indexIntoOptions = curr_declaration.second;
 
-    meld meld_to_make;
+    meld meld_to_make = options[declarationToMeld[declaration]][indexIntoOptions];
+
     switch (declaration) {
         case Declaration::SMALL_MELDED_KANG: {
-            meld_to_make = (options[SMALL_MELDED_KANG])[indexIntoOptions];
             int pengIndex = meld_to_make.indexInMeld;
             Tile *matching_tile = hand[meld_to_make.indexInHand];
             melds[pengIndex].first = SMALL_MELDED_KANG;
@@ -103,16 +104,33 @@ void Player::makeMeld()
             break;
         }
         case Declaration::CONCEALED_KANG:
-            meld_to_make = options[CONCEALED_KANG][indexIntoOptions];
+        case Declaration::MELDED_KANG: // Big Melded Kang
+        case Declaration::MELDED_PENG:
+        case Declaration::MELDED_CHI: {
+            std::pair<MeldType, std::vector<Tile*>> new_meld;
+            new_meld.first = declarationToMeld[declaration];
+            assert(discardedTile);
             std::vector<int> indicesInHand = meld_to_make.indicesInHand;
-            std::vector<Tile*> tilesInNewMeld;
+            std::vector<Tile*> tilesInNewMeld, handCopy = hand;
+            int lastDeleted = 0;
             for (int i : indicesInHand) {
-                tilesInNewMeld.push_back(hand[i]);
-                hand.erase(hand.begin() + i);
+                // signifies to push the discarded tile into tilesInNewMeld and that CHI was declared
+                if (i == -1) {
+                    tilesInNewMeld.push_back(discardedTile);
+                    hand.erase(hand.begin() + (i - lastDeleted));
+                } else {
+                    tilesInNewMeld.push_back(handCopy[i]);
+                    hand.erase(hand.begin() + (i - lastDeleted)); /** since making changes to the hand while
+                    ** trying to access indices that refer to the unamended hand */
+                    lastDeleted++;
+                }
             }
-            std::pair<MeldType, std::vector<Tile*>> new_meld (CONCEALED_KANG, tilesInNewMeld);
+            if (declaration != Declaration::MELDED_CHI)
+                tilesInNewMeld.push_back(discardedTile);
+            new_meld.second = tilesInNewMeld;
             melds.push_back(new_meld);
             break;
+        }
     }
     setDeclaration(std::make_pair(Declaration::NONE, -1));
 }

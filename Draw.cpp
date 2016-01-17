@@ -167,16 +167,10 @@ void Draw::drawGame(float rot_x, float rot_y, float rot_z, mouseActivity mouseIn
                 // if it's the human's turn, and this is the last tile, raise it
                 HumanPlayer *human = dynamic_cast<HumanPlayer*>(game->getCurrentPlayer());
                 if (game->getStatus() == In_Play(WAITING_FOR_INPUT_TO_DISCARD) && i == humanIndex) {
-                    cout << "mouseOverOther: " << mouseOverOther << "____________" << endl;
                     if (mouseInfo.mouseMoved && (mouseInfo.selectionIndex == pieceIndex + 1)) {
                         loc.z += tile_height/4; // raise the tile
                         mouseOverOther = true;
-                        cout << "****************" << endl;
-                        cout << "sected_index " << mouseInfo.selectionIndex << endl;
-                        cout << "pieceInde " << pieceIndex << endl;
-                        cout << "****************" << endl;
                     } else if (pieceIndex == handSize - 1 && !mouseOverOther ) {
-                            cout << "in here........................" << endl;
                             loc.z += tile_height/4;
                     }
                     glStencilFunc(GL_ALWAYS, pieceIndex + 1, -1);
@@ -263,7 +257,7 @@ void Draw::drawGame(float rot_x, float rot_y, float rot_z, mouseActivity mouseIn
         }
     }
     if (game->getStatus() == In_Play(WAITING_FOR_INPUT_AFTER_DECLARATION)) {
-        displayChoices(game->getPlayer(game->humanPlayerIndex));
+        displayChoices(game->getPlayer(game->humanPlayerIndex), game->getDiscard());
     }
     updateText();
 }
@@ -281,7 +275,7 @@ void determineLengths(float &x, float &y,
     x = total_len / (num_sections + _ratio*num_sections + _ratio);
     y = _ratio * x;
 }
-void Draw::displayChoices(Player *human) {
+void Draw::displayChoices(Player *human, Tile *discardedTile) {
     map<MeldType, vector<meld>> options = human->getOptions();
     Declaration dec_type = human->getDeclaration().first;
     MeldType meld_type = Player::declarationToMeld[dec_type];
@@ -317,6 +311,25 @@ void Draw::displayChoices(Player *human) {
                 glPopMatrix();
                 break;
             }
+            case Declaration::MELDED_CHI:
+                num_tiles = 3;
+                x = num_tiles;
+                determineLengths(x, y, choices_len, len);
+                glStencilFunc(GL_ALWAYS, j + 1, -1);
+                glPushMatrix();
+                glTranslatef(y + j*(num_tiles + 1), 0, 0);
+                for (int i = 0; i < num_tiles; i++) {
+                    boardLoc loc = getPieceLoc(REGULAR, HUMAN, i);
+                    if (_meld.indicesInHand[i] == -1) {
+                        tile_in_meld = discardedTile;
+                    } else {
+                        tile_in_meld = human->hand[_meld.indicesInHand[i]];
+                    }
+                    tile.draw(loc.x, loc.y, z, loc.rotX, loc.rotY, loc.rotZ,
+                              tile_in_meld->get_val());
+                }
+                glPopMatrix();
+                break;
         }
         j++;
     }

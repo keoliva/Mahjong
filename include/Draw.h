@@ -32,7 +32,7 @@ class Draw {
                       mouseActivity mouseInfo, Game *game);
     private:
         bool mouseOverOther;
-        void displayChoices(Player *human);
+        void displayChoices(Player *human, Tile *discardedTile=nullptr);
         void displayOptions(Player *human);
         boardLoc getPieceLoc(HandTile type, PlayingOrder playerIndex, int ith, int row=0);
 };

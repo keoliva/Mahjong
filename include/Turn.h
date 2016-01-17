@@ -21,6 +21,7 @@ private:
 enum class State {
     DISCARD_TILE, DETERMINE_ORDER_OF_CLAIMS,
     DRAW_TILE,
+    MAKE_DECLARATION,
     DECLARATIONS // defined in AIPlayer.h
 };
 #undef X
@@ -36,8 +37,7 @@ class Turn
         void drawTile();
         void discardTile();
         void determineOrderOfClaims();
-        void smallMeldedKang();
-        void concealedKang();
+        void makeDeclaration();
     protected:
     private:
         StackFSM<State> state_machine;

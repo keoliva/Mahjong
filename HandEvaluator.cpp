@@ -21,81 +21,82 @@ vector<meld> HandEvaluator::canDeclareMeldedPeng(vector<Tile*> hand, Tile *disca
         if (Tile::areEqual(*(hand[indices[0]]), *discardedTile)) {
             // just take the first two indices in case a concealed pair is technically within
             // a peng, where there is three of the tile
-            melded_peng.indicesInHand.push_back(indices[0]);
-            melded_peng.indicesInHand.push_back(indices[1]);
+            melded_peng.indicesInHand.insert(melded_peng.indicesInHand.begin(), indices.begin(), indices.begin() + 2);
             break;
         }
     }
     vector<meld> peng (1, melded_peng);
     return peng;
 }
-// using binary search to insert the discarded tile into the sorted vector containing
-// suitTileA and B
-vector<SuitTile*> HandEvaluator::insertIntoPossibleChi(vector<SuitTile*> tiles, SuitTile *tile)
-{
-    vector<SuitTile*> ordered_tiles;
-    SuitTile *suitTileA = tiles[0], *suitTileB = tiles[1];
-    if (*tile < *suitTileB) {
-        if (*tile < *suitTileA) {
-            ordered_tiles = {tile, suitTileA, suitTileB};
-        } else if (*tile > *suitTileA) {
-            ordered_tiles = {suitTileA, tile, suitTileB};
-        } else {
-            throw -1;
-        }
-    } else if (*tile > *suitTileB) {
-       ordered_tiles = {suitTileA, suitTileB, tile};
-    } else {
-        throw 1;
-    }
-    return ordered_tiles;
-}
+
+struct myclass {
+  SuitTile &discardedTile;
+  vector<Tile*> tiles;
+  myclass(SuitTile &discard, vector<Tile*> _tiles) : discardedTile(discard),
+                                                        tiles(_tiles) {};
+  bool operator() (int i,int j) const {
+    SuitTile &a = (i == -1)?(discardedTile):*(dynamic_cast<SuitTile*>(tiles[i]));
+    SuitTile &b = (j == -1)?(discardedTile):*(dynamic_cast<SuitTile*>(tiles[j]));
+    return a < b;
+  };
+};
+
 vector<meld> HandEvaluator::canDeclareMeldedChi(vector<Tile*> hand, Tile *discardedTile)
 {
     SuitTile *discardedSuitTile = dynamic_cast<SuitTile*>(discardedTile);
     vector<meld> possibleChis;
     if (!discardedSuitTile) return possibleChis;
-    auto eq = [](const Tile &a, const Tile &b) { return a.get_className() == b.get_className(); };
+    bool (*eq)(const Tile &a, const Tile &b) = [](const Tile &a, const Tile &b) {
+        return a.get_className() == b.get_className();
+    };
     vector<vector<int>> split_melds = splitTiles(hand, eq);
-    int _size;
+    vector<SuitTile*> tiles;
+    vector<int> suit_indices;
+    int _size, i;
     Tile *tile;
-    bool sameAsLowerSuit, sameAsHigherSuit;
+    bool sameAsHigherSuit = false;
     for (vector<int> indices : split_melds) {
         _size = indices.size();
         tile = hand[indices[0]];
-        if (eq(*tile, *discardedTile) && tile->type == SUIT && _size >= 2) {
-            for (int i = 0; i < _size-1; i+=(sameAsHigherSuit)?2:1) {
-                sameAsLowerSuit = false; sameAsHigherSuit = false;
-                meld melded_chi;
-                vector<SuitTile*> tiles = { dynamic_cast<SuitTile*>(hand[i]),
-                                            dynamic_cast<SuitTile*>(hand[i+1]) };
-                try {
-                    tiles = insertIntoPossibleChi(tiles, discardedSuitTile);
-                } catch (int e) {
-                    if (e == -1) { // discarded tile is the same as the tile at index i
-                        try {
-                            sameAsLowerSuit = true;
-                            tiles.erase(tiles.begin());
-                            tiles.insert(tiles.begin(), dynamic_cast<SuitTile*>(hand.at(i-1)));
-                        } catch (std::exception &e) { continue; }
-                    } else { // e == 1 discarded tile is the same as tile at index i+1
-                        try {
-                            sameAsHigherSuit = true;
-                            tiles.push_back(dynamic_cast<SuitTile*>(hand.at(i+2)));
-                        } catch (std::exception &e) { continue; }
-                    }
+        if ((*eq)(*tile, *discardedTile) && tile->type == SUIT && _size >= 2) {
+            for (int j = 0; j <= _size-2; j+=(sameAsHigherSuit)?2:1) {
+                i = indices[j];
+                sameAsHigherSuit = false;
+                                meld melded_chi;
+                tiles.clear();
+                tiles.push_back(discardedSuitTile);
+                suit_indices.clear();
+                suit_indices.push_back(-1); // -1 will signify the discardedSuitTile
+                if (Tile::areEqual(*(hand[i]), *discardedTile)) {
+                    continue;
+                } else {
+                    suit_indices.push_back(i);
                 }
-                if (!tiles.empty() && SuitTile::inSequence(tiles)) {
-                    if (sameAsLowerSuit) {
-                        melded_chi.indicesInHand.push_back(i-1);
-                        melded_chi.indicesInHand.push_back(i+1);
-                    } else if (sameAsHigherSuit) {
-                        melded_chi.indicesInHand.push_back(i);
-                        melded_chi.indicesInHand.push_back(i+2);
-                    } else {
-                        melded_chi.indicesInHand.push_back(i);
-                        melded_chi.indicesInHand.push_back(i+1);
+                tiles.push_back(dynamic_cast<SuitTile*>(hand[i]));
+                if (Tile::areEqual(*(hand[i+1]), *discardedTile)) {
+                    sameAsHigherSuit = true;
+                    tiles.push_back(dynamic_cast<SuitTile*>(hand[i+2]));
+                    suit_indices.push_back(i+2);
+                } else {
+                    tiles.push_back(dynamic_cast<SuitTile*>(hand[i+1]));
+                    suit_indices.push_back(i+1);
+                }
+                // sort the tiles but keep track of the indices
+                sort(suit_indices.begin(), suit_indices.end(),
+                    [discardedSuitTile, hand](int i, int j)->bool {
+                        SuitTile &a = (i == -1)?(*discardedSuitTile):
+                                        *(dynamic_cast<SuitTile*>(hand[i]));
+                        SuitTile &b = (j == -1)?(*discardedSuitTile):
+                                        *(dynamic_cast<SuitTile*>(hand[j]));
+                        return a < b;
+                });
+                sort(tiles.begin(), tiles.end(),
+                    [](const SuitTile *a, const SuitTile *b)->bool {
+                        return *a < *b;
                     }
+                );
+                if (SuitTile::inSequence(tiles)) {
+                    melded_chi.indicesInHand = suit_indices;
                     possibleChis.push_back(melded_chi);
                 } else { continue; }
             }
@@ -129,7 +130,8 @@ vector<vector<int>> HandEvaluator::splitTiles(vector<Tile*> tiles, bool (*eq)(co
     for (int i = 0; i < _size; i++) {
         if (!(*eq)(*lastTile, *(tiles[i]))) {
             split.push_back(meld);
-            handClassifications[static_cast<MeldType>(meld.size())].push_back(meld);
+            if (eq == &Tile::areEqual)
+                handClassifications[static_cast<MeldType>(meld.size())].push_back(meld);
             meld.erase(meld.begin(), meld.end());
         }
         lastTile = tiles[i];
@@ -202,6 +204,20 @@ void HandEvaluator::test()
     }
     sort(tiles.begin(), tiles.end(), SortTiles());
     cout << "Running splitTiles Tests..." << endl;
+    vector<Tile*> hand0 = {new BambooTile(1), new BambooTile(9), new CharacterTile(2), new CharacterTile(3), new CharacterTile(4), new CharacterTile(5)};
+    bool (*eq)(const Tile &a, const Tile &b) = [](const Tile &a, const Tile &b) {
+        return a.get_className() == b.get_className();
+    };
+    vector<vector<int>> split_by_class = splitTiles(hand0, eq);
+    assert(split_by_class.size() == 2);
+    cout << "Passed." << endl;
+    vector<int> b_indices = {0, 1};
+    assert(split_by_class[0] == b_indices);
+    cout << "Passed." << endl;
+    vector<int> c_indices = {2, 3, 4, 5};
+    assert(split_by_class[1] == c_indices);
+    cout << "Passed." << endl;
+    vector<vector<int>> split_melds = splitTiles(hand0, eq);
     bool (*equals)(const Tile &a, const Tile &b) = NULL;
     equals = &Tile::areEqual;
     vector<vector<int>> exp, res = splitTiles(tiles, equals);
@@ -254,22 +270,25 @@ void HandEvaluator::test()
     assert(_meld.indicesInHand == indices);
     cout << "Passed." << endl;;
     cout << "Running canDeclareMeldedChi Tests..." << endl;
-    hand = {new BambooTile(2), new BambooTile(3), new BambooTile(4), new BambooTile(5)};
-    Tile *discardedTile = new BambooTile(6);
+    /**vector<Tile*> hand0 = {new BambooTile(1), new BambooTile(9), new CharacterTile(2),
+    new CharacterTile(3), new CharacterTile(4), new CharacterTile(5)};*/
+
+    Tile *discardedTile = new CharacterTile(6);
     vector<meld> chis;
-    chis = canDeclareMeldedChi(hand, discardedTile);
+    chis = canDeclareMeldedChi(hand0, discardedTile);
+    cout << "SIZE: " << chis.size() << endl;
     assert(chis.size() == 1);
-    indices = {2, 3};
+    indices = {4, 5, -1};
     _meld = chis[0];
     assert(_meld.indicesInHand == indices);
     cout << "Passed." << endl;
-    discardedTile = new BambooTile(3);
-    chis = canDeclareMeldedChi(hand, discardedTile);
+    discardedTile = new CharacterTile(3);
+    chis = canDeclareMeldedChi(hand0, discardedTile);
     assert(chis.size() == 2);
-    indices = {0, 2};
+    indices = {2, -1, 4};
     _meld = chis[0];
     assert(_meld.indicesInHand == indices);
-    indices = {2, 3};
+    indices = {-1, 4, 5};
     _meld = chis[1];
     assert(_meld.indicesInHand == indices);
     discardedTile = tiles[4];
@@ -287,6 +306,9 @@ void HandEvaluator::test()
     cout << "Passed.";
     delete discardedTile;
     for (Tile *tile : hand) {
+        delete tile;
+    }
+    for (Tile *tile : hand0) {
         delete tile;
     }
     for (Tile *tile : melds) {

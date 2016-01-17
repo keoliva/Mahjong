@@ -18,11 +18,8 @@ void Turn::update()
             case State::DRAW_TILE:
                 drawTile();
                 break;
-            case State::SMALL_MELDED_KANG:
-                smallMeldedKang();
-                break;
-            case State::CONCEALED_KANG:
-                concealedKang();
+            case State::MAKE_DECLARATION:
+                makeDeclaration();
                 break;
         }
     } catch (int e) {
@@ -107,13 +104,13 @@ void Turn::discardTile() {
 }
 
 void Turn::determineOrderOfClaims() {
-
+    game_instance->setDiscard(nullptr);
     state_machine.popState();
     game_instance->cycleCurrentPlayer();
     state_machine.pushState(State::DRAW_TILE);
 }
 
-void Turn::smallMeldedKang() {
+void Turn::makeDeclaration() {
     if (dynamic_cast<HumanPlayer*>(curr_player)) {
         Declaration dec_type = curr_player->getDeclaration().first;
         MeldType meld_type = Player::declarationToMeld[dec_type];
@@ -128,13 +125,10 @@ void Turn::smallMeldedKang() {
     game_instance->updateStatus(In_Play(curr_player->_wind,
                                 Player::declarationToMeld[curr_player->getDeclaration().first]));
     curr_player->makeMeld();
+    game_instance->setDiscard(nullptr);
     state_machine.popState();
     game_instance->cycleCurrentPlayer();
     state_machine.pushState(State::DRAW_TILE);
-}
-
-void Turn::concealedKang() {
-    Turn::smallMeldedKang();
 }
 
 Turn::~Turn() {

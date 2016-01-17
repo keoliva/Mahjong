@@ -33,7 +33,7 @@ class Player
         Player();
         virtual void takeTile(Tile *tile);
         virtual Tile *discardTile(int selected_index=0);
-        void makeMeld();
+        void makeMeld(Tile *discardedTile=nullptr);
         bool isDealer();
         bool hasHandSize(int _size);
         void sortHand();
