@@ -18,7 +18,7 @@ class HumanPlayer : public Player
         Tile *discardTile(int selected_index=0);
         void takeTile(Tile *tile);
         void setDeclaration(std::pair<Declaration, int> declaration);
-        void makeMeld();
+        void makeMeld(Tile *discardedTile=nullptr);
         PlayerStatus getStatus() { return curr_status; };
         ~HumanPlayer();
     private:

@@ -17,7 +17,7 @@ void AIPlayer::determineTileToDiscard() {
 
 Tile *AIPlayer::discardTile(int selected_index) {
     Tile *discardedTile = hand[indexOfTileToDiscard];
-
+    std::cout << "Tile being discarded: " << discardedTile->get_val() << std::endl;
     discards.push_back(discardedTile);
     hand.erase(hand.begin() + indexOfTileToDiscard);
 

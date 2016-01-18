@@ -37,9 +37,12 @@ class Turn
         void drawTile();
         void discardTile();
         void determineOrderOfClaims();
+        Player *determineWhoHasPrecedence(Declaration max_declaration, Player *player_highest_declaration,
+                                       Player *players[], int num_players);
         void makeDeclaration();
     protected:
     private:
+        bool determinedWhoHasPrecedence;
         StackFSM<State> state_machine;
         Game *game_instance;
         Player *curr_player;

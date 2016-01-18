@@ -12,10 +12,7 @@ string SuitTile::get_val() const
     ss << className <<"(" << suit << ")";
     return ss.str();
 }
-string SuitTile::get_className() const
-{
-    return className;
-}
+
 bool const operator<(const SuitTile &a, const SuitTile &b)
 {
     return (a.suit < b.suit);
@@ -41,10 +38,7 @@ string AttributeTile::get_val() const
     ss << className <<"(" << attribute << ")";
     return ss.str();
 }
-string AttributeTile::get_className() const
-{
-    return className;
-}
+
 
 bool Tile::areEqual(const Tile &a, const Tile &b)
 {

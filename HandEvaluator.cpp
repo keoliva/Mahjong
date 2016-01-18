@@ -11,7 +11,7 @@ HandEvaluator::HandEvaluator()
 
 vector<meld> HandEvaluator::canDeclareMeldedPeng(vector<Tile*> hand, Tile *discardedTile)
 {
-    meld melded_peng;
+    vector<meld> peng;
     vector<vector<int>> split_melds = splitTiles(hand, &Tile::areEqual);
     vector<vector<int>> concealed_pairs;
     concealed_pairs.reserve(handClassifications[PAIR].size() + handClassifications[PENG].size());
@@ -21,25 +21,14 @@ vector<meld> HandEvaluator::canDeclareMeldedPeng(vector<Tile*> hand, Tile *disca
         if (Tile::areEqual(*(hand[indices[0]]), *discardedTile)) {
             // just take the first two indices in case a concealed pair is technically within
             // a peng, where there is three of the tile
+            meld melded_peng;
             melded_peng.indicesInHand.insert(melded_peng.indicesInHand.begin(), indices.begin(), indices.begin() + 2);
+            peng.push_back(melded_peng);
             break;
         }
     }
-    vector<meld> peng (1, melded_peng);
     return peng;
 }
-
-struct myclass {
-  SuitTile &discardedTile;
-  vector<Tile*> tiles;
-  myclass(SuitTile &discard, vector<Tile*> _tiles) : discardedTile(discard),
-                                                        tiles(_tiles) {};
-  bool operator() (int i,int j) const {
-    SuitTile &a = (i == -1)?(discardedTile):*(dynamic_cast<SuitTile*>(tiles[i]));
-    SuitTile &b = (j == -1)?(discardedTile):*(dynamic_cast<SuitTile*>(tiles[j]));
-    return a < b;
-  };
-};
 
 vector<meld> HandEvaluator::canDeclareMeldedChi(vector<Tile*> hand, Tile *discardedTile)
 {
@@ -62,7 +51,7 @@ vector<meld> HandEvaluator::canDeclareMeldedChi(vector<Tile*> hand, Tile *discar
             for (int j = 0; j <= _size-2; j+=(sameAsHigherSuit)?2:1) {
                 i = indices[j];
                 sameAsHigherSuit = false;
-                                meld melded_chi;
+                meld melded_chi;
                 tiles.clear();
                 tiles.push_back(discardedSuitTile);
                 suit_indices.clear();
@@ -70,13 +59,24 @@ vector<meld> HandEvaluator::canDeclareMeldedChi(vector<Tile*> hand, Tile *discar
                 if (Tile::areEqual(*(hand[i]), *discardedTile)) {
                     continue;
                 } else {
+                    tiles.push_back(dynamic_cast<SuitTile*>(hand[i]));
                     suit_indices.push_back(i);
                 }
-                tiles.push_back(dynamic_cast<SuitTile*>(hand[i]));
                 if (Tile::areEqual(*(hand[i+1]), *discardedTile)) {
                     sameAsHigherSuit = true;
-                    tiles.push_back(dynamic_cast<SuitTile*>(hand[i+2]));
-                    suit_indices.push_back(i+2);
+                    try {
+                        // since it's only safe to access every two indices
+                        SuitTile *suitTile = dynamic_cast<SuitTile*>(hand.at(i+2));
+                        if (suitTile) {
+                            tiles.push_back(suitTile);
+                            suit_indices.push_back(i+2);
+                        } else {
+                            continue;
+                        }
+                    } catch (const std::out_of_range& oor) {
+                        continue;
+                    }
+
                 } else {
                     tiles.push_back(dynamic_cast<SuitTile*>(hand[i+1]));
                     suit_indices.push_back(i+1);
@@ -107,21 +107,23 @@ vector<meld> HandEvaluator::canDeclareMeldedChi(vector<Tile*> hand, Tile *discar
 vector<meld> HandEvaluator::canDeclareBigMeldedKang(std::vector<Tile*> hand,
                                                     Tile *discardedTile)
 {
-    meld melded_kang;
+    vector<meld> kang;
     vector<vector<int>> split_melds = splitTiles(hand, &Tile::areEqual);
     vector<vector<int>> concealed_pengs = handClassifications[PENG];
     for (vector<int> indices: concealed_pengs) {
         if (Tile::areEqual(*(hand[indices[0]]), *discardedTile)) {
+            meld melded_kang;
             melded_kang.indicesInHand = indices;
+            kang.push_back(melded_kang);
             break; // only four duplicates of a single tile
         }
     }
-    vector<meld> kang (1, melded_kang);
     return kang;
 }
 
 vector<vector<int>> HandEvaluator::splitTiles(vector<Tile*> tiles, bool (*eq)(const Tile &a, const Tile &b))
 {
+    handClassifications.clear();
     int _size = tiles.size();
     Tile *lastTile;
     if (_size > 0) lastTile = tiles[0];

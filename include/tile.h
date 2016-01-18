@@ -11,30 +11,32 @@ enum tileType {
 };
 
 class Tile {
+
     public:
+        std::string className;
         tileType type;
-        Tile(tileType _type) : type(_type) {};
+        Tile(std::string _name, tileType _type) : className(_name), type(_type) {};
+        std::string get_className() const {return className; };
         static bool areEqual(const Tile &a, const Tile &b);
         virtual ~Tile() {};
         virtual std::string get_val() const = 0;
-        virtual std::string get_className() const = 0;
         static std::vector<Tile*>createTheTiles();
 };
 
 struct SortTiles { // like a Comparator in Java
-    bool operator()(const Tile *a, const Tile *b) const { return a->get_val() < b->get_val(); };
+    bool operator()(const Tile *a, const Tile *b) const {
+        return a->get_val() < b->get_val();
+    };
 };
 
 class SuitTile : public Tile {
-        std::string className;
     public:
         int suit;
-        SuitTile(std::string name, int suitNumber) : Tile(SUIT), className(name), suit(suitNumber) {};
+        SuitTile(std::string name, int suitNumber) : Tile(name, SUIT), suit(suitNumber) {};
         friend bool const operator<(const SuitTile &a, const SuitTile &b);
         friend bool const operator>(const SuitTile &a, const SuitTile &b);
         static bool inSequence(std::vector<SuitTile*> tiles); // returns whether the tiles' suit numbers are consecutive terms
         std::string get_val() const;
-        std::string get_className() const;
 };
 
 class BambooTile : public SuitTile {
@@ -51,11 +53,11 @@ class CircleTile : public SuitTile {
 };
 
 class AttributeTile : public Tile {
-    std::string attribute, className;
+    std::string attribute;
     public:
-        AttributeTile(std::string name, tileType _tileType, std::string attribute_type) : Tile(_tileType), attribute(attribute_type), className(name) {};
+        AttributeTile(std::string name, tileType _tileType, std::string attribute_type) : Tile(name, _tileType),
+                                                                                        attribute(attribute_type) {};
         std::string get_val() const;
-        std::string get_className() const;
 };
 
 class DragonTile : public AttributeTile { // dragon types: GREEN, RED, WHITE

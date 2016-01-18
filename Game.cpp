@@ -12,6 +12,7 @@ Game::Game()
     playExtraHand = false;
     rounds = 0;
     curr_status = new In_Play();
+    curr_discard = nullptr;
     chooseDealer();
     curr_state.players[humanPlayerIndex] = new HumanPlayer();
     int i = (humanPlayerIndex + 1) % NUM_PLAYERS;

@@ -17,7 +17,6 @@ namespace {
 }
 Draw::Draw() {
     mouseOverOther = false;
-    cout << "mouseOverOther set to false........................" << endl;
     tile = Obj("tile");
     tile.loadObj();
 }
@@ -125,6 +124,7 @@ void Draw::drawGame(float rot_x, float rot_y, float rot_z, mouseActivity mouseIn
     glRotated(rot_z, 0, 0, 1);
     drawBoard();
 
+    updates.clear();
     stringstream ss;
     ss << "Tiles Left: " << game->getTilesLeft();
     updates["tilesLeft"] = msg_data(ss.str(), 5.0/6.0);
@@ -210,7 +210,6 @@ void Draw::drawGame(float rot_x, float rot_y, float rot_z, mouseActivity mouseIn
                         tile.draw(loc.x, loc.y, loc.z, loc.rotX, loc.rotY, loc.rotZ,
                               discard_tile->get_val());
                     }
-
                     j++;
                 }
             }

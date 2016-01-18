@@ -14,14 +14,14 @@
 
 #define X(a) a,
 enum MeldType {
-    NONE,
+    NONE=0,
     MELDS
 };
 #undef X
 
 
 #define X(a) #a,
-static std:: string meld_strings[] = { MELDS };
+static std:: string meld_strings[] = { "NONE", MELDS };
 #undef X
 
 struct meld {
