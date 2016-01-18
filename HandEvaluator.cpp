@@ -67,7 +67,7 @@ vector<meld> HandEvaluator::canDeclareMeldedChi(vector<Tile*> hand, Tile *discar
                     try {
                         // since it's only safe to access every two indices
                         SuitTile *suitTile = dynamic_cast<SuitTile*>(hand.at(i+2));
-                        if (suitTile) {
+                        if (suitTile && (suitTile->get_className() == discardedSuitTile->get_className())) {
                             tiles.push_back(suitTile);
                             suit_indices.push_back(i+2);
                         } else {
