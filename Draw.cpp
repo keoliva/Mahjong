@@ -7,6 +7,7 @@
 #include <ctype.h> // tolower
 #include <map>
 #include <sstream>
+#include <stdio.h>
 #define ROWS 22
 #define COLS 22
 #define BOARD_SIZE 20
@@ -110,7 +111,7 @@ boardLoc Draw::getPieceLoc(HandTile type, PlayingOrder playerIndex,
 struct msg_data {
     string msg;
     float screen_height_ratio;
-    msg_data() {};
+    msg_data() : msg(""), screen_height_ratio(0.0f) {};
     msg_data(string _msg, float y) : msg(_msg), screen_height_ratio(y) {};
 };
 
@@ -130,6 +131,9 @@ void Draw::drawGame(float rot_x, float rot_y, float rot_z, mouseActivity mouseIn
     updates["tilesLeft"] = msg_data(ss.str(), 5.0/6.0);
     ss.str("");
     bool drawBlinkingDiscard = false;
+    string status = game->getStatus().toString();
+    // regex re ("In_Play<(.+), (.+)>");
+    char playerWind[5], playerMeld[20];
     if (game->getStatus() == In_Play(WAITING_FOR_INPUT_AFTER_DRAW) ||
         game->getStatus() == In_Play(WAITING_FOR_INPUT_ON_DISCARD)) {
         displayOptions(game->getPlayer(game->humanPlayerIndex));
@@ -139,6 +143,10 @@ void Draw::drawGame(float rot_x, float rot_y, float rot_z, mouseActivity mouseIn
     } else if (game->getStatus() == In_Play(WAITING_FOR_INPUT_TO_DISCARD)) {
         glEnable(GL_STENCIL_TEST);
         glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+    } else if (sscanf(status.c_str(), "In_Play<%[A-Z]%*[, ]%[A-Z]>", playerWind, playerMeld) == 2) {
+        ss << playerWind << " declared '" << playerMeld << "'";
+        updates["meldMade"] = msg_data(ss.str(), 4.0/6.0);
+        ss.str("");
     }
 
     Player *player, *curr_player = game->getCurrentPlayer();
@@ -287,6 +295,9 @@ void Draw::displayChoices(Player *human, Tile *discardedTile) {
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
     for (meld _meld : possible_melds ) {
         switch (dec_type) {
+            case Declaration::NONE:
+            case Declaration::MAHJONG:
+                break;
             case Declaration::MELDED_PENG:
             case Declaration::SMALL_MELDED_KANG:
             case Declaration::CONCEALED_KANG:

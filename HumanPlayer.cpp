@@ -25,7 +25,6 @@ void HumanPlayer::setDeclaration(std::pair<Declaration, int> declaration) {
 
 void HumanPlayer::makeMeld(Tile *discardedTile) {
     Player::makeMeld(discardedTile);
-    std::cout << "HUMAN PLAYER's VERSION OF MAKEMELD was CALLEDDDDDDDDDDDDDDDDDDD" << std::endl;
     providedInput = false;
     curr_status = PlayerStatus::DECLARING_MELD;
 }

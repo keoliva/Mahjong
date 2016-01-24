@@ -19,6 +19,7 @@ private:
 };
 #define X(a) a,
 enum class State {
+    NULL_STATE,
     DISCARD_TILE, DETERMINE_ORDER_OF_CLAIMS,
     DRAW_TILE,
     MAKE_DECLARATION,
@@ -29,20 +30,21 @@ class Game;
 class Turn
 {
     public:
-        Turn() : state_machine(StackFSM<State>()) {};
+        Turn() : state_machine(StackFSM<State>()), game_instance(nullptr), curr_player(nullptr) {};
         ~Turn();
-        Turn(Game *game, Player *player) : game_instance(game), curr_player(player) {};
+        Turn(Game *game, Player *player) : state_machine(StackFSM<State>()), game_instance(game),
+                                                                    curr_player(player) {};
         void setCurrentPlayer(Player *player) { curr_player = player; };
         void update();
         void drawTile();
         void discardTile();
         void determineOrderOfClaims();
-        Player *determineWhoHasPrecedence(Declaration max_declaration, Player *player_highest_declaration,
-                                       Player *players[], int num_players);
+        Player *determineWhoHasPrecedence(Declaration max_declaration,
+                                        Player *player_highest_declaration,
+                                        Player *players[], int num_players);
         void makeDeclaration();
     protected:
     private:
-        bool determinedWhoHasPrecedence;
         StackFSM<State> state_machine;
         Game *game_instance;
         Player *curr_player;

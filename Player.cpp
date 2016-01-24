@@ -30,70 +30,11 @@ void Player::determineOptions(Tile *discardedTile) {
     options.clear();
     if (discardedTile) {
         options[PENG] = handEvaluator->canDeclareMeldedPeng(hand, discardedTile);
-        cout << "=====================" << endl;
-        cout << "PENG SIZE: " << options[PENG].size() << endl;
-        cout << "PENG EMPTY? " << options[PENG].empty() << endl;
-        for (meld _meld : options[PENG]) {
-            cout << "meld..." << endl;
-            for (int i : _meld.indicesInHand) {
-                cout << i << ", ";
-            }
-            cout << endl;
-        }
-        cout << "=================" << endl;
-        cout << endl;
         options[KANG] = handEvaluator->canDeclareBigMeldedKang(hand, discardedTile);
-        cout << "=====================" << endl;
-        cout << "KANG SIZE: " << options[KANG].size() << endl;
-        cout << "KANG EMPTY? " << options[KANG].empty() << endl;
-        for (meld _meld : options[KANG]) {
-            cout << "meld..." << endl;
-            for (int i : _meld.indicesInHand) {
-                cout << i << ", ";
-            }
-            cout << endl;
-        }
-        cout << "=================" << endl;
-        cout << endl;
         options[CHI] = handEvaluator->canDeclareMeldedChi(hand, discardedTile);
-        cout << "=====================" << endl;
-        cout << "CHI SIZE: " << options[CHI].size() << endl;
-        cout << "CHI EMPTY? " << options[CHI].empty() << endl;
-        for (meld _meld : options[CHI]) {
-            cout << "meld..." << endl;
-            for (int i : _meld.indicesInHand) {
-                cout << i << ", ";
-            }
-            cout << endl;
-        }
-        cout << "=================" << endl;
-        cout << endl;
     } else {
         options[SMALL_MELDED_KANG] = handEvaluator->canDeclareSmallMeldedKang(melds, hand);
-        cout << "=====================" << endl;
-        cout << "SMALL_MELDED_KANG SIZE: " << options[SMALL_MELDED_KANG].size() << endl;
-        cout << "SMALL_MELDED_KANG EMPTY? " << options[SMALL_MELDED_KANG].empty() << endl;
-        for (meld _meld : options[SMALL_MELDED_KANG]) {
-            cout << "meld..." << endl;
-            cout << "indexInHand: " << _meld.indexInHand << endl;
-            cout << "indexInMeld: " << _meld.indexInMeld << endl;
-            cout << endl;
-        }
-        cout << "=================" << endl;
-        cout << endl;
         options[CONCEALED_KANG] = handEvaluator->canDeclareConcealedKang(hand);
-        cout << "=====================" << endl;
-        cout << "CONCEALED_KANG SIZE: " << options[CONCEALED_KANG].size() << endl;
-        cout << "CONCEALED_KANG EMPTY? " << options[CONCEALED_KANG].empty() << endl;
-        for (meld _meld : options[CONCEALED_KANG]) {
-            cout << "meld..." << endl;
-            for (int i : _meld.indicesInHand) {
-                cout << i << ", ";
-            }
-            cout << endl;
-        }
-        cout << "=================" << endl;
-        cout << endl;
     }
 }
 std::map<MeldType, std::vector<meld>> Player::getOptions(Tile *discardedTile) {

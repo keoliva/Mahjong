@@ -14,16 +14,12 @@
 #endif
 #include <iostream>
 #include <math.h>
-#include <memory>
 #include <string>
 #include <stdlib.h>
-#include <typeinfo>
 #include "include/Game.h"
 #include "include/HandEvaluator.h"
 #include "include/HumanPlayer.h"
 #include "include/Draw.h"
-#define BOOST_BIND_NO_PLACEHOLDERS
-#include <boost/lambda/lambda.hpp>
 
 using namespace std;
 static Draw *draw = nullptr;
@@ -62,8 +58,7 @@ static void display(void) {
 static void idle() {
     HumanPlayer *human = dynamic_cast<HumanPlayer*>(game->getCurrentPlayer());
     HumanPlayer *humanPlayer = dynamic_cast<HumanPlayer*>(game->getPlayer(game->humanPlayerIndex));
-    if (human)
-        bool has = human->hasProvidedInput();
+    string game_stat = game->getStatus().toString();
     if ((game->getStatus() == In_Play(WAITING_FOR_INPUT_AFTER_DRAW) ||
          game->getStatus() == In_Play(WAITING_FOR_INPUT_TO_DISCARD) ||
          game->getStatus() == In_Play(WAITING_FOR_INPUT_AFTER_DECLARATION)) &&
@@ -89,7 +84,6 @@ static void dealTiles() {
 
 
 static void mouseButton(int button, int state, int x, int y) {
-    bool check = game->getStatus() != In_Play(WAITING_FOR_INPUT_TO_DISCARD);
     if (button != GLUT_LEFT_BUTTON || state != GLUT_DOWN || game->roundOver()) return;
     int window_height = glutGet(GLUT_WINDOW_HEIGHT);
 
@@ -122,9 +116,6 @@ static void mouseMove(int x, int y) {
 }
 
 static void key(unsigned char key, int x, int y) {
-    cout << endl;
-    cout << "KEY PRESSED---------------------------------------" << endl;
-    cout << "game_status: " << game->getStatus().toString() << endl;
     switch (key) {
         case 27 :
         case 'q':
@@ -140,13 +131,8 @@ static void key(unsigned char key, int x, int y) {
                                             make_pair(Declaration::NONE, -1));
                 glutIdleFunc(idle);
             } else if (game->getStatus() == In_Play(WAITING_FOR_INPUT_ON_DISCARD)) {
-                cout << "*********************************************************" <<endl;
-                cout << "Pressed 's'" << endl;
-                cout << endl;
                 (game->getPlayer(game->humanPlayerIndex))->setDeclaration(
                                             make_pair(Declaration::NONE, -1));
-                HumanPlayer *human = dynamic_cast<HumanPlayer*>(game->getPlayer(game->humanPlayerIndex));
-                cout << "human gave input, did you get that? " << human->hasProvidedInput() << endl;
                 glutIdleFunc(idle);
             } else {
                 glutIdleFunc(dealTiles);
@@ -186,11 +172,6 @@ static void key(unsigned char key, int x, int y) {
             } else if (game->getStatus() == In_Play(WAITING_FOR_INPUT_ON_DISCARD)) {
                 (game->getPlayer(game->humanPlayerIndex))->setDeclaration(
                                         make_pair(Declaration::MELDED_CHI, -1));
-                cout << "*********************************************************" <<endl;
-                cout << "Pressed 'c'" << endl;
-                cout << endl;
-                HumanPlayer *human = dynamic_cast<HumanPlayer*>(game->getPlayer(game->humanPlayerIndex));
-                cout << "human gave input, did you get that? " << human->hasProvidedInput() << endl;
                 glutIdleFunc(idle);
             }
             break;
@@ -284,6 +265,5 @@ int main(int argc, char *argv[]) {
     init();
     //testInitGame();
     glutMainLoop();
-
     return EXIT_SUCCESS;
 }
