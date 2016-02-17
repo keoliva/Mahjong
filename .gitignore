@@ -1,4 +1,0 @@
-*.depend
-obj/Debug/*.o
-*.o
-*.layout

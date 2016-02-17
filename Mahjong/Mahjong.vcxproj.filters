@@ -1,0 +1,239 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="resources">
+      <UniqueIdentifier>{ccf06446-e3cd-46b3-a545-830ce6561374}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resources\images">
+      <UniqueIdentifier>{eff778d5-ae21-4e05-83e4-1f84beafc8e3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\Quarto\Mahjong\include\Game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Quarto\Mahjong\include\AIPlayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Quarto\Mahjong\include\Draw.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Quarto\Mahjong\include\HandEvaluator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Quarto\Mahjong\include\HumanPlayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Quarto\Mahjong\include\Player.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Quarto\Mahjong\include\Status.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Quarto\Mahjong\include\tile.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Quarto\Mahjong\include\Turn.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Quarto\Mahjong\include\Obj.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Quarto\Mahjong\resources\SOIL.h">
+      <Filter>resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Quarto\Mahjong\resources\tile.h">
+      <Filter>resources</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\Program Files (x86)\Windows Kits\8.1\Include\um\gl\GL.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\GL\glut.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\..\..\Program Files (x86)\Windows Kits\8.1\Include\um\gl\GLU.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Quarto\Mahjong\include\TileDealer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\Quarto\Mahjong\AIPlayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Quarto\Mahjong\Draw.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Quarto\Mahjong\Game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Quarto\Mahjong\HandEvaluator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Quarto\Mahjong\HumanPlayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Quarto\Mahjong\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Quarto\Mahjong\Obj.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Quarto\Mahjong\Player.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Quarto\Mahjong\Status.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Quarto\Mahjong\Tile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Quarto\Mahjong\TileDealer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Quarto\Mahjong\Turn.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\BambooTile(1).png">
+      <Filter>resources\images</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\BambooTile(2).png">
+      <Filter>resources\images</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\BambooTile(3).png">
+      <Filter>resources\images</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\BambooTile(4).png">
+      <Filter>resources\images</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\BambooTile(5).png">
+      <Filter>resources\images</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\BambooTile(6).png">
+      <Filter>resources\images</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\BambooTile(7).png">
+      <Filter>resources\images</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\BambooTile(8).png">
+      <Filter>resources\images</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\BambooTile(9).png">
+      <Filter>resources\images</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\CharacterTile(1).png">
+      <Filter>resources\images</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\CharacterTile(2).png">
+      <Filter>resources\images</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\CharacterTile(3).png">
+      <Filter>resources\images</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\CharacterTile(4).png">
+      <Filter>resources\images</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\CharacterTile(5).png">
+      <Filter>resources\images</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\CharacterTile(6).png">
+      <Filter>resources\images</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\CharacterTile(7).png">
+      <Filter>resources\images</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\CharacterTile(8).png">
+      <Filter>resources\images</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\CharacterTile(9).png">
+      <Filter>resources\images</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\CircleTile(1).png">
+      <Filter>resources\images</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\CircleTile(2).png">
+      <Filter>resources\images</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\CircleTile(3).png">
+      <Filter>resources\images</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\CircleTile(4).png">
+      <Filter>resources\images</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\CircleTile(5).png">
+      <Filter>resources\images</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\CircleTile(6).png">
+      <Filter>resources\images</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\CircleTile(7).png">
+      <Filter>resources\images</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\CircleTile(8).png">
+      <Filter>resources\images</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\CircleTile(9).png">
+      <Filter>resources\images</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\DragonTile(GREEN).png">
+      <Filter>resources\images</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\DragonTile(RED).png">
+      <Filter>resources\images</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\DragonTile(WHITE).png">
+      <Filter>resources\images</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\FlowerTile(BAMBOO).png">
+      <Filter>resources\images</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\FlowerTile(CHRYSANTHEMUM).png">
+      <Filter>resources\images</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\FlowerTile(ORCHID).png">
+      <Filter>resources\images</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\FlowerTile(PLUMB).png">
+      <Filter>resources\images</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\SeasonTile(AUTUMN).png">
+      <Filter>resources\images</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\SeasonTile(SPRING).png">
+      <Filter>resources\images</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\SeasonTile(SUMMER).png">
+      <Filter>resources\images</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\SeasonTile(WINTER).png">
+      <Filter>resources\images</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\WindTile(EAST).png">
+      <Filter>resources\images</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\WindTile(NORTH).png">
+      <Filter>resources\images</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\WindTile(SOUTH).png">
+      <Filter>resources\images</Filter>
+    </Image>
+    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\WindTile(WEST).png">
+      <Filter>resources\images</Filter>
+    </Image>
+  </ItemGroup>
+</Project>

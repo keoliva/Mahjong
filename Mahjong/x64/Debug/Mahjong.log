@@ -1,0 +1,69 @@
+﻿Build started 2/15/2016 8:55:37 PM.
+     1>Project "C:\Users\Kayla\documents\visual studio 2015\Projects\Mahjong\Mahjong\Mahjong.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\CL.exe /c /I"C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\lib\amd64" /I"C:\Program Files (x86)\Visual Leak Detector\include" /I"C:\Program Files (x86)\Visual Leak Detector\include" /ZI /nologo /W3 /WX- /Od /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"x64\Debug\\" /Fd"x64\Debug\vc140.pdb" /Gd /TP /errorReport:prompt ..\..\..\..\Quarto\Mahjong\AIPlayer.cpp ..\..\..\..\Quarto\Mahjong\Draw.cpp ..\..\..\..\Quarto\Mahjong\Game.cpp ..\..\..\..\Quarto\Mahjong\HandEvaluator.cpp ..\..\..\..\Quarto\Mahjong\HumanPlayer.cpp ..\..\..\..\Quarto\Mahjong\main.cpp ..\..\..\..\Quarto\Mahjong\Obj.cpp ..\..\..\..\Quarto\Mahjong\Player.cpp ..\..\..\..\Quarto\Mahjong\Status.cpp ..\..\..\..\Quarto\Mahjong\Tile.cpp ..\..\..\..\Quarto\Mahjong\TileDealer.cpp ..\..\..\..\Quarto\Mahjong\Turn.cpp
+         Turn.cpp
+     1>c:\users\kayla\documents\quarto\mahjong\turn.cpp(28): warning C4101: 'e': unreferenced local variable
+     1>c:\users\kayla\documents\quarto\mahjong\turn.cpp(53): warning C4101: 'e': unreferenced local variable
+         TileDealer.cpp
+     1>c:\users\kayla\documents\quarto\mahjong\tiledealer.cpp(35): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+         Tile.cpp
+     1>c:\users\kayla\documents\quarto\mahjong\tile.cpp(83): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+     1>c:\users\kayla\documents\quarto\mahjong\tile.cpp(85): warning C4244: 'initializing': conversion from 'std::chrono::system_clock::rep' to 'unsigned int', possible loss of data
+         Status.cpp
+         Player.cpp
+         Obj.cpp
+     1>c:\users\kayla\documents\quarto\mahjong\resources\tile.h(188): warning C4838: conversion from 'double' to 'const float' requires a narrowing conversion
+     1>c:\users\kayla\documents\quarto\mahjong\resources\tile.h(188): warning C4305: 'initializing': truncation from 'double' to 'const float'
+     1>c:\users\kayla\documents\quarto\mahjong\resources\tile.h(730): warning C4838: conversion from 'double' to 'const float' requires a narrowing conversion
+     1>c:\users\kayla\documents\quarto\mahjong\resources\tile.h(730): warning C4305: 'initializing': truncation from 'double' to 'const float'
+     1>c:\users\kayla\documents\quarto\mahjong\resources\tile.h(1632): warning C4838: conversion from 'double' to 'const float' requires a narrowing conversion
+     1>c:\users\kayla\documents\quarto\mahjong\resources\tile.h(1632): warning C4305: 'initializing': truncation from 'double' to 'const float'
+     1>c:\users\kayla\documents\quarto\mahjong\resources\tile.h(2534): warning C4838: conversion from 'double' to 'const float' requires a narrowing conversion
+     1>c:\users\kayla\documents\quarto\mahjong\resources\tile.h(2534): warning C4305: 'initializing': truncation from 'double' to 'const float'
+     1>c:\users\kayla\documents\quarto\mahjong\obj.cpp(53): warning C4996: 'strerror': This function or variable may be unsafe. Consider using strerror_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\string.h(178): note: see declaration of 'strerror'
+     1>c:\users\kayla\documents\quarto\mahjong\obj.cpp(70): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\stdio.h(2254): note: see declaration of 'sscanf'
+     1>c:\users\kayla\documents\quarto\mahjong\obj.cpp(82): warning C4996: 'strerror': This function or variable may be unsafe. Consider using strerror_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\string.h(178): note: see declaration of 'strerror'
+     1>c:\users\kayla\documents\quarto\mahjong\obj.cpp(98): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\stdio.h(2254): note: see declaration of 'sscanf'
+     1>c:\users\kayla\documents\quarto\mahjong\obj.cpp(101): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\stdio.h(2254): note: see declaration of 'sscanf'
+     1>c:\users\kayla\documents\quarto\mahjong\obj.cpp(105): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\stdio.h(2254): note: see declaration of 'sscanf'
+     1>c:\users\kayla\documents\quarto\mahjong\obj.cpp(120): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\stdio.h(2254): note: see declaration of 'sscanf'
+     1>c:\users\kayla\documents\quarto\mahjong\obj.cpp(162): warning C4996: 'strerror': This function or variable may be unsafe. Consider using strerror_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\string.h(178): note: see declaration of 'strerror'
+         main.cpp
+     1>c:\users\kayla\documents\quarto\mahjong\main.cpp(14): fatal error C1083: Cannot open include file: 'Poco/Net/HTTPClientSession.h': No such file or directory
+         HumanPlayer.cpp
+         HandEvaluator.cpp
+     1>c:\users\kayla\documents\quarto\mahjong\handevaluator.cpp(48): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+     1>c:\users\kayla\documents\quarto\mahjong\handevaluator.cpp(79): warning C4101: 'oor': unreferenced local variable
+     1>c:\users\kayla\documents\quarto\mahjong\handevaluator.cpp(132): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+         Game.cpp
+     1>c:\users\kayla\documents\quarto\mahjong\game.cpp(157): warning C4267: 'return': conversion from 'size_t' to 'int', possible loss of data
+         Draw.cpp
+     1>c:\users\kayla\documents\quarto\mahjong\draw.cpp(171): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
+     1>c:\users\kayla\documents\quarto\mahjong\draw.cpp(208): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
+     1>c:\users\kayla\documents\quarto\mahjong\draw.cpp(212): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+     1>c:\users\kayla\documents\quarto\mahjong\draw.cpp(246): warning C4267: '=': conversion from 'size_t' to 'unsigned int', possible loss of data
+     1>c:\users\kayla\documents\quarto\mahjong\draw.cpp(149): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\stdio.h(2254): note: see declaration of 'sscanf'
+     1>c:\users\kayla\documents\quarto\mahjong\draw.cpp(288): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\stdio.h(2254): note: see declaration of 'sscanf'
+     1>c:\users\kayla\documents\quarto\mahjong\draw.cpp(316): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+     1>c:\users\kayla\documents\quarto\mahjong\draw.cpp(440): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+         AIPlayer.cpp
+     1>c:\users\kayla\documents\quarto\mahjong\aiplayer.cpp(12): warning C4244: 'initializing': conversion from 'std::chrono::system_clock::rep' to 'unsigned int', possible loss of data
+     1>c:\users\kayla\documents\quarto\mahjong\aiplayer.cpp(14): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+         Generating Code...
+     1>c:\users\kayla\documents\quarto\mahjong\turn.cpp(254): warning C4700: uninitialized local variable 'player_highest_declaration' used
+     1>Done Building Project "C:\Users\Kayla\documents\visual studio 2015\Projects\Mahjong\Mahjong\Mahjong.vcxproj" (Build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:18.65
