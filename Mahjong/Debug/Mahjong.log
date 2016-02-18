@@ -1,10 +1,34 @@
-﻿Build started 2/17/2016 11:46:33 AM.
-     1>Project "C:\Users\Kayla\documents\visual studio 2015\Projects\Mahjong\Mahjong\Mahjong.vcxproj" on node 2 (Build target(s)).
+﻿Build started 2/18/2016 3:48:00 AM.
+     1>Project "C:\Users\Kayla\Documents\Visual Studio 2015\Projects\Mahjong\Mahjong\Mahjong.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /I"C:\Program Files (x86)\Visual Leak Detector\include" /I"C:\Users\Kayla\Downloads\poco-1.6.1\poco-1.6.1\Foundation\include" /I"C:\Users\Kayla\Downloads\poco-1.6.1\poco-1.6.1\XML\include" /I"C:\Users\Kayla\Downloads\poco-1.6.1\poco-1.6.1\Net\include" /I"C:\Users\Kayla\documents\visual studio 2015\Projects\Mahjong\\" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt ..\..\..\..\Quarto\Mahjong\main.cpp
-         main.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /I"C:\Program Files (x86)\Visual Leak Detector\include" /I"C:\Users\Kayla\Downloads\curl-7.46.0\builds\libcurl-vc14-x86-release-static-ipv6-sspi-winssl\include" /I"C:\Users\Kayla\Documents\Visual Studio 2015\Projects\Mahjong\\" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D CURL_STATICLIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt "..\Source Files\Obj.cpp"
+         Obj.cpp
+     1>c:\users\kayla\documents\visual studio 2015\projects\mahjong\resources\tile.h(188): warning C4838: conversion from 'double' to 'const float' requires a narrowing conversion
+     1>c:\users\kayla\documents\visual studio 2015\projects\mahjong\resources\tile.h(188): warning C4305: 'initializing': truncation from 'double' to 'const float'
+     1>c:\users\kayla\documents\visual studio 2015\projects\mahjong\resources\tile.h(730): warning C4838: conversion from 'double' to 'const float' requires a narrowing conversion
+     1>c:\users\kayla\documents\visual studio 2015\projects\mahjong\resources\tile.h(730): warning C4305: 'initializing': truncation from 'double' to 'const float'
+     1>c:\users\kayla\documents\visual studio 2015\projects\mahjong\resources\tile.h(1632): warning C4838: conversion from 'double' to 'const float' requires a narrowing conversion
+     1>c:\users\kayla\documents\visual studio 2015\projects\mahjong\resources\tile.h(1632): warning C4305: 'initializing': truncation from 'double' to 'const float'
+     1>c:\users\kayla\documents\visual studio 2015\projects\mahjong\resources\tile.h(2534): warning C4838: conversion from 'double' to 'const float' requires a narrowing conversion
+     1>c:\users\kayla\documents\visual studio 2015\projects\mahjong\resources\tile.h(2534): warning C4305: 'initializing': truncation from 'double' to 'const float'
+     1>c:\users\kayla\documents\visual studio 2015\projects\mahjong\source files\obj.cpp(53): warning C4996: 'strerror': This function or variable may be unsafe. Consider using strerror_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\string.h(178): note: see declaration of 'strerror'
+     1>c:\users\kayla\documents\visual studio 2015\projects\mahjong\source files\obj.cpp(70): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\stdio.h(2254): note: see declaration of 'sscanf'
+     1>c:\users\kayla\documents\visual studio 2015\projects\mahjong\source files\obj.cpp(82): warning C4996: 'strerror': This function or variable may be unsafe. Consider using strerror_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\string.h(178): note: see declaration of 'strerror'
+     1>c:\users\kayla\documents\visual studio 2015\projects\mahjong\source files\obj.cpp(98): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\stdio.h(2254): note: see declaration of 'sscanf'
+     1>c:\users\kayla\documents\visual studio 2015\projects\mahjong\source files\obj.cpp(101): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\stdio.h(2254): note: see declaration of 'sscanf'
+     1>c:\users\kayla\documents\visual studio 2015\projects\mahjong\source files\obj.cpp(105): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\stdio.h(2254): note: see declaration of 'sscanf'
+     1>c:\users\kayla\documents\visual studio 2015\projects\mahjong\source files\obj.cpp(120): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\stdio.h(2254): note: see declaration of 'sscanf'
+     1>c:\users\kayla\documents\visual studio 2015\projects\mahjong\source files\obj.cpp(162): warning C4996: 'strerror': This function or variable may be unsafe. Consider using strerror_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\string.h(178): note: see declaration of 'strerror'
        Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Kayla\documents\visual studio 2015\Projects\Mahjong\Debug\Mahjong.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Users\Kayla\Downloads\soil\Simple OpenGL Image Library\projects\VC8\Debug" /LIBPATH:"C:\Users\Kayla\Downloads\poco-1.6.1\poco-1.6.1\lib" /LIBPATH:"C:\Program Files (x86)\Visual Leak Detector\lib\Win32" opengl32.lib glu32.lib glut32.lib SOIL.lib PocoFoundation.lib PocoFoundationd.lib PocoNet.lib PocoNetd.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:\Users\Kayla\documents\visual studio 2015\Projects\Mahjong\Debug\Mahjong.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Kayla\documents\visual studio 2015\Projects\Mahjong\Debug\Mahjong.lib" /MACHINE:X86 Debug\AIPlayer.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Kayla\Documents\Visual Studio 2015\Projects\Mahjong\Debug\Mahjong.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Users\Kayla\Downloads\soil\Simple OpenGL Image Library\projects\VC8\Debug" /LIBPATH:"C:\Users\Kayla\Downloads\curl-7.46.0\builds\libcurl-vc14-x86-debug-static-ipv6-sspi-winssl\lib" /LIBPATH:"C:\Program Files (x86)\Visual Leak Detector\lib\Win32" opengl32.lib glu32.lib glut32.lib SOIL.lib libcurl_a_debug.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:\Users\Kayla\Documents\Visual Studio 2015\Projects\Mahjong\Debug\Mahjong.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Kayla\Documents\Visual Studio 2015\Projects\Mahjong\Debug\Mahjong.lib" /MACHINE:X86 Debug\AIPlayer.obj
          Debug\Draw.obj
          Debug\Game.obj
          Debug\HandEvaluator.obj
@@ -16,9 +40,9 @@
          Debug\Tile.obj
          Debug\TileDealer.obj
          Debug\Turn.obj
-         Mahjong.vcxproj -> C:\Users\Kayla\documents\visual studio 2015\Projects\Mahjong\Debug\Mahjong.exe
-     1>Done Building Project "C:\Users\Kayla\documents\visual studio 2015\Projects\Mahjong\Mahjong\Mahjong.vcxproj" (Build target(s)).
+         Mahjong.vcxproj -> C:\Users\Kayla\Documents\Visual Studio 2015\Projects\Mahjong\Debug\Mahjong.exe
+     1>Done Building Project "C:\Users\Kayla\Documents\Visual Studio 2015\Projects\Mahjong\Mahjong\Mahjong.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:14.29
+Time Elapsed 00:00:24.69

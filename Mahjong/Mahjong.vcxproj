@@ -89,14 +89,14 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Users\Kayla\Downloads\curl-7.46.0\include;%(AdditionalIncludeDirectories);$(SolutionDir)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;CURL_STATICLIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);C:\Users\Kayla\Downloads\curl-7.46.0\builds\libcurl-vc14-x86-release-static-ipv6-sspi-winssl\include;$(SolutionDir)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;glut32.lib;SOIL.lib;PocoFoundation.lib;PocoFoundationd.lib;PocoNet.lib;PocoNetd.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\Users\Kayla\Downloads\soil\Simple OpenGL Image Library\projects\VC8\Debug;C:\Users\Kayla\Downloads\poco-1.6.1\poco-1.6.1\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;glut32.lib;SOIL.lib;libcurl_a_debug.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Users\Kayla\Downloads\soil\Simple OpenGL Image Library\projects\VC8\Debug;C:\Users\Kayla\Downloads\curl-7.46.0\builds\libcurl-vc14-x86-debug-static-ipv6-sspi-winssl\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -150,82 +150,80 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\..\..\Program Files (x86)\Microsoft Visual Studio 14.0\VC\include\GL\glut.h" />
-    <ClInclude Include="..\..\..\..\..\..\..\Program Files (x86)\Windows Kits\8.1\Include\um\gl\GL.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\..\..\Program Files (x86)\Windows Kits\8.1\Include\um\gl\GLU.h" />
-    <ClInclude Include="..\..\..\..\Quarto\Mahjong\include\AIPlayer.h" />
-    <ClInclude Include="..\..\..\..\Quarto\Mahjong\include\Draw.h" />
-    <ClInclude Include="..\..\..\..\Quarto\Mahjong\include\Game.h" />
-    <ClInclude Include="..\..\..\..\Quarto\Mahjong\include\HandEvaluator.h" />
-    <ClInclude Include="..\..\..\..\Quarto\Mahjong\include\HumanPlayer.h" />
-    <ClInclude Include="..\..\..\..\Quarto\Mahjong\include\Obj.h" />
-    <ClInclude Include="..\..\..\..\Quarto\Mahjong\include\Player.h" />
-    <ClInclude Include="..\..\..\..\Quarto\Mahjong\include\Status.h" />
-    <ClInclude Include="..\..\..\..\Quarto\Mahjong\include\tile.h" />
-    <ClInclude Include="..\..\..\..\Quarto\Mahjong\include\TileDealer.h" />
-    <ClInclude Include="..\..\..\..\Quarto\Mahjong\include\Turn.h" />
-    <ClInclude Include="..\..\..\..\Quarto\Mahjong\resources\SOIL.h" />
-    <ClInclude Include="..\..\..\..\Quarto\Mahjong\resources\tile.h" />
+    <ClInclude Include="..\include\AIPlayer.h" />
+    <ClInclude Include="..\include\Draw.h" />
+    <ClInclude Include="..\include\Game.h" />
+    <ClInclude Include="..\include\HandEvaluator.h" />
+    <ClInclude Include="..\include\HumanPlayer.h" />
+    <ClInclude Include="..\include\Obj.h" />
+    <ClInclude Include="..\include\Player.h" />
+    <ClInclude Include="..\include\Status.h" />
+    <ClInclude Include="..\include\tile.h" />
+    <ClInclude Include="..\include\TileDealer.h" />
+    <ClInclude Include="..\include\Turn.h" />
+    <ClInclude Include="..\resources\SOIL.h" />
+    <ClInclude Include="..\resources\tile.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\Quarto\Mahjong\AIPlayer.cpp" />
-    <ClCompile Include="..\..\..\..\Quarto\Mahjong\Draw.cpp" />
-    <ClCompile Include="..\..\..\..\Quarto\Mahjong\Game.cpp" />
-    <ClCompile Include="..\..\..\..\Quarto\Mahjong\HandEvaluator.cpp" />
-    <ClCompile Include="..\..\..\..\Quarto\Mahjong\HumanPlayer.cpp" />
-    <ClCompile Include="..\..\..\..\Quarto\Mahjong\main.cpp" />
-    <ClCompile Include="..\..\..\..\Quarto\Mahjong\Obj.cpp" />
-    <ClCompile Include="..\..\..\..\Quarto\Mahjong\Player.cpp" />
-    <ClCompile Include="..\..\..\..\Quarto\Mahjong\Status.cpp" />
-    <ClCompile Include="..\..\..\..\Quarto\Mahjong\Tile.cpp" />
-    <ClCompile Include="..\..\..\..\Quarto\Mahjong\TileDealer.cpp" />
-    <ClCompile Include="..\..\..\..\Quarto\Mahjong\Turn.cpp" />
+    <ClCompile Include="..\Source Files\AIPlayer.cpp" />
+    <ClCompile Include="..\Source Files\Draw.cpp" />
+    <ClCompile Include="..\Source Files\Game.cpp" />
+    <ClCompile Include="..\Source Files\HandEvaluator.cpp" />
+    <ClCompile Include="..\Source Files\HumanPlayer.cpp" />
+    <ClCompile Include="..\Source Files\main.cpp" />
+    <ClCompile Include="..\Source Files\Obj.cpp" />
+    <ClCompile Include="..\Source Files\Player.cpp" />
+    <ClCompile Include="..\Source Files\Status.cpp" />
+    <ClCompile Include="..\Source Files\Tile.cpp" />
+    <ClCompile Include="..\Source Files\TileDealer.cpp" />
+    <ClCompile Include="..\Source Files\Turn.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\BambooTile(1).png" />
-    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\BambooTile(2).png" />
-    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\BambooTile(3).png" />
-    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\BambooTile(4).png" />
-    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\BambooTile(5).png" />
-    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\BambooTile(6).png" />
-    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\BambooTile(7).png" />
-    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\BambooTile(8).png" />
-    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\BambooTile(9).png" />
-    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\CharacterTile(1).png" />
-    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\CharacterTile(2).png" />
-    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\CharacterTile(3).png" />
-    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\CharacterTile(4).png" />
-    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\CharacterTile(5).png" />
-    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\CharacterTile(6).png" />
-    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\CharacterTile(7).png" />
-    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\CharacterTile(8).png" />
-    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\CharacterTile(9).png" />
-    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\CircleTile(1).png" />
-    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\CircleTile(2).png" />
-    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\CircleTile(3).png" />
-    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\CircleTile(4).png" />
-    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\CircleTile(5).png" />
-    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\CircleTile(6).png" />
-    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\CircleTile(7).png" />
-    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\CircleTile(8).png" />
-    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\CircleTile(9).png" />
-    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\DragonTile(GREEN).png" />
-    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\DragonTile(RED).png" />
-    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\DragonTile(WHITE).png" />
-    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\FlowerTile(BAMBOO).png" />
-    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\FlowerTile(CHRYSANTHEMUM).png" />
-    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\FlowerTile(ORCHID).png" />
-    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\FlowerTile(PLUMB).png" />
-    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\SeasonTile(AUTUMN).png" />
-    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\SeasonTile(SPRING).png" />
-    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\SeasonTile(SUMMER).png" />
-    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\SeasonTile(WINTER).png" />
-    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\WindTile(EAST).png" />
-    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\WindTile(NORTH).png" />
-    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\WindTile(SOUTH).png" />
-    <Image Include="..\..\..\..\Quarto\Mahjong\resources\images\WindTile(WEST).png" />
+    <None Include="..\resources\images\Thumbs.db" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\resources\images\BambooTile(1).png" />
+    <Image Include="..\resources\images\BambooTile(2).png" />
+    <Image Include="..\resources\images\BambooTile(3).png" />
+    <Image Include="..\resources\images\BambooTile(4).png" />
+    <Image Include="..\resources\images\BambooTile(5).png" />
+    <Image Include="..\resources\images\BambooTile(6).png" />
+    <Image Include="..\resources\images\BambooTile(7).png" />
+    <Image Include="..\resources\images\BambooTile(8).png" />
+    <Image Include="..\resources\images\BambooTile(9).png" />
+    <Image Include="..\resources\images\CharacterTile(1).png" />
+    <Image Include="..\resources\images\CharacterTile(2).png" />
+    <Image Include="..\resources\images\CharacterTile(3).png" />
+    <Image Include="..\resources\images\CharacterTile(4).png" />
+    <Image Include="..\resources\images\CharacterTile(5).png" />
+    <Image Include="..\resources\images\CharacterTile(6).png" />
+    <Image Include="..\resources\images\CharacterTile(7).png" />
+    <Image Include="..\resources\images\CharacterTile(8).png" />
+    <Image Include="..\resources\images\CharacterTile(9).png" />
+    <Image Include="..\resources\images\CircleTile(1).png" />
+    <Image Include="..\resources\images\CircleTile(2).png" />
+    <Image Include="..\resources\images\CircleTile(3).png" />
+    <Image Include="..\resources\images\CircleTile(4).png" />
+    <Image Include="..\resources\images\CircleTile(5).png" />
+    <Image Include="..\resources\images\CircleTile(6).png" />
+    <Image Include="..\resources\images\CircleTile(7).png" />
+    <Image Include="..\resources\images\CircleTile(8).png" />
+    <Image Include="..\resources\images\CircleTile(9).png" />
+    <Image Include="..\resources\images\DragonTile(GREEN).png" />
+    <Image Include="..\resources\images\DragonTile(RED).png" />
+    <Image Include="..\resources\images\DragonTile(WHITE).png" />
+    <Image Include="..\resources\images\FlowerTile(BAMBOO).png" />
+    <Image Include="..\resources\images\FlowerTile(CHRYSANTHEMUM).png" />
+    <Image Include="..\resources\images\FlowerTile(ORCHID).png" />
+    <Image Include="..\resources\images\FlowerTile(PLUMB).png" />
+    <Image Include="..\resources\images\SeasonTile(AUTUMN).png" />
+    <Image Include="..\resources\images\SeasonTile(SPRING).png" />
+    <Image Include="..\resources\images\SeasonTile(SUMMER).png" />
+    <Image Include="..\resources\images\SeasonTile(WINTER).png" />
+    <Image Include="..\resources\images\WindTile(EAST).png" />
+    <Image Include="..\resources\images\WindTile(NORTH).png" />
+    <Image Include="..\resources\images\WindTile(SOUTH).png" />
+    <Image Include="..\resources\images\WindTile(WEST).png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
