@@ -13,7 +13,7 @@ Game::Game()
     roundIsOver = false;
     playExtraHand = false;
     rounds = 0;
-	curr_discard = new NullTile();
+	curr_discard.reset(new NullTile());
     curr_status = In_Play();
     chooseDealer();
     curr_state.players[humanPlayerIndex] = new HumanPlayer();
@@ -168,7 +168,7 @@ bool Game::matchOver()
 Game::~Game()
 {
     cout << "deleting game.." << endl;
-	delete curr_discard;
+	//delete curr_discard;
     delete turnManager;
     delete tileDealer;
     wall.clear();

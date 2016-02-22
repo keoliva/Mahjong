@@ -31,7 +31,7 @@ class Game
         Game();
         Status getStatus() { return curr_status; };
 		void updateStatus(Status new_status);
-		Tile *getDiscard() { return curr_discard; };
+		Tile *getDiscard() { return curr_discard.get(); };
         std::string getPrevailingWind(); // round wind
         int getTilesLeft();
         Player *getCurrentPlayer();
@@ -45,12 +45,19 @@ class Game
     private:
         Turn *turnManager;
         TileDealer *tileDealer;
-		Tile *curr_discard;
+		std::shared_ptr<Tile> curr_discard;
         state curr_state;
         Status curr_status;
         int rounds, lastPlayerIndex;
         tiles_t wall;
-		void setDiscard(Tile *tile) { if (!tile) *curr_discard = NullTile(); else *curr_discard = *tile; };
+		void setDiscard(Tile *tile) { 
+			if (!tile) {
+				curr_discard.reset(new NullTile());
+			} else {
+				curr_discard.reset(tile->clone());
+			}
+			std::cout << typeid(*curr_discard).name() << std::endl;
+		};
         void cycleCurrentPlayer();
         void cycleDealer();
         void chooseDealer();

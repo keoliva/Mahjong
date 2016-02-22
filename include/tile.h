@@ -22,6 +22,7 @@ class Tile {
 		virtual bool isNull() { return false; };
         std::string get_className() const {return className; };
         static bool areEqual(const Tile &a, const Tile &b);
+		virtual Tile *clone() const = 0;
         virtual ~Tile() {};
         virtual std::string get_val() const = 0;
         static void createTheTiles(tiles_t &pile);
@@ -40,6 +41,7 @@ class NullTile : public Tile {
 	NullTile() : Tile("", NIL_TYPE) {};
 	bool isNull() { return true; };
 	std::string get_val() const { return "NullTile"; };
+	Tile *clone() const { return new NullTile(); };
 };
 
 class SuitTile : public Tile {
@@ -50,6 +52,7 @@ class SuitTile : public Tile {
         friend bool const operator>(const SuitTile &a, const SuitTile &b);
         static bool inSequence(std::vector<SuitTile*> tiles); // returns whether the tiles' suit numbers are consecutive terms
         std::string get_val() const;
+		Tile *clone() const;
 };
 
 class BambooTile : public SuitTile {
@@ -71,6 +74,7 @@ class AttributeTile : public Tile {
         AttributeTile(std::string name, tileType _tileType, std::string attribute_type) : Tile(name, _tileType),
                                                                                         attribute(attribute_type) {};
         std::string get_val() const;
+		Tile *clone() const;
 };
 
 class DragonTile : public AttributeTile { // dragon types: GREEN, RED, WHITE

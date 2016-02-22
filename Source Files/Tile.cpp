@@ -12,6 +12,9 @@ string SuitTile::get_val() const
     ss << className <<"(" << suit << ")";
     return ss.str();
 }
+Tile *SuitTile::clone() const {
+	return new SuitTile(className, suit);
+}
 
 bool const operator<(const SuitTile &a, const SuitTile &b)
 {
@@ -37,6 +40,10 @@ string AttributeTile::get_val() const
     std::stringstream ss;
     ss << className <<"(" << attribute << ")";
     return ss.str();
+}
+Tile *AttributeTile::clone() const
+{
+	return new AttributeTile(className, type, attribute);
 }
 
 

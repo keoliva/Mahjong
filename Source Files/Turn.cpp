@@ -263,15 +263,20 @@ void Turn::makeDeclaration() {
 		determineIfRobbingAKang(player_with_claim);
 	}   
 	game_instance->updateStatus(In_Play(curr_player->_wind,
-		Player::declarationToMeld[curr_player->getDeclaration().first]));
+		Player::declarationToMeld[dec_type]));
     game_instance->setDiscard(nullptr);
 	state_machine.popState();
 	if (potential_win_type == ROBBING_A_KANG && player_with_claim) {
 		game_instance->lastPlayerIndex = game_instance->curr_state.currPlayerReference;
 		state_machine.pushState(State::DETERMINE_ORDER_OF_CLAIMS);
-	} else {
-		potential_win_type = TILE_REPLACEMENT;
-		state_machine.pushState(State::DISCARD_TILE);
+	} else {	
+		if (dec_type == Declaration::MELDED_PENG || dec_type == Declaration::MELDED_CHI) {
+			potential_win_type = REGULAR_DISCARD;
+			state_machine.pushState(State::DISCARD_TILE);
+		} else { // all the other declarations including a 'kang' (four of a kind)
+			potential_win_type = TILE_REPLACEMENT;
+			state_machine.pushState(State::DRAW_TILE); // drawing a replacement tile
+		}
 	} 
     state_machine.pushState(State::NULL_STATE);
     state_machine.pushState(State::NULL_STATE);/** this is on the top of the stack so that the updated status

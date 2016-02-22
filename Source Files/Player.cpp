@@ -32,7 +32,7 @@ void Player::determineOptions(Tile *discardedTile) {
 	player_tiles_t::iterator it = hand.begin();
 	for (; it != hand.end(); it++)
 		_hand.push_back((*it).get());
-    if (discardedTile && discardedTile->isNull()) {
+    if (discardedTile && !discardedTile->isNull()) {
         options[PENG] = handEvaluator->canDeclareMeldedPeng(_hand, discardedTile);
         options[KANG] = handEvaluator->canDeclareBigMeldedKang(_hand, discardedTile);
         options[CHI] = handEvaluator->canDeclareMeldedChi(_hand, discardedTile);
