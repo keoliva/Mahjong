@@ -221,7 +221,7 @@ void Turn::determineIfRobbingAKang(Player *player_with_claim) {
 	player_with_claim =
 		determineWhoHasPrecedence(max_declaration, player_highest_declaration, players, 3);
 	if (player_with_claim && player_with_claim->getDeclaration().first == Declaration::MAHJONG) {
-		potential_win_type = ROBBING_A_KANG;
+		potential_win_type = ROBBING;
 		game_instance->setDiscard(robbed_tile_from_kang);
 	}
 }
@@ -245,9 +245,10 @@ void Turn::makeDeclaration() {
         }
     }
 	if (dec_type != Declaration::SMALL_MELDED_KANG || dec_type != Declaration::CONCEALED_KANG ||
-		(dec_type == Declaration::MAHJONG && potential_win_type != ROBBING_A_KANG)) {
+		(dec_type == Declaration::MAHJONG && potential_win_type != ROBBING)) {
+		// calculate score before making meld
 		curr_player->makeMeld(game_instance->getPlayer(game_instance->lastPlayerIndex)->discards.back());
-	} else if (dec_type == Declaration::MAHJONG && potential_win_type == ROBBING_A_KANG) {
+	} else if (dec_type == Declaration::MAHJONG && potential_win_type == ROBBING) {
 		// the tile added to a peng to form a small melded kang by the player before
 		curr_player->makeMeld(game_instance->getPlayer(game_instance->lastPlayerIndex)->melds.back().second.back());
 	} else {
@@ -266,7 +267,7 @@ void Turn::makeDeclaration() {
 		Player::declarationToMeld[dec_type]));
     game_instance->setDiscard(nullptr);
 	state_machine.popState();
-	if (potential_win_type == ROBBING_A_KANG && player_with_claim) {
+	if (potential_win_type == ROBBING && player_with_claim) {
 		game_instance->lastPlayerIndex = game_instance->curr_state.currPlayerReference;
 		state_machine.pushState(State::DETERMINE_ORDER_OF_CLAIMS);
 	} else {	
@@ -274,7 +275,7 @@ void Turn::makeDeclaration() {
 			potential_win_type = REGULAR_DISCARD;
 			state_machine.pushState(State::DISCARD_TILE);
 		} else { // all the other declarations including a 'kang' (four of a kind)
-			potential_win_type = TILE_REPLACEMENT;
+			potential_win_type = KONG_REPLACEMENT;
 			state_machine.pushState(State::DRAW_TILE); // drawing a replacement tile
 		}
 	} 

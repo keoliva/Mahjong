@@ -10,8 +10,8 @@
 #define MAHJONG_WIN_TYPES \
 	X(SELF_DRAW) \
 	X(LAST_TURN) \
-	X(TILE_REPLACEMENT) \
-	X(ROBBING_A_KANG)
+	X(KONG_REPLACEMENT) \
+	X(ROBBING)
 
 class Status {
   public:

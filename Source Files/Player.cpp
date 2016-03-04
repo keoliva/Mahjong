@@ -90,6 +90,12 @@ void Player::makeMeld(player_tile_t discardedTile) {
 
     switch (declaration) {
 		case Declaration::MAHJONG:
+			// self draw, last turn
+			if (discardedTile) { 
+				/** create copy of tiles ithout adding tile yet, check for mahjong, 
+					set winning tile to tile not added yet, set score */
+				// set score
+			}
 			hand.push_back(std::move(discardedTile));
 			break;
         case Declaration::SMALL_MELDED_KANG: {

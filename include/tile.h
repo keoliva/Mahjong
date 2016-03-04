@@ -69,8 +69,8 @@ class CircleTile : public SuitTile {
 };
 
 class AttributeTile : public Tile {
-    std::string attribute;
     public:
+		std::string attribute;
         AttributeTile(std::string name, tileType _tileType, std::string attribute_type) : Tile(name, _tileType),
                                                                                         attribute(attribute_type) {};
         std::string get_val() const;

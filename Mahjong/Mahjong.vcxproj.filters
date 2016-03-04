@@ -58,6 +58,9 @@
     <ClInclude Include="..\resources\tile.h">
       <Filter>resources</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\ScoreCalculator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Source Files\AIPlayer.cpp">
@@ -94,6 +97,9 @@
       <Filter>SourceFiles</Filter>
     </ClCompile>
     <ClCompile Include="..\Source Files\Turn.cpp">
+      <Filter>SourceFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source Files\ScoreCalculator.cpp">
       <Filter>SourceFiles</Filter>
     </ClCompile>
   </ItemGroup>

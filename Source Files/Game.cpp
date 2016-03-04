@@ -1,6 +1,7 @@
 #include "include/Game.h"
 #include "include/AIPlayer.h"
 #include "include/HumanPlayer.h"
+#include "include/ScoreCalculator.h"
 #include <GL/glut.h>
 #include <cassert>
 #include <chrono>

@@ -157,6 +157,7 @@
     <ClInclude Include="..\include\HumanPlayer.h" />
     <ClInclude Include="..\include\Obj.h" />
     <ClInclude Include="..\include\Player.h" />
+    <ClInclude Include="..\include\ScoreCalculator.h" />
     <ClInclude Include="..\include\Status.h" />
     <ClInclude Include="..\include\tile.h" />
     <ClInclude Include="..\include\TileDealer.h" />
@@ -173,6 +174,7 @@
     <ClCompile Include="..\Source Files\main.cpp" />
     <ClCompile Include="..\Source Files\Obj.cpp" />
     <ClCompile Include="..\Source Files\Player.cpp" />
+    <ClCompile Include="..\Source Files\ScoreCalculator.cpp" />
     <ClCompile Include="..\Source Files\Status.cpp" />
     <ClCompile Include="..\Source Files\Tile.cpp" />
     <ClCompile Include="..\Source Files\TileDealer.cpp" />

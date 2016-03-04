@@ -45,7 +45,6 @@ class Player
         void determineOptions(Tile *discardedTile=nullptr);
         std::pair<Declaration, int> getDeclaration();
         virtual void setDeclaration(std::pair<Declaration, int> declaration);
-        bool declarationIn(Declaration declarations[]);
         std::map<MeldType, std::vector<meld>> getOptions();
         virtual ~Player();
     protected:

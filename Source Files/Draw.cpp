@@ -146,7 +146,8 @@ void Draw::drawGame(float rot_x, float rot_y, float rot_z, mouseActivity mouseIn
     } else if (game->getStatus() == In_Play(WAITING_FOR_INPUT_TO_DISCARD)) {
         glEnable(GL_STENCIL_TEST);
         glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-    } else if (sscanf(status.c_str(), "In_Play<%[A-Z]%*[, ]%[A-Z]>", playerWind, playerMeld) == 2) {
+    } else if (game->getStatus() != In_Play(WAITING_FOR_INPUT_AFTER_DECLARATION) &&
+		sscanf(status.c_str(), "In_Play<%[A-Z]%*[, ]%[A-Z]>", playerWind, playerMeld) == 2) {
         ss << playerWind << " declared '" << playerMeld << "'";
         updates["meldMade"] = msg_data(ss.str(), 4.0/6.0);
         ss.str("");
