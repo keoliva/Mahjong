@@ -246,7 +246,7 @@ void HandEvaluator::test()
 	cout << ((findMatchingTile(tiles, tileToBeFound) == -1) ? "Passed." : "Failed.") << endl;
 	tileToBeFound = new BambooTile(1);
 	cout << ((findMatchingTile(tiles, tileToBeFound) == 0) ? "Passed." : "Failed.") << endl;
-	delete tileToBeFound;
+
 	cout << "Running canDeclareSmallMeldedKang Tests..." << endl;
 	vector<Tile*>hand = { new CharacterTile(4), new CharacterTile(5), new CircleTile(2), new BambooTile(7) };
 	vector<pair<MeldType, vector<Tile*>>> _melds = {
@@ -282,8 +282,6 @@ void HandEvaluator::test()
 	assert(_meld.indicesInHand == indices);
 	cout << "Passed." << endl;;
 	cout << "Running canDeclareMeldedChi Tests..." << endl;
-	/**vector<Tile*>hand0 = {new BambooTile(1), new BambooTile(9), new CharacterTile(2),
-	new CharacterTile(3), new CharacterTile(4), new CharacterTile(5)};*/
 
 	Tile *discardedTile = new CharacterTile(6);
 	vector<meld> chis;
@@ -316,13 +314,21 @@ void HandEvaluator::test()
 	assert(canDeclareBigMeldedKang(melds, discardedTile).empty());
 	cout << "Passed.";
 	delete discardedTile;
+	
+	for (Tile *tile : melds) {
+		delete tile;
+	}
+	for (pair<MeldType, vector<Tile*>> mapping : _melds) {
+		vector<Tile*> _tiles = mapping.second;
+		for (Tile *tile : _tiles) {
+			delete tile;
+		}
+	}
 	for (Tile *tile : hand) {
 		delete tile;
 	}
+	delete tileToBeFound;
 	for (Tile *tile : hand0) {
-		delete tile;
-	}
-	for (Tile *tile : melds) {
 		delete tile;
 	}
 	for (Tile *tile : tiles) {

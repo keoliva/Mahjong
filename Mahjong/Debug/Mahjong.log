@@ -1,23 +1,7 @@
-﻿Build started 3/4/2016 10:55:28 AM.
-     1>Project "C:\Users\Kayla\Documents\Visual Studio 2015\Projects\Mahjong\Mahjong\Mahjong.vcxproj" on node 2 (Build target(s)).
-     1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /I"C:\Program Files (x86)\Visual Leak Detector\include" /I"C:\Users\Kayla\Downloads\curl-7.46.0\builds\libcurl-vc14-x86-release-static-ipv6-sspi-winssl\include" /I"C:\Users\Kayla\Documents\Visual Studio 2015\Projects\Mahjong\\" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D CURL_STATICLIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt "..\Source Files\Draw.cpp" "..\Source Files\Game.cpp" "..\Source Files\Player.cpp" "..\Source Files\Turn.cpp"
-         Turn.cpp
-     1>c:\users\kayla\documents\visual studio 2015\projects\mahjong\source files\turn.cpp(28): warning C4101: 'e': unreferenced local variable
-     1>c:\users\kayla\documents\visual studio 2015\projects\mahjong\source files\turn.cpp(53): warning C4101: 'e': unreferenced local variable
-         Player.cpp
-     1>c:\users\kayla\documents\visual studio 2015\projects\mahjong\source files\player.cpp(73): warning C4018: '<': signed/unsigned mismatch
-         Game.cpp
-         Draw.cpp
-     1>c:\users\kayla\documents\visual studio 2015\projects\mahjong\source files\draw.cpp(150): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\stdio.h(2254): note: see declaration of 'sscanf'
-     1>c:\users\kayla\documents\visual studio 2015\projects\mahjong\source files\draw.cpp(289): warning C4996: 'sscanf': This function or variable may be unsafe. Consider using sscanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\stdio.h(2254): note: see declaration of 'sscanf'
-         Generating Code...
-     1>c:\users\kayla\documents\visual studio 2015\projects\mahjong\source files\turn.cpp(221): warning C4700: uninitialized local variable 'player_highest_declaration' used
-     1>c:\users\kayla\documents\visual studio 2015\projects\mahjong\source files\turn.cpp(264): warning C4700: uninitialized local variable 'player_with_claim' used
-       Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Kayla\Documents\Visual Studio 2015\Projects\Mahjong\Debug\Mahjong.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Users\Kayla\Downloads\soil\Simple OpenGL Image Library\projects\VC8\Debug" /LIBPATH:"C:\Users\Kayla\Downloads\curl-7.46.0\builds\libcurl-vc14-x86-debug-static-ipv6-sspi-winssl\lib" /LIBPATH:"C:\Program Files (x86)\Visual Leak Detector\lib\Win32" opengl32.lib glu32.lib glut32.lib SOIL.lib libcurl_a_debug.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:\Users\Kayla\Documents\Visual Studio 2015\Projects\Mahjong\Debug\Mahjong.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Kayla\Documents\Visual Studio 2015\Projects\Mahjong\Debug\Mahjong.lib" /MACHINE:X86 Debug\AIPlayer.obj
+﻿Build started 2/19/2017 4:48:31 AM.
+     1>Project "C:\Users\Kayla\documents\visual studio 2015\Projects\Mahjong\Mahjong\Mahjong.vcxproj" on node 2 (Build target(s)).
+     1>Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Kayla\documents\visual studio 2015\Projects\Mahjong\Debug\Mahjong.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Users\Kayla\Downloads\soil\Simple OpenGL Image Library\projects\VC8\Debug" /LIBPATH:"C:\Users\Kayla\Downloads\curl-7.46.0\builds\libcurl-vc14-x86-debug-static-ipv6-sspi-winssl\lib" /LIBPATH:"C:\Program Files (x86)\Visual Leak Detector\lib\Win32" opengl32.lib glu32.lib glut32.lib SOIL.lib libcurl_a_debug.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:\Users\Kayla\documents\visual studio 2015\Projects\Mahjong\Debug\Mahjong.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Kayla\documents\visual studio 2015\Projects\Mahjong\Debug\Mahjong.lib" /MACHINE:X86 Debug\AIPlayer.obj
          Debug\Draw.obj
          Debug\Game.obj
          Debug\HandEvaluator.obj
@@ -30,9 +14,9 @@
          Debug\Tile.obj
          Debug\TileDealer.obj
          Debug\Turn.obj
-         Mahjong.vcxproj -> C:\Users\Kayla\Documents\Visual Studio 2015\Projects\Mahjong\Debug\Mahjong.exe
-     1>Done Building Project "C:\Users\Kayla\Documents\Visual Studio 2015\Projects\Mahjong\Mahjong\Mahjong.vcxproj" (Build target(s)).
+         Mahjong.vcxproj -> C:\Users\Kayla\documents\visual studio 2015\Projects\Mahjong\Debug\Mahjong.exe
+     1>Done Building Project "C:\Users\Kayla\documents\visual studio 2015\Projects\Mahjong\Mahjong\Mahjong.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:43.67
+Time Elapsed 00:00:02.15

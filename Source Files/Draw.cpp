@@ -410,7 +410,7 @@ void Draw::displayOptions(Player *human) {
     ss << "Press 's' to skip.   ";
     string meld_type, key;
     vector<meld> possible_melds;
-    for (it = options.begin(); it != options.end(); it++) {
+    for (it = options.begin(); it != options.end(); ++it) {
         possible_melds = it->second;
         if (!possible_melds.empty()) {
             meld_type = meld_strings[it->first];

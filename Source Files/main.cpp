@@ -279,7 +279,7 @@ int main(int argc, char *argv[]) {
 	glutPassiveMotionFunc(mouseMove);
 	init();
 
-	testInitGame();
+	//testInitGame();
 	atexit(cleanup);
 	glutMainLoop();
 	return EXIT_SUCCESS;
